@@ -1,0 +1,1324 @@
+plugin,timestamp,PID,PPID,ImageFileName,memory_image,TreeDepth,Offset(V),Threads,Handles,SessionId,Wow64,CreateTime,ExitTime,File output,Process,Args,Base,Size,Name,Path,LoadCount,LoadTime,Pid,InLoad,InInit,InMem,MappedPath,Start VPN,End VPN,Tag,Protection,CommitCharge,PrivateMemory,Notes,Hexdump,Disasm,Offset,Parent,File
+windows.pslist,2026-03-09 12:40:57,1468,2832,WannaCry.exe,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe8853021080,11,-,0,True,2026-03-09 17:32:37.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.pslist,2026-03-09 12:40:57,8832,1468,@WanaDecryptor,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe885358f080,4,-,0,True,2026-03-09 17:33:13.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.pslist,2026-03-09 12:40:57,5732,8832,taskhsvc.exe,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe8852a2e080,6,-,0,True,2026-03-09 17:33:15.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.pslist,2026-03-09 12:40:57,8016,5732,conhost.exe,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe8852b43080,4,-,0,False,2026-03-09 17:33:15.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.psscan,2026-03-09 12:40:59,5732,8832,taskhsvc.exe,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe8852a2e080,6,-,0,True,2026-03-09 17:33:15.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.psscan,2026-03-09 12:40:59,8016,5732,conhost.exe,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe8852b43080,4,-,0,False,2026-03-09 17:33:15.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.psscan,2026-03-09 12:40:59,1468,2832,WannaCry.exe,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe8853021080,11,-,0,True,2026-03-09 17:32:37.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.psscan,2026-03-09 12:40:59,8832,1468,@WanaDecryptor,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,0xbe885358f080,4,-,0,True,2026-03-09 17:33:13.000000 UTC,N/A,Disabled,,,,,,,,,,,,,,,,,,,,,,,,,
+windows.cmdline,2026-03-09 12:41:40,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,"""C:\\Malware\\WannaCry\\WannaCry.exe""",,,,,,,,,,,,,,,,,,,,,,,
+windows.cmdline,2026-03-09 12:41:40,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,@WanaDecryptor@.exe co,,,,,,,,,,,,,,,,,,,,,,,
+windows.cmdline,2026-03-09 12:41:40,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,TaskData\\Tor\\taskhsvc.exe,,,,,,,,,,,,,,,,,,,,,,,
+windows.cmdline,2026-03-09 12:41:40,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,\\??\\C:\\Windows\\system32\\conhost.exe 0x4,,,,,,,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x400000,0x35a000,WannaCry.exe,C:\\Malware\\WannaCry\\WannaCry.exe,-1,2026-03-09 17:32:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x7ffe77e10000,0x1f6000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-1,2026-03-09 17:32:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x7ffe77280000,0x59000,wow64.dll,C:\\Windows\\System32\\wow64.dll,-1,2026-03-09 17:32:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x7ffe77800000,0x83000,wow64win.dll,C:\\Windows\\System32\\wow64win.dll,6,2026-03-09 17:32:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x77b50000,0xa000,wow64cpu.dll,C:\\Windows\\System32\\wow64cpu.dll,6,2026-03-09 17:32:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x400000,0x35a000,WannaCry.exe,C:\\Malware\\WannaCry\\WannaCry.exe,-,1601-01-01 00:07:09.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x77b60000,0x1a3000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-,1658-07-03 08:38:46.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76280000,0xf0000,KERNEL32.DLL,C:\\Windows\\System32\\KERNEL32.DLL,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x75af0000,0x214000,KERNELBASE.dll,C:\\Windows\\System32\\KERNELBASE.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x75e50000,0x196000,USER32.dll,C:\\Windows\\System32\\USER32.dll,-,6768-09-21 17:47:33.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76c60000,0x18000,win32u.dll,C:\\Windows\\System32\\win32u.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76c30000,0x23000,GDI32.dll,C:\\Windows\\System32\\GDI32.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x77250000,0xda000,gdi32full.dll,C:\\Windows\\System32\\gdi32full.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x768d0000,0x7b000,msvcp_win.dll,C:\\Windows\\System32\\msvcp_win.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x75d30000,0x120000,ucrtbase.dll,C:\\Windows\\System32\\ucrtbase.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76e80000,0x7a000,ADVAPI32.dll,C:\\Windows\\System32\\ADVAPI32.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76a50000,0xbf000,msvcrt.dll,C:\\Windows\\System32\\msvcrt.dll,-,1748-01-21 20:56:33.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x75a70000,0x75000,sechost.dll,C:\\Windows\\System32\\sechost.dll,-,N/A,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x77190000,0xba000,RPCRT4.dll,C:\\Windows\\System32\\RPCRT4.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74f90000,0x13000,CRYPTSP.dll,C:\\Windows\\SYSTEM32\\CRYPTSP.dll,-,1748-03-24 19:48:59.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74d90000,0x2f000,rsaenh.dll,C:\\Windows\\system32\\rsaenh.dll,-,1748-03-20 22:16:54.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x75d10000,0x19000,bcrypt.dll,C:\\Windows\\System32\\bcrypt.dll,-,-,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74dd0000,0xa000,CRYPTBASE.dll,C:\\Windows\\SYSTEM32\\CRYPTBASE.dll,-,1748-03-22 07:41:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x77920000,0x5c000,bcryptPrimitives.dll,C:\\Windows\\System32\\bcryptPrimitives.dll,-,1748-03-25 02:29:51.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x77330000,0x5b3000,SHELL32.dll,C:\\Windows\\System32\\SHELL32.dll,-,1748-03-23 23:46:24.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74d20000,0x70000,MSVCP60.dll,C:\\Windows\\SYSTEM32\\MSVCP60.dll,-,1748-03-24 13:08:07.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74cc0000,0x29000,ntmarta.dll,C:\\Windows\\SYSTEM32\\ntmarta.dll,-,1748-03-28 10:40:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74de0000,0x9f000,apphelp.dll,C:\\Windows\\system32\\apphelp.dll,-,1600-12-31 23:59:59.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x75410000,0x60a000,windows.storage.dll,C:\\Windows\\SYSTEM32\\windows.storage.dll,-,1748-03-27 07:56:46.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76f00000,0x281000,combase.dll,C:\\Windows\\System32\\combase.dll,-,1676-10-25 20:40:16.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x753e0000,0x24000,Wldp.dll,C:\\Windows\\SYSTEM32\\Wldp.dll,-,1676-10-25 20:40:16.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76df0000,0x87000,SHCORE.dll,C:\\Windows\\System32\\SHCORE.dll,-,1704-06-21 03:05:39.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x76b10000,0x45000,shlwapi.dll,C:\\Windows\\System32\\shlwapi.dll,-,N/A,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,0x74e80000,0x28000,SspiCli.dll,C:\\Windows\\SYSTEM32\\SspiCli.dll,-,1676-10-25 20:40:16.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x400000,0x3d000,@WanaDecryptor@.exe,C:\\Malware\\WannaCry\\@WanaDecryptor@.exe,-1,2026-03-09 17:33:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x7ffe77e10000,0x1f6000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-1,2026-03-09 17:33:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x7ffe77280000,0x59000,wow64.dll,C:\\Windows\\System32\\wow64.dll,-1,2026-03-09 17:33:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x7ffe77800000,0x83000,wow64win.dll,C:\\Windows\\System32\\wow64win.dll,6,2026-03-09 17:33:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77b50000,0xa000,wow64cpu.dll,C:\\Windows\\System32\\wow64cpu.dll,6,2026-03-09 17:33:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x400000,0x3d000,@WanaDecryptor@.exe,C:\\Malware\\WannaCry\\@WanaDecryptor@.exe,-,1669-09-06 14:40:34.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77b60000,0x1a3000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-,1659-02-24 03:30:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76280000,0xf0000,KERNEL32.DLL,C:\\Windows\\System32\\KERNEL32.DLL,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x75af0000,0x214000,KERNELBASE.dll,C:\\Windows\\System32\\KERNELBASE.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74de0000,0x9f000,apphelp.dll,C:\\Windows\\SYSTEM32\\apphelp.dll,-,1661-09-02 02:07:18.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76a50000,0xbf000,MSVCRT.dll,C:\\Windows\\System32\\MSVCRT.dll,-,1663-04-01 19:22:10.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x75e50000,0x196000,USER32.dll,C:\\Windows\\System32\\USER32.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76c60000,0x18000,win32u.dll,C:\\Windows\\System32\\win32u.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76c30000,0x23000,GDI32.dll,C:\\Windows\\System32\\GDI32.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77250000,0xda000,gdi32full.dll,C:\\Windows\\System32\\gdi32full.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x768d0000,0x7b000,msvcp_win.dll,C:\\Windows\\System32\\msvcp_win.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x75d30000,0x120000,ucrtbase.dll,C:\\Windows\\System32\\ucrtbase.dll,-,1662-11-10 19:04:28.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76e80000,0x7a000,ADVAPI32.dll,C:\\Windows\\System32\\ADVAPI32.dll,-,1662-07-27 11:51:50.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x75a70000,0x75000,sechost.dll,C:\\Windows\\System32\\sechost.dll,-,1662-07-29 03:57:01.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77190000,0xba000,RPCRT4.dll,C:\\Windows\\System32\\RPCRT4.dll,-,1662-07-29 23:59:36.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77330000,0x5b3000,SHELL32.dll,C:\\Windows\\System32\\SHELL32.dll,-,1662-07-29 17:18:44.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x769b0000,0x96000,OLEAUT32.dll,C:\\Windows\\System32\\OLEAUT32.dll,-,1662-07-25 13:05:47.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76f00000,0x281000,combase.dll,C:\\Windows\\System32\\combase.dll,-,1662-07-26 22:30:06.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77980000,0x63000,WS2_32.dll,C:\\Windows\\System32\\WS2_32.dll,-,1662-07-28 01:13:33.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74b90000,0x124000,MFC42.DLL,C:\\Windows\\SYSTEM32\\MFC42.DLL,-,1601-01-01 00:21:28.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x77a60000,0xe3000,OLE32.dll,C:\\Windows\\System32\\OLE32.dll,-,1662-11-13 13:53:06.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x747c0000,0x1a9000,urlmon.dll,C:\\Windows\\SYSTEM32\\urlmon.dll,-,1662-07-29 10:37:52.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74d20000,0x70000,MSVCP60.dll,C:\\Windows\\SYSTEM32\\MSVCP60.dll,-,1662-07-18 12:09:40.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74970000,0x212000,COMCTL32.dll,C:\\Windows\\WinSxS\\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.488_none_11b1e5df2ffd8627\\COMCTL32.dll,-,1662-07-28 07:54:25.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74360000,0x458000,WININET.dll,C:\\Windows\\SYSTEM32\\WININET.dll,-,1662-11-13 00:31:22.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74130000,0x22b000,iertutil.dll,C:\\Windows\\SYSTEM32\\iertutil.dll,-,1662-11-09 09:40:09.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x76df0000,0x87000,shcore.dll,C:\\Windows\\System32\\shcore.dll,-,1662-11-10 05:42:44.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74d10000,0x6000,RICHED32.DLL,C:\\Windows\\SYSTEM32\\RICHED32.DLL,-,1662-07-28 21:16:09.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x740b0000,0x7a000,RICHED20.dll,C:\\Windows\\SYSTEM32\\RICHED20.dll,-,1662-07-28 14:35:17.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74cf0000,0x17000,USP10.dll,C:\\Windows\\SYSTEM32\\USP10.dll,-,1664-05-07 06:24:46.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74070000,0x31000,msls31.dll,C:\\Windows\\SYSTEM32\\msls31.dll,-,1664-05-07 13:05:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x73ff0000,0x74000,UxTheme.dll,C:\\Windows\\SYSTEM32\\UxTheme.dll,-,N/A,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x73f90000,0x52000,mswsock.dll,C:\\Windows\\system32\\mswsock.dll,-,1662-07-23 00:58:01.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,0x74cc0000,0x29000,ntmarta.dll,C:\\Windows\\SYSTEM32\\ntmarta.dll,-,1662-07-27 05:10:58.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0xba0000,0x2fe000,taskhsvc.exe,C:\\Malware\\WannaCry\\TaskData\\Tor\\taskhsvc.exe,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x7ffe77e10000,0x1f6000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x7ffe77280000,0x59000,wow64.dll,C:\\Windows\\System32\\wow64.dll,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x7ffe77800000,0x83000,wow64win.dll,C:\\Windows\\System32\\wow64win.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77b50000,0xa000,wow64cpu.dll,C:\\Windows\\System32\\wow64cpu.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0xba0000,0x2fe000,taskhsvc.exe,C:\\Malware\\WannaCry\\TaskData\\Tor\\taskhsvc.exe,-,1669-09-06 14:40:34.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77b60000,0x1a3000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-,1766-12-23 20:56:38.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76280000,0xf0000,KERNEL32.DLL,C:\\Windows\\System32\\KERNEL32.DLL,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75af0000,0x214000,KERNELBASE.dll,C:\\Windows\\System32\\KERNELBASE.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x74de0000,0x9f000,apphelp.dll,C:\\Windows\\SYSTEM32\\apphelp.dll,-,1925-12-27 04:21:51.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76e80000,0x7a000,ADVAPI32.dll,C:\\Windows\\System32\\ADVAPI32.dll,-,1708-12-05 22:34:26.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76a50000,0xbf000,msvcrt.dll,C:\\Windows\\System32\\msvcrt.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75a70000,0x75000,sechost.dll,C:\\Windows\\System32\\sechost.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77190000,0xba000,RPCRT4.dll,C:\\Windows\\System32\\RPCRT4.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77330000,0x5b3000,SHELL32.dll,C:\\Windows\\System32\\SHELL32.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x768d0000,0x7b000,msvcp_win.dll,C:\\Windows\\System32\\msvcp_win.dll,-,1691-02-02 11:31:27.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75d30000,0x120000,ucrtbase.dll,C:\\Windows\\System32\\ucrtbase.dll,-,N/A,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75e50000,0x196000,USER32.dll,C:\\Windows\\System32\\USER32.dll,-,-,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76c60000,0x18000,win32u.dll,C:\\Windows\\System32\\win32u.dll,-,1926-09-27 12:04:19.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76c30000,0x23000,GDI32.dll,C:\\Windows\\System32\\GDI32.dll,-,1926-09-25 13:18:16.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77250000,0xda000,gdi32full.dll,C:\\Windows\\System32\\gdi32full.dll,-,1926-09-25 06:37:24.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77980000,0x63000,WS2_32.dll,C:\\Windows\\System32\\WS2_32.dll,-,1926-07-28 17:12:53.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73f00000,0x82000,libevent-2-0-5.dll,C:\\Malware\\WannaCry\\TaskData\\Tor\\libevent-2-0-5.dll,-,1926-06-09 11:37:17.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73ee0000,0x1c000,libssp-0.dll,C:\\Malware\\WannaCry\\TaskData\\Tor\\libssp-0.dll,-,1926-07-02 15:34:52.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73e50000,0x82000,SSLEAY32.dll,C:\\Malware\\WannaCry\\TaskData\\Tor\\SSLEAY32.dll,-,1926-06-30 03:27:06.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73da0000,0x77000,libgcc_s_sjlj-1.dll,C:\\Malware\\WannaCry\\TaskData\\Tor\\libgcc_s_sjlj-1.dll,-,1926-09-20 19:43:35.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73e20000,0x22000,zlib1.dll,C:\\Malware\\WannaCry\\TaskData\\Tor\\zlib1.dll,-,1601-01-01 00:00:03.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73b80000,0x21c000,LIBEAY32.dll,C:\\Malware\\WannaCry\\TaskData\\Tor\\LIBEAY32.dll,-,1926-09-21 15:46:11.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x74f90000,0x13000,CRYPTSP.dll,C:\\Windows\\SYSTEM32\\CRYPTSP.dll,-,1600-12-31 23:52:50.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x74d90000,0x2f000,rsaenh.dll,C:\\Windows\\system32\\rsaenh.dll,-,1926-06-29 07:24:30.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75d10000,0x19000,bcrypt.dll,C:\\Windows\\System32\\bcrypt.dll,-,1926-06-30 16:48:49.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x74dd0000,0xa000,CRYPTBASE.dll,C:\\Windows\\SYSTEM32\\CRYPTBASE.dll,-,1926-06-29 20:46:14.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77920000,0x5c000,bcryptPrimitives.dll,C:\\Windows\\System32\\bcryptPrimitives.dll,-,1926-09-25 19:59:08.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75410000,0x60a000,windows.storage.dll,C:\\Windows\\SYSTEM32\\windows.storage.dll,-,1926-06-30 10:07:57.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76f00000,0x281000,combase.dll,C:\\Windows\\System32\\combase.dll,-,1926-09-21 09:05:19.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x753e0000,0x24000,Wldp.dll,C:\\Windows\\SYSTEM32\\Wldp.dll,-,1926-09-23 14:32:13.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76df0000,0x87000,SHCORE.dll,C:\\Windows\\System32\\SHCORE.dll,-,1926-07-02 08:54:00.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76b10000,0x45000,shlwapi.dll,C:\\Windows\\System32\\shlwapi.dll,-,1926-09-27 18:45:11.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x74f80000,0xf000,kernel.appcore.dll,C:\\Windows\\SYSTEM32\\kernel.appcore.dll,-,N/A,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x77a60000,0xe3000,ole32.dll,C:\\Windows\\System32\\ole32.dll,-,1926-07-01 06:10:33.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x769b0000,0x96000,OLEAUT32.dll,C:\\Windows\\System32\\OLEAUT32.dll,-,1929-03-17 09:45:09.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76410000,0x7e000,clbcatq.dll,C:\\Windows\\System32\\clbcatq.dll,-,1929-03-17 03:04:18.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73ab0000,0xc3000,propsys.dll,C:\\Windows\\system32\\propsys.dll,-,N/A,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x75120000,0x1d000,profapi.dll,C:\\Windows\\SYSTEM32\\profapi.dll,-,-,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x76b60000,0x3b000,CFGMGR32.dll,C:\\Windows\\System32\\CFGMGR32.dll,-,1606-07-31 09:43:31.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,0x73f90000,0x52000,mswsock.dll,C:\\Windows\\system32\\mswsock.dll,-,1606-07-31 09:43:31.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ff663770000,0xd5000,conhost.exe,C:\\Windows\\system32\\conhost.exe,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe77e10000,0x1f6000,ntdll.dll,C:\\Windows\\SYSTEM32\\ntdll.dll,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe77390000,0xbd000,KERNEL32.DLL,C:\\Windows\\System32\\KERNEL32.DLL,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75760000,0x2c8000,KERNELBASE.dll,C:\\Windows\\System32\\KERNELBASE.dll,-1,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75a80000,0x9d000,msvcp_win.dll,C:\\Windows\\System32\\msvcp_win.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75b50000,0x100000,ucrtbase.dll,C:\\Windows\\System32\\ucrtbase.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe762a0000,0xae000,shcore.dll,C:\\Windows\\System32\\shcore.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe77d30000,0x9e000,msvcrt.dll,C:\\Windows\\System32\\msvcrt.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe76690000,0x355000,combase.dll,C:\\Windows\\System32\\combase.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe77540000,0x124000,RPCRT4.dll,C:\\Windows\\System32\\RPCRT4.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75ea0000,0xac000,advapi32.dll,C:\\Windows\\System32\\advapi32.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe77170000,0x9b000,sechost.dll,C:\\Windows\\System32\\sechost.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75fd0000,0x1a0000,user32.dll,C:\\Windows\\System32\\user32.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75c50000,0x22000,win32u.dll,C:\\Windows\\System32\\win32u.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe77d00000,0x2a000,GDI32.dll,C:\\Windows\\System32\\GDI32.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe75c80000,0x109000,gdi32full.dll,C:\\Windows\\System32\\gdi32full.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.dlllist,2026-03-09 12:41:43,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,0x7ffe76a10000,0x741000,shell32.dll,C:\\Windows\\System32\\shell32.dll,6,2026-03-09 17:33:15.000000 UTC,,,,,,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76280000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\kernel32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x400000,,,,,,1468,True,False,True,\\Malware\\WannaCry\\WannaCry.exe5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa.exe,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74d90000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\rsaenh.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x10000000,,,,,,1468,False,False,False,N/A,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74cc0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\ntmarta.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74d20000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\msvcp60.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x75a70000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\sechost.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74f90000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\cryptsp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74de0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\apphelp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74dd0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\cryptbase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x74e80000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\sspicli.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x753e0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\wldp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x75410000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\windows.storage.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x75d30000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\ucrtbase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x75af0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\KernelBase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x75d10000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\bcrypt.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x75e50000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\user32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x77b60000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\ntdll.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76f00000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\combase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76c60000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\win32u.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76a50000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\msvcrt.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x768d0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\msvcp_win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76c30000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\gdi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76b10000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\shlwapi.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76e80000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\advapi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x76df0000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\SHCore.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x77250000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\gdi32full.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x77190000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\rpcrt4.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x77920000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\bcryptprimitives.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x77330000,,,,,,1468,True,True,True,\\Windows\\SysWOW64\\shell32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x77b50000,,,,,,1468,True,True,True,\\Windows\\System32\\wow64cpu.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x7ffe77280000,,,,,,1468,True,True,True,\\Windows\\System32\\wow64.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x7ffe77e10000,,,,,,1468,True,True,True,\\Windows\\System32\\ntdll.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,WannaCry.exe,,0x7ffe77800000,,,,,,1468,True,True,True,\\Windows\\System32\\wow64win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x75af0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\KernelBase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x400000,,,,,,8832,True,False,True,\\Malware\\WannaCry\\@WanaDecryptor@.exe,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x73ff0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\uxtheme.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x960000,,,,,,8832,False,False,False,\\Windows\\System32\\en-US\\MFC42.dll.mui,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x990000,,,,,,8832,False,False,False,\\Windows\\System32\\en-US\\user32.dll.mui,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x73f90000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\mswsock.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x747c0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\urlmon.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x740b0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\riched20.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74070000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\msls31.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74130000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\iertutil.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74360000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\wininet.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74d20000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\msvcp60.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74b90000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\mfc42.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74970000,,,,,,8832,True,True,True,\\Windows\\WinSxS\\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.488_none_11b1e5df2ffd8627\\comctl32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74cf0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\usp10.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74cc0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\ntmarta.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74d10000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\riched32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x74de0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\apphelp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x75a70000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\sechost.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77b60000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\ntdll.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76a50000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\msvcrt.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76280000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\kernel32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x75e50000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\user32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x75d30000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\ucrtbase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x768d0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\msvcp_win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x769b0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\oleaut32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77250000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\gdi32full.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76e80000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\advapi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76c60000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\win32u.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76c30000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\gdi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76df0000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\SHCore.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77190000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\rpcrt4.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x76f00000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\combase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77980000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\ws2_32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77330000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\shell32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77b50000,,,,,,8832,True,True,True,\\Windows\\System32\\wow64cpu.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x77a60000,,,,,,8832,True,True,True,\\Windows\\SysWOW64\\ole32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x7ffe77280000,,,,,,8832,True,True,True,\\Windows\\System32\\wow64.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x7ffe77e10000,,,,,,8832,True,True,True,\\Windows\\System32\\ntdll.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,@WanaDecryptor,,0x7ffe77800000,,,,,,8832,True,True,True,\\Windows\\System32\\wow64win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76280000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\kernel32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0xba0000,,,,,,5732,True,False,True,\\Malware\\WannaCry\\TaskData\\Tor\\taskhsvc.exe,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73f00000,,,,,,5732,True,True,True,\\Malware\\WannaCry\\TaskData\\Tor\\libevent-2-0-5.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73b80000,,,,,,5732,True,True,True,\\Malware\\WannaCry\\TaskData\\Tor\\libeay32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x3ba0000,,,,,,5732,False,False,False,\\Windows\\System32\\en-US\\KernelBase.dll.mui,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73ab0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\propsys.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73e20000,,,,,,5732,True,True,True,\\Malware\\WannaCry\\TaskData\\Tor\\zlib1.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73da0000,,,,,,5732,True,True,True,\\Malware\\WannaCry\\TaskData\\Tor\\libgcc_s_sjlj-1.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73e50000,,,,,,5732,True,True,True,\\Malware\\WannaCry\\TaskData\\Tor\\ssleay32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73ee0000,,,,,,5732,True,True,True,\\Malware\\WannaCry\\TaskData\\Tor\\libssp-0.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75a70000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\sechost.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x74f90000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\cryptsp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x74dd0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\cryptbase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x74d90000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\rsaenh.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x73f90000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\mswsock.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x74de0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\apphelp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x74f80000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\kernel.appcore.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x753e0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\wldp.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75120000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\profapi.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75410000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\windows.storage.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75d30000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\ucrtbase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75af0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\KernelBase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75d10000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\bcrypt.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x75e50000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\user32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77b60000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\ntdll.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76e80000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\advapi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76c30000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\gdi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76a50000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\msvcrt.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x768d0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\msvcp_win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76410000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\clbcatq.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x769b0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\oleaut32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76b10000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\shlwapi.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76b60000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\cfgmgr32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76c60000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\win32u.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76df0000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\SHCore.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77330000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\shell32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77190000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\rpcrt4.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x76f00000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\combase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77250000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\gdi32full.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77980000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\ws2_32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77920000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\bcryptprimitives.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77b50000,,,,,,5732,True,True,True,\\Windows\\System32\\wow64cpu.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x77a60000,,,,,,5732,True,True,True,\\Windows\\SysWOW64\\ole32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x7ffe77280000,,,,,,5732,True,True,True,\\Windows\\System32\\wow64.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x7ffe77e10000,,,,,,5732,True,True,True,\\Windows\\System32\\ntdll.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,taskhsvc.exe,,0x7ffe77800000,,,,,,5732,True,True,True,\\Windows\\System32\\wow64win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x1fd6bfd0000,,,,,,8016,False,False,False,\\Windows\\System32\\en-US\\Conhost.exe.mui,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe762a0000,,,,,,8016,True,True,True,\\Windows\\System32\\SHCore.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75a80000,,,,,,8016,True,True,True,\\Windows\\System32\\msvcp_win.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75760000,,,,,,8016,True,True,True,\\Windows\\System32\\KernelBase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ff663770000,,,,,,8016,True,False,True,\\Windows\\System32\\conhost.exe,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75ea0000,,,,,,8016,True,True,True,\\Windows\\System32\\advapi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75c50000,,,,,,8016,True,True,True,\\Windows\\System32\\win32u.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75b50000,,,,,,8016,True,True,True,\\Windows\\System32\\ucrtbase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75c80000,,,,,,8016,True,True,True,\\Windows\\System32\\gdi32full.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe75fd0000,,,,,,8016,True,True,True,\\Windows\\System32\\user32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe77390000,,,,,,8016,True,True,True,\\Windows\\System32\\kernel32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe76a10000,,,,,,8016,True,True,True,\\Windows\\System32\\shell32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe76690000,,,,,,8016,True,True,True,\\Windows\\System32\\combase.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe77170000,,,,,,8016,True,True,True,\\Windows\\System32\\sechost.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe77d30000,,,,,,8016,True,True,True,\\Windows\\System32\\msvcrt.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe77540000,,,,,,8016,True,True,True,\\Windows\\System32\\rpcrt4.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe77d00000,,,,,,8016,True,True,True,\\Windows\\System32\\gdi32.dll,,,,,,,,,,,,
+windows.ldrmodules,2026-03-09 12:42:10,,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,,conhost.exe,,0x7ffe77e10000,,,,,,8016,True,True,True,\\Windows\\System32\\ntdll.dll,,,,,,,,,,,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c516cf0000,0x2c516cf0fff,VadS,PAGE_EXECUTE_READWRITE,1,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c516cf0000:	push	rbp
+0x2c516cf0001:	lea	rbp, [rsp]
+0x2c516cf0005:	sub	rsp, 0x20
+0x2c516cf0009:	mov	rax, qword ptr [rcx]
+0x2c516cf000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c516cf0010:	call	rax
+0x2c516cf0012:	lea	rsp, [rbp]
+0x2c516cf0016:	pop	rbp
+0x2c516cf0017:	ret	
+0x2c516cf0018:	int3	
+0x2c516cf0019:	int3	
+0x2c516cf001a:	int3	
+0x2c516cf001b:	int3	
+0x2c516cf001c:	int3	
+0x2c516cf001d:	int3	
+0x2c516cf001e:	int3	
+0x2c516cf001f:	int3	
+0x2c516cf0020:	int3	
+0x2c516cf0021:	int3	
+0x2c516cf0022:	int3	
+0x2c516cf0023:	int3	
+0x2c516cf0024:	int3	
+0x2c516cf0025:	int3	
+0x2c516cf0026:	int3	
+0x2c516cf0027:	int3	
+0x2c516cf0028:	int3	
+0x2c516cf0029:	int3	
+0x2c516cf002a:	int3	
+0x2c516cf002b:	int3	
+0x2c516cf002c:	int3	
+0x2c516cf002d:	int3	
+0x2c516cf002e:	int3	
+0x2c516cf002f:	int3	
+0x2c516cf0030:	int3	
+0x2c516cf0031:	int3	
+0x2c516cf0032:	int3	
+0x2c516cf0033:	int3	
+0x2c516cf0034:	int3	
+0x2c516cf0035:	int3	
+0x2c516cf0036:	int3	
+0x2c516cf0037:	int3	
+0x2c516cf0038:	int3	
+0x2c516cf0039:	int3	
+0x2c516cf003a:	int3	
+0x2c516cf003b:	int3	
+0x2c516cf003c:	int3	
+0x2c516cf003d:	int3	
+0x2c516cf003e:	int3	
+0x2c516cf003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c53b240000,0x2c53b240fff,VadS,PAGE_EXECUTE_READWRITE,1,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c53b240000:	push	rbp
+0x2c53b240001:	lea	rbp, [rsp]
+0x2c53b240005:	sub	rsp, 0x20
+0x2c53b240009:	mov	rax, qword ptr [rcx]
+0x2c53b24000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c53b240010:	call	rax
+0x2c53b240012:	lea	rsp, [rbp]
+0x2c53b240016:	pop	rbp
+0x2c53b240017:	ret	
+0x2c53b240018:	int3	
+0x2c53b240019:	int3	
+0x2c53b24001a:	int3	
+0x2c53b24001b:	int3	
+0x2c53b24001c:	int3	
+0x2c53b24001d:	int3	
+0x2c53b24001e:	int3	
+0x2c53b24001f:	int3	
+0x2c53b240020:	int3	
+0x2c53b240021:	int3	
+0x2c53b240022:	int3	
+0x2c53b240023:	int3	
+0x2c53b240024:	int3	
+0x2c53b240025:	int3	
+0x2c53b240026:	int3	
+0x2c53b240027:	int3	
+0x2c53b240028:	int3	
+0x2c53b240029:	int3	
+0x2c53b24002a:	int3	
+0x2c53b24002b:	int3	
+0x2c53b24002c:	int3	
+0x2c53b24002d:	int3	
+0x2c53b24002e:	int3	
+0x2c53b24002f:	int3	
+0x2c53b240030:	int3	
+0x2c53b240031:	int3	
+0x2c53b240032:	int3	
+0x2c53b240033:	int3	
+0x2c53b240034:	int3	
+0x2c53b240035:	int3	
+0x2c53b240036:	int3	
+0x2c53b240037:	int3	
+0x2c53b240038:	int3	
+0x2c53b240039:	int3	
+0x2c53b24003a:	int3	
+0x2c53b24003b:	int3	
+0x2c53b24003c:	int3	
+0x2c53b24003d:	int3	
+0x2c53b24003e:	int3	
+0x2c53b24003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c53b260000,0x2c53b260fff,VadS,PAGE_EXECUTE_READWRITE,1,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c53b260000:	push	rbp
+0x2c53b260001:	lea	rbp, [rsp]
+0x2c53b260005:	sub	rsp, 0x20
+0x2c53b260009:	mov	rax, qword ptr [rcx]
+0x2c53b26000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c53b260010:	call	rax
+0x2c53b260012:	lea	rsp, [rbp]
+0x2c53b260016:	pop	rbp
+0x2c53b260017:	ret	
+0x2c53b260018:	int3	
+0x2c53b260019:	int3	
+0x2c53b26001a:	int3	
+0x2c53b26001b:	int3	
+0x2c53b26001c:	int3	
+0x2c53b26001d:	int3	
+0x2c53b26001e:	int3	
+0x2c53b26001f:	int3	
+0x2c53b260020:	int3	
+0x2c53b260021:	int3	
+0x2c53b260022:	int3	
+0x2c53b260023:	int3	
+0x2c53b260024:	int3	
+0x2c53b260025:	int3	
+0x2c53b260026:	int3	
+0x2c53b260027:	int3	
+0x2c53b260028:	int3	
+0x2c53b260029:	int3	
+0x2c53b26002a:	int3	
+0x2c53b26002b:	int3	
+0x2c53b26002c:	int3	
+0x2c53b26002d:	int3	
+0x2c53b26002e:	int3	
+0x2c53b26002f:	int3	
+0x2c53b260030:	int3	
+0x2c53b260031:	int3	
+0x2c53b260032:	int3	
+0x2c53b260033:	int3	
+0x2c53b260034:	int3	
+0x2c53b260035:	int3	
+0x2c53b260036:	int3	
+0x2c53b260037:	int3	
+0x2c53b260038:	int3	
+0x2c53b260039:	int3	
+0x2c53b26003a:	int3	
+0x2c53b26003b:	int3	
+0x2c53b26003c:	int3	
+0x2c53b26003d:	int3	
+0x2c53b26003e:	int3	
+0x2c53b26003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c53b290000,0x2c53b291fff,VadS,PAGE_EXECUTE_READWRITE,2,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c53b290000:	push	rbp
+0x2c53b290001:	lea	rbp, [rsp]
+0x2c53b290005:	sub	rsp, 0x20
+0x2c53b290009:	mov	rax, qword ptr [rcx]
+0x2c53b29000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c53b290010:	call	rax
+0x2c53b290012:	lea	rsp, [rbp]
+0x2c53b290016:	pop	rbp
+0x2c53b290017:	ret	
+0x2c53b290018:	int3	
+0x2c53b290019:	int3	
+0x2c53b29001a:	int3	
+0x2c53b29001b:	int3	
+0x2c53b29001c:	int3	
+0x2c53b29001d:	int3	
+0x2c53b29001e:	int3	
+0x2c53b29001f:	int3	
+0x2c53b290020:	int3	
+0x2c53b290021:	int3	
+0x2c53b290022:	int3	
+0x2c53b290023:	int3	
+0x2c53b290024:	int3	
+0x2c53b290025:	int3	
+0x2c53b290026:	int3	
+0x2c53b290027:	int3	
+0x2c53b290028:	int3	
+0x2c53b290029:	int3	
+0x2c53b29002a:	int3	
+0x2c53b29002b:	int3	
+0x2c53b29002c:	int3	
+0x2c53b29002d:	int3	
+0x2c53b29002e:	int3	
+0x2c53b29002f:	int3	
+0x2c53b290030:	int3	
+0x2c53b290031:	int3	
+0x2c53b290032:	int3	
+0x2c53b290033:	int3	
+0x2c53b290034:	int3	
+0x2c53b290035:	int3	
+0x2c53b290036:	int3	
+0x2c53b290037:	int3	
+0x2c53b290038:	int3	
+0x2c53b290039:	int3	
+0x2c53b29003a:	int3	
+0x2c53b29003b:	int3	
+0x2c53b29003c:	int3	
+0x2c53b29003d:	int3	
+0x2c53b29003e:	int3	
+0x2c53b29003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c540030000,0x2c540030fff,VadS,PAGE_EXECUTE_READWRITE,1,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c540030000:	push	rbp
+0x2c540030001:	lea	rbp, [rsp]
+0x2c540030005:	sub	rsp, 0x20
+0x2c540030009:	mov	rax, qword ptr [rcx]
+0x2c54003000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c540030010:	call	rax
+0x2c540030012:	lea	rsp, [rbp]
+0x2c540030016:	pop	rbp
+0x2c540030017:	ret	
+0x2c540030018:	int3	
+0x2c540030019:	int3	
+0x2c54003001a:	int3	
+0x2c54003001b:	int3	
+0x2c54003001c:	int3	
+0x2c54003001d:	int3	
+0x2c54003001e:	int3	
+0x2c54003001f:	int3	
+0x2c540030020:	int3	
+0x2c540030021:	int3	
+0x2c540030022:	int3	
+0x2c540030023:	int3	
+0x2c540030024:	int3	
+0x2c540030025:	int3	
+0x2c540030026:	int3	
+0x2c540030027:	int3	
+0x2c540030028:	int3	
+0x2c540030029:	int3	
+0x2c54003002a:	int3	
+0x2c54003002b:	int3	
+0x2c54003002c:	int3	
+0x2c54003002d:	int3	
+0x2c54003002e:	int3	
+0x2c54003002f:	int3	
+0x2c540030030:	int3	
+0x2c540030031:	int3	
+0x2c540030032:	int3	
+0x2c540030033:	int3	
+0x2c540030034:	int3	
+0x2c540030035:	int3	
+0x2c540030036:	int3	
+0x2c540030037:	int3	
+0x2c540030038:	int3	
+0x2c540030039:	int3	
+0x2c54003003a:	int3	
+0x2c54003003b:	int3	
+0x2c54003003c:	int3	
+0x2c54003003d:	int3	
+0x2c54003003e:	int3	
+0x2c54003003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c540020000,0x2c540022fff,VadS,PAGE_EXECUTE_READWRITE,3,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c540020000:	push	rbp
+0x2c540020001:	lea	rbp, [rsp]
+0x2c540020005:	sub	rsp, 0x20
+0x2c540020009:	mov	rax, qword ptr [rcx]
+0x2c54002000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c540020010:	call	rax
+0x2c540020012:	lea	rsp, [rbp]
+0x2c540020016:	pop	rbp
+0x2c540020017:	ret	
+0x2c540020018:	int3	
+0x2c540020019:	int3	
+0x2c54002001a:	int3	
+0x2c54002001b:	int3	
+0x2c54002001c:	int3	
+0x2c54002001d:	int3	
+0x2c54002001e:	int3	
+0x2c54002001f:	int3	
+0x2c540020020:	int3	
+0x2c540020021:	int3	
+0x2c540020022:	int3	
+0x2c540020023:	int3	
+0x2c540020024:	int3	
+0x2c540020025:	int3	
+0x2c540020026:	int3	
+0x2c540020027:	int3	
+0x2c540020028:	int3	
+0x2c540020029:	int3	
+0x2c54002002a:	int3	
+0x2c54002002b:	int3	
+0x2c54002002c:	int3	
+0x2c54002002d:	int3	
+0x2c54002002e:	int3	
+0x2c54002002f:	int3	
+0x2c540020030:	int3	
+0x2c540020031:	int3	
+0x2c540020032:	int3	
+0x2c540020033:	int3	
+0x2c540020034:	int3	
+0x2c540020035:	int3	
+0x2c540020036:	int3	
+0x2c540020037:	int3	
+0x2c540020038:	int3	
+0x2c540020039:	int3	
+0x2c54002003a:	int3	
+0x2c54002003b:	int3	
+0x2c54002003c:	int3	
+0x2c54002003d:	int3	
+0x2c54002003e:	int3	
+0x2c54002003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c540120000,0x2c540121fff,VadS,PAGE_EXECUTE_READWRITE,2,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c540120000:	push	rbp
+0x2c540120001:	lea	rbp, [rsp]
+0x2c540120005:	sub	rsp, 0x20
+0x2c540120009:	mov	rax, qword ptr [rcx]
+0x2c54012000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c540120010:	call	rax
+0x2c540120012:	lea	rsp, [rbp]
+0x2c540120016:	pop	rbp
+0x2c540120017:	ret	
+0x2c540120018:	int3	
+0x2c540120019:	int3	
+0x2c54012001a:	int3	
+0x2c54012001b:	int3	
+0x2c54012001c:	int3	
+0x2c54012001d:	int3	
+0x2c54012001e:	int3	
+0x2c54012001f:	int3	
+0x2c540120020:	int3	
+0x2c540120021:	int3	
+0x2c540120022:	int3	
+0x2c540120023:	int3	
+0x2c540120024:	int3	
+0x2c540120025:	int3	
+0x2c540120026:	int3	
+0x2c540120027:	int3	
+0x2c540120028:	int3	
+0x2c540120029:	int3	
+0x2c54012002a:	int3	
+0x2c54012002b:	int3	
+0x2c54012002c:	int3	
+0x2c54012002d:	int3	
+0x2c54012002e:	int3	
+0x2c54012002f:	int3	
+0x2c540120030:	int3	
+0x2c540120031:	int3	
+0x2c540120032:	int3	
+0x2c540120033:	int3	
+0x2c540120034:	int3	
+0x2c540120035:	int3	
+0x2c540120036:	int3	
+0x2c540120037:	int3	
+0x2c540120038:	int3	
+0x2c540120039:	int3	
+0x2c54012003a:	int3	
+0x2c54012003b:	int3	
+0x2c54012003c:	int3	
+0x2c54012003d:	int3	
+0x2c54012003e:	int3	
+0x2c54012003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c5401c0000,0x2c5401c0fff,VadS,PAGE_EXECUTE_READWRITE,1,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c5401c0000:	push	rbp
+0x2c5401c0001:	lea	rbp, [rsp]
+0x2c5401c0005:	sub	rsp, 0x20
+0x2c5401c0009:	mov	rax, qword ptr [rcx]
+0x2c5401c000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c5401c0010:	call	rax
+0x2c5401c0012:	lea	rsp, [rbp]
+0x2c5401c0016:	pop	rbp
+0x2c5401c0017:	ret	
+0x2c5401c0018:	int3	
+0x2c5401c0019:	int3	
+0x2c5401c001a:	int3	
+0x2c5401c001b:	int3	
+0x2c5401c001c:	int3	
+0x2c5401c001d:	int3	
+0x2c5401c001e:	int3	
+0x2c5401c001f:	int3	
+0x2c5401c0020:	int3	
+0x2c5401c0021:	int3	
+0x2c5401c0022:	int3	
+0x2c5401c0023:	int3	
+0x2c5401c0024:	int3	
+0x2c5401c0025:	int3	
+0x2c5401c0026:	int3	
+0x2c5401c0027:	int3	
+0x2c5401c0028:	int3	
+0x2c5401c0029:	int3	
+0x2c5401c002a:	int3	
+0x2c5401c002b:	int3	
+0x2c5401c002c:	int3	
+0x2c5401c002d:	int3	
+0x2c5401c002e:	int3	
+0x2c5401c002f:	int3	
+0x2c5401c0030:	int3	
+0x2c5401c0031:	int3	
+0x2c5401c0032:	int3	
+0x2c5401c0033:	int3	
+0x2c5401c0034:	int3	
+0x2c5401c0035:	int3	
+0x2c5401c0036:	int3	
+0x2c5401c0037:	int3	
+0x2c5401c0038:	int3	
+0x2c5401c0039:	int3	
+0x2c5401c003a:	int3	
+0x2c5401c003b:	int3	
+0x2c5401c003c:	int3	
+0x2c5401c003d:	int3	
+0x2c5401c003e:	int3	
+0x2c5401c003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c540200000,0x2c54020dfff,VadS,PAGE_EXECUTE_READWRITE,14,1,Function prologue,"
+55 48 8d 2c 24 48 83 ec 20 48 8b 01 48 8b 49 08 UH.,$H.. H..H.I.
+ff d0 48 8d 65 00 5d c3 cc cc cc cc cc cc cc cc ..H.e.].........
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................","
+0x2c540200000:	push	rbp
+0x2c540200001:	lea	rbp, [rsp]
+0x2c540200005:	sub	rsp, 0x20
+0x2c540200009:	mov	rax, qword ptr [rcx]
+0x2c54020000c:	mov	rcx, qword ptr [rcx + 8]
+0x2c540200010:	call	rax
+0x2c540200012:	lea	rsp, [rbp]
+0x2c540200016:	pop	rbp
+0x2c540200017:	ret	
+0x2c540200018:	int3	
+0x2c540200019:	int3	
+0x2c54020001a:	int3	
+0x2c54020001b:	int3	
+0x2c54020001c:	int3	
+0x2c54020001d:	int3	
+0x2c54020001e:	int3	
+0x2c54020001f:	int3	
+0x2c540200020:	int3	
+0x2c540200021:	int3	
+0x2c540200022:	int3	
+0x2c540200023:	int3	
+0x2c540200024:	int3	
+0x2c540200025:	int3	
+0x2c540200026:	int3	
+0x2c540200027:	int3	
+0x2c540200028:	int3	
+0x2c540200029:	int3	
+0x2c54020002a:	int3	
+0x2c54020002b:	int3	
+0x2c54020002c:	int3	
+0x2c54020002d:	int3	
+0x2c54020002e:	int3	
+0x2c54020002f:	int3	
+0x2c540200030:	int3	
+0x2c540200031:	int3	
+0x2c540200032:	int3	
+0x2c540200033:	int3	
+0x2c540200034:	int3	
+0x2c540200035:	int3	
+0x2c540200036:	int3	
+0x2c540200037:	int3	
+0x2c540200038:	int3	
+0x2c540200039:	int3	
+0x2c54020003a:	int3	
+0x2c54020003b:	int3	
+0x2c54020003c:	int3	
+0x2c54020003d:	int3	
+0x2c54020003e:	int3	
+0x2c54020003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c543e20000,0x2c543f1ffff,VadS,PAGE_EXECUTE_READWRITE,256,1,N/A,"
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................","
+0x2c543e20000:	int3	
+0x2c543e20001:	int3	
+0x2c543e20002:	int3	
+0x2c543e20003:	int3	
+0x2c543e20004:	int3	
+0x2c543e20005:	int3	
+0x2c543e20006:	int3	
+0x2c543e20007:	int3	
+0x2c543e20008:	int3	
+0x2c543e20009:	int3	
+0x2c543e2000a:	int3	
+0x2c543e2000b:	int3	
+0x2c543e2000c:	int3	
+0x2c543e2000d:	int3	
+0x2c543e2000e:	int3	
+0x2c543e2000f:	int3	
+0x2c543e20010:	int3	
+0x2c543e20011:	int3	
+0x2c543e20012:	int3	
+0x2c543e20013:	int3	
+0x2c543e20014:	int3	
+0x2c543e20015:	int3	
+0x2c543e20016:	int3	
+0x2c543e20017:	int3	
+0x2c543e20018:	int3	
+0x2c543e20019:	int3	
+0x2c543e2001a:	int3	
+0x2c543e2001b:	int3	
+0x2c543e2001c:	int3	
+0x2c543e2001d:	int3	
+0x2c543e2001e:	int3	
+0x2c543e2001f:	int3	
+0x2c543e20020:	int3	
+0x2c543e20021:	int3	
+0x2c543e20022:	int3	
+0x2c543e20023:	int3	
+0x2c543e20024:	int3	
+0x2c543e20025:	int3	
+0x2c543e20026:	int3	
+0x2c543e20027:	int3	
+0x2c543e20028:	int3	
+0x2c543e20029:	int3	
+0x2c543e2002a:	int3	
+0x2c543e2002b:	int3	
+0x2c543e2002c:	int3	
+0x2c543e2002d:	int3	
+0x2c543e2002e:	int3	
+0x2c543e2002f:	int3	
+0x2c543e20030:	int3	
+0x2c543e20031:	add	byte ptr [rax], al
+0x2c543e20033:	add	byte ptr [rax], al
+0x2c543e20035:	add	byte ptr [rax], al
+0x2c543e20037:	add	byte ptr [rax], al
+0x2c543e20039:	add	byte ptr [rax], al
+0x2c543e2003b:	add	byte ptr [rax], al
+0x2c543e2003d:	add	byte ptr [rax], al",,,
+windows.malfind,2026-03-09 12:43:14,2856,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,MsMpEng.exe,,,,,,,,,,,,,0x2c543f20000,0x2c54411ffff,VadS,PAGE_EXECUTE_READWRITE,512,1,N/A,"
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc ................
+cc 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................","
+0x2c543f20000:	int3	
+0x2c543f20001:	int3	
+0x2c543f20002:	int3	
+0x2c543f20003:	int3	
+0x2c543f20004:	int3	
+0x2c543f20005:	int3	
+0x2c543f20006:	int3	
+0x2c543f20007:	int3	
+0x2c543f20008:	int3	
+0x2c543f20009:	int3	
+0x2c543f2000a:	int3	
+0x2c543f2000b:	int3	
+0x2c543f2000c:	int3	
+0x2c543f2000d:	int3	
+0x2c543f2000e:	int3	
+0x2c543f2000f:	int3	
+0x2c543f20010:	int3	
+0x2c543f20011:	int3	
+0x2c543f20012:	int3	
+0x2c543f20013:	int3	
+0x2c543f20014:	int3	
+0x2c543f20015:	int3	
+0x2c543f20016:	int3	
+0x2c543f20017:	int3	
+0x2c543f20018:	int3	
+0x2c543f20019:	int3	
+0x2c543f2001a:	int3	
+0x2c543f2001b:	int3	
+0x2c543f2001c:	int3	
+0x2c543f2001d:	int3	
+0x2c543f2001e:	int3	
+0x2c543f2001f:	int3	
+0x2c543f20020:	int3	
+0x2c543f20021:	int3	
+0x2c543f20022:	int3	
+0x2c543f20023:	int3	
+0x2c543f20024:	int3	
+0x2c543f20025:	int3	
+0x2c543f20026:	int3	
+0x2c543f20027:	int3	
+0x2c543f20028:	int3	
+0x2c543f20029:	int3	
+0x2c543f2002a:	int3	
+0x2c543f2002b:	int3	
+0x2c543f2002c:	int3	
+0x2c543f2002d:	int3	
+0x2c543f2002e:	int3	
+0x2c543f2002f:	int3	
+0x2c543f20030:	int3	
+0x2c543f20031:	add	byte ptr [rax], al
+0x2c543f20033:	add	byte ptr [rax], al
+0x2c543f20035:	add	byte ptr [rax], al
+0x2c543f20037:	add	byte ptr [rax], al
+0x2c543f20039:	add	byte ptr [rax], al
+0x2c543f2003b:	add	byte ptr [rax], al
+0x2c543f2003d:	add	byte ptr [rax], al",,,
+windows.malfind,2026-03-09 12:43:14,5424,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,SearchApp.exe,,,,,,,,,,,,,0x1fbcf280000,0x1fbcf29ffff,VadS,PAGE_EXECUTE_READWRITE,6,1,N/A,"
+48 89 54 24 10 48 89 4c 24 08 4c 89 44 24 18 4c H.T$.H.L$.L.D$.L
+89 4c 24 20 48 8b 41 28 48 8b 48 08 48 8b 51 50 .L$ H.A(H.H.H.QP
+48 83 e2 f8 48 8b ca 48 b8 60 00 28 cf fb 01 00 H...H..H.`.(....
+00 48 2b c8 48 81 f9 70 0f 00 00 76 09 48 c7 c1 .H+.H..p...v.H..","
+0x1fbcf280000:	mov	qword ptr [rsp + 0x10], rdx
+0x1fbcf280005:	mov	qword ptr [rsp + 8], rcx
+0x1fbcf28000a:	mov	qword ptr [rsp + 0x18], r8
+0x1fbcf28000f:	mov	qword ptr [rsp + 0x20], r9
+0x1fbcf280014:	mov	rax, qword ptr [rcx + 0x28]
+0x1fbcf280018:	mov	rcx, qword ptr [rax + 8]
+0x1fbcf28001c:	mov	rdx, qword ptr [rcx + 0x50]
+0x1fbcf280020:	and	rdx, 0xfffffffffffffff8
+0x1fbcf280024:	mov	rcx, rdx
+0x1fbcf280027:	movabs	rax, 0x1fbcf280060
+0x1fbcf280031:	sub	rcx, rax
+0x1fbcf280034:	cmp	rcx, 0xf70
+0x1fbcf28003b:	jbe	0x1fbcf280046",,,
+windows.malfind,2026-03-09 12:43:14,5424,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,SearchApp.exe,,,,,,,,,,,,,0x1fce1480000,0x1fce14e3fff,VadS,PAGE_EXECUTE_READWRITE,1,1,N/A,"
+48 b8 00 5c 0a d0 fb 01 00 00 48 ff e0 cc cc cc H..\\......H.....
+48 b8 00 0c fb cf fb 01 00 00 48 ff e0 cc cc cc H.........H.....
+48 b8 00 50 fa cf fb 01 00 00 48 ff e0 cc cc cc H..P......H.....
+48 b8 00 60 fa cf fb 01 00 00 48 ff e0 cc cc cc H..`......H.....","
+0x1fce1480000:	movabs	rax, 0x1fbd00a5c00
+0x1fce148000a:	jmp	rax
+0x1fce148000d:	int3	
+0x1fce148000e:	int3	
+0x1fce148000f:	int3	
+0x1fce1480010:	movabs	rax, 0x1fbcffb0c00
+0x1fce148001a:	jmp	rax
+0x1fce148001d:	int3	
+0x1fce148001e:	int3	
+0x1fce148001f:	int3	
+0x1fce1480020:	movabs	rax, 0x1fbcffa5000
+0x1fce148002a:	jmp	rax
+0x1fce148002d:	int3	
+0x1fce148002e:	int3	
+0x1fce148002f:	int3	
+0x1fce1480030:	movabs	rax, 0x1fbcffa6000
+0x1fce148003a:	jmp	rax
+0x1fce148003d:	int3	
+0x1fce148003e:	int3	
+0x1fce148003f:	int3	",,,
+windows.malfind,2026-03-09 12:43:14,6512,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,smartscreen.ex,,,,,,,,,,,,,0x1bcfebb0000,0x1bcfebcffff,VadS,PAGE_EXECUTE_READWRITE,1,1,N/A,"
+48 89 54 24 10 48 89 4c 24 08 4c 89 44 24 18 4c H.T$.H.L$.L.D$.L
+89 4c 24 20 48 8b 41 28 48 8b 48 08 48 8b 51 50 .L$ H.A(H.H.H.QP
+48 83 e2 f8 48 8b ca 48 b8 60 00 bb fe bc 01 00 H...H..H.`......
+00 48 2b c8 48 81 f9 70 0f 00 00 76 09 48 c7 c1 .H+.H..p...v.H..","
+0x1bcfebb0000:	mov	qword ptr [rsp + 0x10], rdx
+0x1bcfebb0005:	mov	qword ptr [rsp + 8], rcx
+0x1bcfebb000a:	mov	qword ptr [rsp + 0x18], r8
+0x1bcfebb000f:	mov	qword ptr [rsp + 0x20], r9
+0x1bcfebb0014:	mov	rax, qword ptr [rcx + 0x28]
+0x1bcfebb0018:	mov	rcx, qword ptr [rax + 8]
+0x1bcfebb001c:	mov	rdx, qword ptr [rcx + 0x50]
+0x1bcfebb0020:	and	rdx, 0xfffffffffffffff8
+0x1bcfebb0024:	mov	rcx, rdx
+0x1bcfebb0027:	movabs	rax, 0x1bcfebb0060
+0x1bcfebb0031:	sub	rcx, rax
+0x1bcfebb0034:	cmp	rcx, 0xf70
+0x1bcfebb003b:	jbe	0x1bcfebb0046",,,
+windows.malfind,2026-03-09 12:43:14,6840,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,OneDrive.exe,,,,,,,,,,,,,0x23e7a7c0000,0x23e7a7cffff,VadS,PAGE_EXECUTE_READWRITE,16,1,N/A,"
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+f0 ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................","
+0x23e7a7c0000:	add	byte ptr [rax], al
+0x23e7a7c0002:	add	byte ptr [rax], al
+0x23e7a7c0004:	add	byte ptr [rax], al
+0x23e7a7c0006:	add	byte ptr [rax], al
+0x23e7a7c0008:	add	byte ptr [rax], al
+0x23e7a7c000a:	add	byte ptr [rax], al
+0x23e7a7c000c:	add	byte ptr [rax], al
+0x23e7a7c000e:	add	byte ptr [rax], al
+0x23e7a7c0010:	add	byte ptr [rax], al
+0x23e7a7c0012:	add	byte ptr [rax], al
+0x23e7a7c0014:	add	byte ptr [rax], al
+0x23e7a7c0016:	add	byte ptr [rax], al
+0x23e7a7c0018:	add	byte ptr [rax], al
+0x23e7a7c001a:	add	byte ptr [rax], al
+0x23e7a7c001c:	add	byte ptr [rax], al
+0x23e7a7c001e:	add	byte ptr [rax], al
+0x23e7a7c0020:	lock inc	dword ptr [rax]
+0x23e7a7c0023:	add	byte ptr [rax], al
+0x23e7a7c0025:	add	byte ptr [rax], al
+0x23e7a7c0027:	add	byte ptr [rax], al
+0x23e7a7c0029:	add	byte ptr [rax], al
+0x23e7a7c002b:	add	byte ptr [rax], al
+0x23e7a7c002d:	add	byte ptr [rax], al
+0x23e7a7c002f:	add	byte ptr [rax], al
+0x23e7a7c0031:	add	byte ptr [rax], al
+0x23e7a7c0033:	add	byte ptr [rax], al
+0x23e7a7c0035:	add	byte ptr [rax], al
+0x23e7a7c0037:	add	byte ptr [rax], al
+0x23e7a7c0039:	add	byte ptr [rax], al
+0x23e7a7c003b:	add	byte ptr [rax], al
+0x23e7a7c003d:	add	byte ptr [rax], al",,,
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76280000,0x7636ffff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8853064440,0x0,\\Windows\\SysWOW64\\kernel32.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2ab0000,0x2aeffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88542d48d0,0xffffbe8853064440,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xa40000,0xb3ffff,VadS,PAGE_READWRITE,146,1,,,,0xffffbe88522cf470,0xffffbe88542d48d0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x200000,0x3fffff,VadS,PAGE_READWRITE,35,1,,,,0xffffbe88522c8d00,0xffffbe88522cf470,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x1a0000,0x1a3fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885363f400,0xffffbe88522c8d00,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x40000,0x5cfff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885363e820,0xffffbe885363f400,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x20000,0x20fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853059b80,0xffffbe885363e820,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x10000,0x10fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88530490a0,0xffffbe8853059b80,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x30000,0x3ffff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe8853076d20,0xffffbe8853059b80,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xa0000,0x19ffff,VadS,PAGE_READWRITE,15,1,,,,0xffffbe88522c8940,0xffffbe885363e820,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x60000,0x9ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88522c8760,0xffffbe88522c8940,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x1c0000,0x1c1fff,VadS,PAGE_READWRITE,2,1,,,,0xffffbe88522c91b0,0xffffbe885363f400,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x1b0000,0x1b1fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885363f720,0xffffbe88522c91b0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x1e0000,0x1e7fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88522d1400,0xffffbe88522c91b0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x1d0000,0x1d0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885305e540,0xffffbe88522d1400,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x1f0000,0x1f7fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884cc76410,0xffffbe88522d1400,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x870000,0x87ffff,VadS,PAGE_READWRITE,8,1,,,,0xffffbe88522cee30,0xffffbe88522c8d00,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x760000,0x828fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885307d300,0xffffbe88522cee30,\\Windows\\System32\\locale.nls
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x400000,0x759fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885363e6e0,0xffffbe885307d300,\\Malware\\WannaCry\\WannaCry.exe5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa.exe
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x830000,0x86ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88522d1900,0xffffbe885307d300,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x9d0000,0x9d0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884ef4e1d0,0xffffbe88522cee30,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x980000,0x9bffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88522d1cc0,0xffffbe884ef4e1d0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x880000,0x97ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88522d19f0,0xffffbe88522d1cc0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x9c0000,0x9c0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884ef4eef0,0xffffbe88522d1cc0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x9f0000,0x9fcfff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88542d5960,0xffffbe884ef4e1d0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x9e0000,0x9e0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884ef4e450,0xffffbe88542d5960,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xa00000,0xa3ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88542d3bb0,0xffffbe88542d5960,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2490000,0x258ffff,VadS,PAGE_READWRITE,82,1,,,,0xffffbe884eef7740,0xffffbe88522cf470,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xfd0000,0x23d0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853638880,0xffffbe884eef7740,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xc40000,0xe3ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8852324650,0xffffbe8853638880,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xb40000,0xc3ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88522d1e00,0xffffbe8852324650,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0xe40000,0xfc0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853618b20,0xffffbe8852324650,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2420000,0x245ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88542d4470,0xffffbe8853638880,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x23e0000,0x241ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88542d4a10,0xffffbe88542d4470,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2470000,0x2477fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88542d5550,0xffffbe88542d4470,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2460000,0x2460fff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe885363a860,0xffffbe88542d5550,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2480000,0x248ffff,VadS,PAGE_READWRITE,15,1,,,,0xffffbe88522d1b30,0xffffbe88542d5550,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x28b0000,0x29affff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88542d4880,0xffffbe884eef7740,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x26a0000,0x27a4fff,VadS,PAGE_READWRITE,257,1,,,,0xffffbe88542d5280,0xffffbe88542d4880,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2590000,0x2695fff,VadS,PAGE_READWRITE,257,1,,,,0xffffbe88542d5320,0xffffbe88542d5280,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x27b0000,0x28affff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88542d3a20,0xffffbe88542d5280,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x29b0000,0x2aaffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88542d44c0,0xffffbe88542d4880,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74d90000,0x74dbefff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853060d40,0xffffbe88542d48d0,\\Windows\\SysWOW64\\rsaenh.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2f50000,0x2f8ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88542d49c0,0xffffbe8853060d40,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2d30000,0x2e3afff,VadS,PAGE_READWRITE,257,1,,,,0xffffbe88542d4970,0xffffbe88542d49c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2bf0000,0x2c2ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88542d4ab0,0xffffbe88542d4970,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2af0000,0x2beffff,VadS,PAGE_READWRITE,5,1,,,,0xffffbe88542d4600,0xffffbe88542d4ab0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2c30000,0x2d2ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88542d4a60,0xffffbe88542d4ab0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2e40000,0x2f48fff,VadS,PAGE_READWRITE,257,1,,,,0xffffbe88542d4790,0xffffbe88542d4970,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x3710000,0x374ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543c9540,0xffffbe88542d49c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x35d0000,0x360ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543c8370,0xffffbe88543c9540,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x3090000,0x33c7fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885363b8a0,0xffffbe88543c8370,\\Windows\\Globalization\\Sorting\\SortDefault.nls
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x2f90000,0x308ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88542d4b50,0xffffbe885363b8a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x33d0000,0x35cffff,VadS,PAGE_READWRITE,71,1,,,,0xffffbe88522c85d0,0xffffbe885363b8a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x3610000,0x370ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88543c8870,0xffffbe88543c8370,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x10000000,0x1000ffff,VadS,PAGE_READWRITE,15,1,,,,0xffffbe88542d57d0,0xffffbe88543c9540,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x3750000,0x384ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88543c8be0,0xffffbe88542d57d0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x3850000,0x4256fff,VadS,PAGE_READWRITE,2561,1,,,,0xffffbe88543cb3e0,0xffffbe88543c8be0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74cc0000,0x74ce8fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe885363ca20,0xffffbe88542d57d0,\\Windows\\SysWOW64\\ntmarta.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74d20000,0x74d8ffff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853638ba0,0xffffbe885363ca20,\\Windows\\SysWOW64\\msvcp60.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x75a70000,0x75ae4fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe88530805a0,0xffffbe8853060d40,\\Windows\\SysWOW64\\sechost.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74f90000,0x74fa2fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885305a300,0xffffbe88530805a0,\\Windows\\SysWOW64\\cryptsp.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74de0000,0x74e7efff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885361cb80,0xffffbe885305a300,\\Windows\\SysWOW64\\apphelp.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74dd0000,0x74dd9fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853072f40,0xffffbe885361cb80,\\Windows\\SysWOW64\\cryptbase.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x74e80000,0x74ea7fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8851986530,0xffffbe885361cb80,\\Windows\\SysWOW64\\sspicli.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x753e0000,0x75403fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885363a400,0xffffbe885305a300,\\Windows\\SysWOW64\\wldp.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x75410000,0x75a19fff,Vad ,PAGE_EXECUTE_WRITECOPY,8,0,,,,0xffffbe8853639aa0,0xffffbe885363a400,\\Windows\\SysWOW64\\windows.storage.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x75d30000,0x75e4ffff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885307f9c0,0xffffbe88530805a0,\\Windows\\SysWOW64\\ucrtbase.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x75af0000,0x75d03fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8853074ca0,0xffffbe885307f9c0,\\Windows\\SysWOW64\\KernelBase.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x75d10000,0x75d28fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853061060,0xffffbe8853074ca0,\\Windows\\SysWOW64\\bcrypt.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x75e50000,0x75fe5fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe885307e2a0,0xffffbe885307f9c0,\\Windows\\SysWOW64\\user32.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x77b60000,0x77d02fff,Vad ,PAGE_EXECUTE_WRITECOPY,9,0,,,,0xffffbe885363dd80,0xffffbe8853064440,\\Windows\\SysWOW64\\ntdll.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76f00000,0x77180fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8853638d80,0xffffbe885363dd80,\\Windows\\SysWOW64\\combase.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76c60000,0x76c77fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe885307d6c0,0xffffbe8853638d80,\\Windows\\SysWOW64\\win32u.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76a50000,0x76b0efff,Vad ,PAGE_EXECUTE_WRITECOPY,7,0,,,,0xffffbe885307eb60,0xffffbe885307d6c0,\\Windows\\SysWOW64\\msvcrt.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x768d0000,0x7694afff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885307d580,0xffffbe885307eb60,\\Windows\\SysWOW64\\msvcp_win.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76c30000,0x76c52fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885307e520,0xffffbe885307eb60,\\Windows\\SysWOW64\\gdi32.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76b10000,0x76b54fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885363c5c0,0xffffbe885307e520,\\Windows\\SysWOW64\\shlwapi.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76e80000,0x76ef9fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe885307e5c0,0xffffbe885307d6c0,\\Windows\\SysWOW64\\advapi32.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x76df0000,0x76e76fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885363a5e0,0xffffbe885307e5c0,\\Windows\\SysWOW64\\SHCore.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x77250000,0x77329fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885307d940,0xffffbe8853638d80,\\Windows\\SysWOW64\\gdi32full.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x77190000,0x77249fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe88530801e0,0xffffbe885307d940,\\Windows\\SysWOW64\\rpcrt4.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x77920000,0x7797bfff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe8853072e00,0xffffbe885307d940,\\Windows\\SysWOW64\\bcryptprimitives.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x77330000,0x778e2fff,Vad ,PAGE_EXECUTE_WRITECOPY,11,0,,,,0xffffbe8853619ac0,0xffffbe8853072e00,\\Windows\\SysWOW64\\shell32.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x77b50000,0x77b59fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe885304b760,0xffffbe8853072e00,\\Windows\\System32\\wow64cpu.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffe6000,0x7ffe6fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88522c88a0,0xffffbe885363dd80,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ff90000,0x7ff91fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88522cec00,0xffffbe88522c88a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ff60000,0x7ff61fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88522c87b0,0xffffbe88522cec00,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7fe50000,0x7ff4ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88530763c0,0xffffbe88522c87b0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ff50000,0x7ff58fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88522ceed0,0xffffbe88530763c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ff70000,0x7ff80fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88522cf0b0,0xffffbe88522c87b0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffb0000,0x7ffd2fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885363df60,0xffffbe88522cec00,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffa0000,0x7ffa0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885363e320,0xffffbe885363df60,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffe0000,0x7ffe0fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88522c8ee0,0xffffbe885363df60,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffe77280000,0x7ffe772d8fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe884ef50bb0,0xffffbe88522c88a0,\\Windows\\System32\\wow64.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7fff0000,0xffffffff,VadS,PAGE_READONLY,2147483647,1,,,,0xffffbe88522c8c10,0xffffbe884ef50bb0,N/A
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffe77e10000,0x7ffe78005fff,Vad ,PAGE_EXECUTE_WRITECOPY,16,0,,,,0xffffbe885363dce0,0xffffbe884ef50bb0,\\Windows\\System32\\ntdll.dll
+windows.vadinfo,2026-03-09 12:46:15,1468,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,WannaCry.exe,,,,,,,,,,,,,0x7ffe77800000,0x7ffe77882fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe884ef50c50,0xffffbe885363dce0,\\Windows\\System32\\wow64win.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x75af0000,0x75d03fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8851de8e10,0x0,\\Windows\\SysWOW64\\KernelBase.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7c0000,0x8bffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88543ccf10,0xffffbe8851de8e10,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x200000,0x3fffff,VadS,PAGE_READWRITE,14,1,,,,0xffffbe88543caa80,0xffffbe88543ccf10,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x1a0000,0x1a3fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de6250,0xffffbe88543caa80,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x40000,0x5cfff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de5d50,0xffffbe8851de6250,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x20000,0x20fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de7ab0,0xffffbe8851de5d50,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x10000,0x10fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de7a10,0xffffbe8851de7ab0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x30000,0x3ffff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe8851de8eb0,0xffffbe8851de7ab0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0xa0000,0x19ffff,VadS,PAGE_READWRITE,10,1,,,,0xffffbe88543cb700,0xffffbe8851de5d50,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x60000,0x9ffff,VadS,PAGE_READWRITE,12,1,,,,0xffffbe88543cb430,0xffffbe88543cb700,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x1c0000,0x1c1fff,VadS,PAGE_READWRITE,2,1,,,,0xffffbe88543cb8e0,0xffffbe8851de6250,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x1b0000,0x1b1fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de6ed0,0xffffbe88543cb8e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x1e0000,0x1e7fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cb250,0xffffbe88543cb8e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x1d0000,0x1d0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de7c90,0xffffbe88543cb250,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x1f0000,0x1fffff,VadS,PAGE_READWRITE,9,1,,,,0xffffbe88543cb7f0,0xffffbe88543cb250,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x760000,0x760fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851deaa30,0xffffbe88543caa80,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x610000,0x64ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543cc240,0xffffbe8851deaa30,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x440000,0x53ffff,VadS,PAGE_READWRITE,62,1,,,,0xffffbe88543cbf20,0xffffbe88543cc240,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x400000,0x43cfff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de55d0,0xffffbe88543cbf20,\\Malware\\WannaCry\\@WanaDecryptor@.exe
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x540000,0x608fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de98b0,0xffffbe88543cbf20,\\Windows\\System32\\locale.nls
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x750000,0x750fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de9e50,0xffffbe88543cc240,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x650000,0x74ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88543cc470,0xffffbe8851de9e50,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x780000,0x7bffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543cb890,0xffffbe8851deaa30,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x770000,0x770fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de9ef0,0xffffbe88543cb890,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x73ff0000,0x74063fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe884ef9fcf0,0xffffbe88543ccf10,\\Windows\\SysWOW64\\uxtheme.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x9b0000,0xbaffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88524b5260,0xffffbe884ef9fcf0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x960000,0x967fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88524c4ee0,0xffffbe88524b5260,\\Windows\\System32\\en-US\\MFC42.dll.mui
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x8d0000,0x94ffff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cd870,0xffffbe88524c4ee0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x8c0000,0x8c7fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88524b5300,0xffffbe88543cd870,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x950000,0x950fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cd2d0,0xffffbe88543cd870,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x980000,0x981fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884ef9ead0,0xffffbe88524c4ee0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x970000,0x970fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cdaf0,0xffffbe884ef9ead0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x9a0000,0x9affff,VadS,PAGE_READWRITE,6,1,,,,0xffffbe88543ccf60,0xffffbe884ef9ead0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x990000,0x994fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884efa0830,0xffffbe88543ccf60,\\Windows\\System32\\en-US\\user32.dll.mui
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x2150000,0x2487fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe884ef9f930,0xffffbe88524b5260,\\Windows\\Globalization\\Sorting\\SortDefault.nls
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0xd40000,0x2140fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88524b68e0,0xffffbe884ef9f930,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0xbb0000,0xd30fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88524b7920,0xffffbe88524b68e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x2620000,0x262ffff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cd5a0,0xffffbe884ef9f930,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x24a0000,0x24dffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543cdeb0,0xffffbe88543cd5a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x2490000,0x249cfff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543ce1d0,0xffffbe88543cdeb0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x24e0000,0x25dffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88543ce590,0xffffbe88543cdeb0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x73f90000,0x73fe1fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe8851dedf50,0xffffbe88543cd5a0,\\Windows\\SysWOW64\\mswsock.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x2630000,0x272ffff,VadS,PAGE_READWRITE,2,1,,,,0xffffbe88543cec20,0xffffbe8851dedf50,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x747c0000,0x74968fff,Vad ,PAGE_EXECUTE_WRITECOPY,14,0,,,,0xffffbe88524b5940,0xffffbe884ef9fcf0,\\Windows\\SysWOW64\\urlmon.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x740b0000,0x74129fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe884ef9ed50,0xffffbe88524b5940,\\Windows\\SysWOW64\\riched20.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74070000,0x740a0fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe884ef9fc50,0xffffbe884ef9ed50,\\Windows\\SysWOW64\\msls31.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74130000,0x7435afff,Vad ,PAGE_EXECUTE_WRITECOPY,10,0,,,,0xffffbe88524b5440,0xffffbe884ef9ed50,\\Windows\\SysWOW64\\iertutil.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74360000,0x747b7fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe88524b59e0,0xffffbe88524b5440,\\Windows\\SysWOW64\\wininet.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74d20000,0x74d8ffff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe88524b60c0,0xffffbe88524b5940,\\Windows\\SysWOW64\\msvcp60.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74b90000,0x74cb3fff,Vad ,PAGE_EXECUTE_WRITECOPY,9,0,,,,0xffffbe8851deac10,0xffffbe88524b60c0,\\Windows\\SysWOW64\\mfc42.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74970000,0x74b81fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe88524b54e0,0xffffbe8851deac10,\\Windows\\WinSxS\\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.488_none_11b1e5df2ffd8627\\comctl32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74cf0000,0x74d06fff,Vad ,PAGE_EXECUTE_WRITECOPY,1,0,,,,0xffffbe884ef9f890,0xffffbe8851deac10,\\Windows\\SysWOW64\\usp10.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74cc0000,0x74ce8fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe8853977e20,0xffffbe884ef9f890,\\Windows\\SysWOW64\\ntmarta.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74d10000,0x74d15fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe884ef9ec10,0xffffbe884ef9f890,\\Windows\\SysWOW64\\riched32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x74de0000,0x74e7efff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8851de8a50,0xffffbe88524b60c0,\\Windows\\SysWOW64\\apphelp.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x75a70000,0x75ae4fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de9090,0xffffbe8851de8a50,\\Windows\\SysWOW64\\sechost.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77b60000,0x77d02fff,Vad ,PAGE_EXECUTE_WRITECOPY,9,0,,,,0xffffbe8851de5b70,0xffffbe8851de8e10,\\Windows\\SysWOW64\\ntdll.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76a50000,0x76b0efff,Vad ,PAGE_EXECUTE_WRITECOPY,7,0,,,,0xffffbe8851de9270,0xffffbe8851de5b70,\\Windows\\SysWOW64\\msvcrt.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76280000,0x7636ffff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de9810,0xffffbe8851de9270,\\Windows\\SysWOW64\\kernel32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x75e50000,0x75fe5fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8851de9450,0xffffbe8851de9810,\\Windows\\SysWOW64\\user32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x75d30000,0x75e4ffff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8851de8b90,0xffffbe8851de9450,\\Windows\\SysWOW64\\ucrtbase.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x768d0000,0x7694afff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de8690,0xffffbe8851de9810,\\Windows\\SysWOW64\\msvcp_win.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x769b0000,0x76a45fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe8851dea670,0xffffbe8851de8690,\\Windows\\SysWOW64\\oleaut32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77250000,0x77329fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de87d0,0xffffbe8851de9270,\\Windows\\SysWOW64\\gdi32full.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76e80000,0x76ef9fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8851de8c30,0xffffbe8851de87d0,\\Windows\\SysWOW64\\advapi32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76c60000,0x76c77fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe8851de85f0,0xffffbe8851de8c30,\\Windows\\SysWOW64\\win32u.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76c30000,0x76c52fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8851de8550,0xffffbe8851de85f0,\\Windows\\SysWOW64\\gdi32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76df0000,0x76e76fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe88524b5ee0,0xffffbe8851de85f0,\\Windows\\SysWOW64\\SHCore.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77190000,0x77249fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8851de91d0,0xffffbe8851de8c30,\\Windows\\SysWOW64\\rpcrt4.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x76f00000,0x77180fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8851dea030,0xffffbe8851de91d0,\\Windows\\SysWOW64\\combase.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77980000,0x779e2fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8851dea7b0,0xffffbe8851de87d0,\\Windows\\SysWOW64\\ws2_32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77330000,0x778e2fff,Vad ,PAGE_EXECUTE_WRITECOPY,11,0,,,,0xffffbe8851de9bd0,0xffffbe8851dea7b0,\\Windows\\SysWOW64\\shell32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77b50000,0x77b59fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe8851de78d0,0xffffbe8851dea7b0,\\Windows\\System32\\wow64cpu.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x77a60000,0x77b42fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe88524b4b80,0xffffbe8851de78d0,\\Windows\\SysWOW64\\ole32.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffe6000,0x7ffe6fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88543c9e50,0xffffbe8851de5b70,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ff90000,0x7ff91fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cbcf0,0xffffbe88543c9e50,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ff60000,0x7ff61fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cc1a0,0xffffbe88543cbcf0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7fe50000,0x7ff4ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de8d70,0xffffbe88543cc1a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ff50000,0x7ff58fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cc5b0,0xffffbe8851de8d70,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ff70000,0x7ff80fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cba70,0xffffbe88543cc1a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffb0000,0x7ffd2fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de5c10,0xffffbe88543cbcf0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffa0000,0x7ffa0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8851de4bd0,0xffffbe8851de5c10,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffe0000,0x7ffe0fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88543c9e00,0xffffbe8851de5c10,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffe77280000,0x7ffe772d8fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de7bf0,0xffffbe88543c9e50,\\Windows\\System32\\wow64.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7fff0000,0xffffffff,VadS,PAGE_READONLY,2147483647,1,,,,0xffffbe88543ca030,0xffffbe8851de7bf0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffe77e10000,0x7ffe78005fff,Vad ,PAGE_EXECUTE_WRITECOPY,16,0,,,,0xffffbe8851de5ad0,0xffffbe8851de7bf0,\\Windows\\System32\\ntdll.dll
+windows.vadinfo,2026-03-09 12:46:15,8832,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,@WanaDecryptor,,,,,,,,,,,,,0x7ffe77800000,0x7ffe77882fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8851de7150,0xffffbe8851de5ad0,\\Windows\\System32\\wow64win.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76280000,0x7636ffff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8853979220,0x0,\\Windows\\SysWOW64\\kernel32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x16c0000,0x17bffff,VadS,PAGE_READWRITE,67,1,,,,0xffffbe88543cf170,0xffffbe8853979220,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb50000,0xb50fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397c6a0,0xffffbe88543cf170,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xae0000,0xae0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853979ae0,0xffffbe885397c6a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xa60000,0xa7cfff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853978320,0xffffbe8853979ae0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xa40000,0xa40fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853978f00,0xffffbe8853978320,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xa30000,0xa30fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88539788c0,0xffffbe8853978f00,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xa50000,0xa5ffff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe88539794a0,0xffffbe8853978f00,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xac0000,0xac3fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853978640,0xffffbe8853978320,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xa80000,0xabffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543cef40,0xffffbe8853978640,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xad0000,0xad1fff,VadS,PAGE_READWRITE,2,1,,,,0xffffbe88543ceae0,0xffffbe8853978640,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb00000,0xb3ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543cf850,0xffffbe8853979ae0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xaf0000,0xaf7fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cf5d0,0xffffbe88543cf850,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb40000,0xb40fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397bd40,0xffffbe88543cf850,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1200000,0x13fffff,VadS,PAGE_READWRITE,8,1,,,,0xffffbe88543ce810,0xffffbe885397c6a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xba0000,0xe9dfff,Vad ,PAGE_EXECUTE_WRITECOPY,598,0,,,,0xffffbe8853978b40,0xffffbe88543ce810,\\Malware\\WannaCry\\TaskData\\Tor\\taskhsvc.exe
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb70000,0xb77fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397bac0,0xffffbe8853978b40,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb60000,0xb60fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397b8e0,0xffffbe885397bac0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb80000,0xb87fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cfd50,0xffffbe885397bac0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xb90000,0xb9cfff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543d0160,0xffffbe88543cfd50,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xf70000,0xfaffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88543cf940,0xffffbe8853978b40,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xea0000,0xf68fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a080,0xffffbe88543cf940,\\Windows\\System32\\locale.nls
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xfc0000,0xffffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88522c98e0,0xffffbe88543cf940,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0xfb0000,0xfb0fff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe88539756c0,0xffffbe88522c98e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1000000,0x11fffff,VadS,PAGE_READWRITE,20,1,,,,0xffffbe88543ce6d0,0xffffbe88522c98e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x14b0000,0x14bffff,VadS,PAGE_READWRITE,15,1,,,,0xffffbe88543cf6c0,0xffffbe88543ce810,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1430000,0x143ffff,VadS,PAGE_NOACCESS,1,1,,,,0xffffbe88522cb2d0,0xffffbe88543cf6c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1410000,0x1410fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853976840,0xffffbe88522cb2d0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1420000,0x1426fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88539777e0,0xffffbe8853976840,\\Windows\\Registration\\R000000000006.clb
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1450000,0x147ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853978dc0,0xffffbe88522cb2d0,\\Users\\Patrick\\AppData\\Local\\Microsoft\\Windows\\Caches\\{AFBF9F1A-8EE8-4C77-AF34-C647E37CA0D9}.1.ver0x0000000000000002.db
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1480000,0x1480fff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe885397d3c0,0xffffbe8853978dc0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x15c0000,0x15cffff,VadS,PAGE_READWRITE,8,1,,,,0xffffbe88543cf260,0xffffbe88543cf6c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x14c0000,0x15bffff,VadS,PAGE_READWRITE,52,1,,,,0xffffbe88543cfc10,0xffffbe88543cf260,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x15d0000,0x160ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88522cb5f0,0xffffbe88543cf260,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1610000,0x164ffff,VadS,PAGE_READWRITE,11,1,,,,0xffffbe88522ccc20,0xffffbe88522cb5f0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73f00000,0x73f81fff,Vad ,PAGE_EXECUTE_WRITECOPY,74,0,,,,0xffffbe885397bc00,0xffffbe88543cf170,\\Malware\\WannaCry\\TaskData\\Tor\\libevent-2-0-5.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73b80000,0x73d9bfff,Vad ,PAGE_EXECUTE_WRITECOPY,388,0,,,,0xffffbe885397c7e0,0xffffbe885397bc00,\\Malware\\WannaCry\\TaskData\\Tor\\libeay32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x36a0000,0x379ffff,VadS,PAGE_READWRITE,69,1,,,,0xffffbe88543cff80,0xffffbe885397c7e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1bc0000,0x1ef7fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397b660,0xffffbe88543cff80,\\Windows\\Globalization\\Sorting\\SortDefault.nls
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x19c0000,0x1bbffff,VadS,PAGE_READWRITE,4,1,,,,0xffffbe88543cf670,0xffffbe885397b660,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x17c0000,0x19bffff,VadS,PAGE_READWRITE,4,1,,,,0xffffbe88543cf620,0xffffbe88543cf670,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x2100000,0x2280fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397d320,0xffffbe885397b660,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x1f00000,0x20fffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397ba20,0xffffbe885397d320,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x2290000,0x3690fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397dbe0,0xffffbe885397d320,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x3ba0000,0x3cdefff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397da00,0xffffbe88543cff80,\\Windows\\System32\\en-US\\KernelBase.dll.mui
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x39a0000,0x3b9ffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88522cb190,0xffffbe885397da00,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x37a0000,0x399ffff,VadS,PAGE_READWRITE,4,1,,,,0xffffbe88522cab00,0xffffbe88522cb190,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73ab0000,0x73b72fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853978d20,0xffffbe885397da00,\\Windows\\SysWOW64\\propsys.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x3ce0000,0x3edffff,VadS,PAGE_READWRITE,3,1,,,,0xffffbe88522ccd60,0xffffbe8853978d20,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73e20000,0x73e41fff,Vad ,PAGE_EXECUTE_WRITECOPY,25,0,,,,0xffffbe885397c380,0xffffbe885397c7e0,\\Malware\\WannaCry\\TaskData\\Tor\\zlib1.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73da0000,0x73e16fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885397c740,0xffffbe885397c380,\\Malware\\WannaCry\\TaskData\\Tor\\libgcc_s_sjlj-1.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73e50000,0x73ed1fff,Vad ,PAGE_EXECUTE_WRITECOPY,91,0,,,,0xffffbe885397c2e0,0xffffbe885397c380,\\Malware\\WannaCry\\TaskData\\Tor\\ssleay32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73ee0000,0x73efbfff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885397c240,0xffffbe885397c2e0,\\Malware\\WannaCry\\TaskData\\Tor\\libssp-0.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75a70000,0x75ae4fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885397bde0,0xffffbe885397bc00,\\Windows\\SysWOW64\\sechost.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x74f90000,0x74fa2fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397c880,0xffffbe885397bde0,\\Windows\\SysWOW64\\cryptsp.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x74dd0000,0x74dd9fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397b7a0,0xffffbe885397c880,\\Windows\\SysWOW64\\cryptbase.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x74d90000,0x74dbefff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397c920,0xffffbe885397b7a0,\\Windows\\SysWOW64\\rsaenh.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x73f90000,0x73fe1fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe885397d140,0xffffbe885397c920,\\Windows\\SysWOW64\\mswsock.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x74de0000,0x74e7efff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397ac60,0xffffbe885397b7a0,\\Windows\\SysWOW64\\apphelp.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x74f80000,0x74f8efff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853977380,0xffffbe885397ac60,\\Windows\\SysWOW64\\kernel.appcore.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x753e0000,0x75403fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853975bc0,0xffffbe885397c880,\\Windows\\SysWOW64\\wldp.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75120000,0x7513cfff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853977ec0,0xffffbe8853975bc0,\\Windows\\SysWOW64\\profapi.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75410000,0x75a19fff,Vad ,PAGE_EXECUTE_WRITECOPY,8,0,,,,0xffffbe88539759e0,0xffffbe8853975bc0,\\Windows\\SysWOW64\\windows.storage.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75d30000,0x75e4ffff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397c100,0xffffbe885397bde0,\\Windows\\SysWOW64\\ucrtbase.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75af0000,0x75d03fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8853979360,0xffffbe885397c100,\\Windows\\SysWOW64\\KernelBase.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75d10000,0x75d28fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397c9c0,0xffffbe8853979360,\\Windows\\SysWOW64\\bcrypt.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x75e50000,0x75fe5fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe885397c1a0,0xffffbe885397c100,\\Windows\\SysWOW64\\user32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77b60000,0x77d02fff,Vad ,PAGE_EXECUTE_WRITECOPY,9,0,,,,0xffffbe8853978780,0xffffbe8853979220,\\Windows\\SysWOW64\\ntdll.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76e80000,0x76ef9fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe885397c600,0xffffbe8853978780,\\Windows\\SysWOW64\\advapi32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76c30000,0x76c52fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397bb60,0xffffbe885397c600,\\Windows\\SysWOW64\\gdi32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76a50000,0x76b0efff,Vad ,PAGE_EXECUTE_WRITECOPY,7,0,,,,0xffffbe885397be80,0xffffbe885397bb60,\\Windows\\SysWOW64\\msvcrt.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x768d0000,0x7694afff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885397b840,0xffffbe885397be80,\\Windows\\SysWOW64\\msvcp_win.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76410000,0x7648dfff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8853976d40,0xffffbe885397b840,\\Windows\\SysWOW64\\clbcatq.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x769b0000,0x76a45fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe8853976c00,0xffffbe885397b840,\\Windows\\SysWOW64\\oleaut32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76b10000,0x76b54fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853975760,0xffffbe885397be80,\\Windows\\SysWOW64\\shlwapi.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76b60000,0x76b9afff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe88539767a0,0xffffbe8853975760,\\Windows\\SysWOW64\\cfgmgr32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76c60000,0x76c77fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe885397c4c0,0xffffbe885397bb60,\\Windows\\SysWOW64\\win32u.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76df0000,0x76e76fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe8853975580,0xffffbe885397c4c0,\\Windows\\SysWOW64\\SHCore.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77330000,0x778e2fff,Vad ,PAGE_EXECUTE_WRITECOPY,11,0,,,,0xffffbe885397c060,0xffffbe885397c600,\\Windows\\SysWOW64\\shell32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77190000,0x77249fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397c420,0xffffbe885397c060,\\Windows\\SysWOW64\\rpcrt4.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x76f00000,0x77180fff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe8853976340,0xffffbe885397c420,\\Windows\\SysWOW64\\combase.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77250000,0x77329fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885397bf20,0xffffbe885397c420,\\Windows\\SysWOW64\\gdi32full.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77980000,0x779e2fff,Vad ,PAGE_EXECUTE_WRITECOPY,3,0,,,,0xffffbe885397bca0,0xffffbe885397c060,\\Windows\\SysWOW64\\ws2_32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77920000,0x7797bfff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe885397b980,0xffffbe885397bca0,\\Windows\\SysWOW64\\bcryptprimitives.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77b50000,0x77b59fff,Vad ,PAGE_EXECUTE_WRITECOPY,2,0,,,,0xffffbe8853978820,0xffffbe885397bca0,\\Windows\\System32\\wow64cpu.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x77a60000,0x77b42fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe88539774c0,0xffffbe8853978820,\\Windows\\SysWOW64\\ole32.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7ffe6000,0x7ffe6fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88543ce770,0xffffbe8853978780,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f850000,0x7f851fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cef90,0xffffbe88543ce770,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f820000,0x7f821fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543ce7c0,0xffffbe88543cef90,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f710000,0x7f80ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe88539795e0,0xffffbe88543ce7c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f810000,0x7f818fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cf120,0xffffbe88539795e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f830000,0x7f840fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543ce5e0,0xffffbe88543ce7c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f870000,0x7f892fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853977ba0,0xffffbe88543cef90,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7f860000,0x7f860fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853978280,0xffffbe8853977ba0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7ffe0000,0x7ffe0fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88543cce70,0xffffbe8853977ba0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7ffe77280000,0x7ffe772d8fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe88539783c0,0xffffbe88543ce770,\\Windows\\System32\\wow64.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7fff0000,0xffffffff,VadS,PAGE_READONLY,2147483647,1,,,,0xffffbe88543cecc0,0xffffbe88539783c0,N/A
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7ffe77e10000,0x7ffe78005fff,Vad ,PAGE_EXECUTE_WRITECOPY,16,0,,,,0xffffbe8853977a60,0xffffbe88539783c0,\\Windows\\System32\\ntdll.dll
+windows.vadinfo,2026-03-09 12:46:15,5732,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,taskhsvc.exe,,,,,,,,,,,,,0x7ffe77800000,0x7ffe77882fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8853978500,0xffffbe8853977a60,\\Windows\\System32\\wow64win.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ff5e8760000,0x7ff5e8782fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853979720,0x0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bd90000,0x1fd6bdacfff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853979180,0xffffbe8853979720,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x75ecc80000,0x75eccfffff,VadS,PAGE_READWRITE,5,1,,,,0xffffbe88543cf210,0xffffbe8853979180,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe6000,0x7ffe6fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88543cf3f0,0xffffbe88543cf210,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe0000,0x7ffe0fff,VadS,PAGE_READONLY,1,1,,,,0xffffbe88543cf300,0xffffbe88543cf3f0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x75eca00000,0x75ecbfffff,VadS,PAGE_READWRITE,9,1,,,,0xffffbe88543cf4e0,0xffffbe88543cf3f0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x75ecc00000,0x75ecc7ffff,VadS,PAGE_READWRITE,5,1,,,,0xffffbe88543cf800,0xffffbe88543cf4e0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bd70000,0x1fd6bd7ffff,Vad ,PAGE_READWRITE,0,0,,,,0xffffbe88539799a0,0xffffbe88543cf210,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x75ecd00000,0x75ecd7ffff,VadS,PAGE_READWRITE,5,1,,,,0xffffbe88543cf080,0xffffbe88539799a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x75ecd80000,0x75ecdfffff,VadS,PAGE_READWRITE,7,1,,,,0xffffbe88543cf3a0,0xffffbe88543cf080,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bd80000,0x1fd6bd8cfff,VadS,PAGE_READWRITE,2,1,,,,0xffffbe88543cf440,0xffffbe88539799a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6c330000,0x1fd6c4b0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397b160,0xffffbe8853979180,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bfb0000,0x1fd6bfb0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397b480,0xffffbe885397b160,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bf90000,0x1fd6bf90fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a3a0,0xffffbe885397b480,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6beb0000,0x1fd6bf78fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853979c20,0xffffbe885397a3a0,\\Windows\\System32\\locale.nls
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bdb0000,0x1fd6beaffff,VadS,PAGE_READWRITE,255,1,,,,0xffffbe88543cf030,0xffffbe8853979c20,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bf80000,0x1fd6bf8cfff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cf350,0xffffbe8853979c20,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bfa0000,0x1fd6bfa0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a580,0xffffbe885397a3a0,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6c120000,0x1fd6c12ffff,VadS,PAGE_READWRITE,7,1,,,,0xffffbe88543cf490,0xffffbe885397b480,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bfd0000,0x1fd6bfd0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a300,0xffffbe88543cf490,\\Windows\\System32\\en-US\\Conhost.exe.mui
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bfc0000,0x1fd6bfc7fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397b0c0,0xffffbe885397a300,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6bfe0000,0x1fd6c0dffff,VadS,PAGE_READWRITE,249,1,,,,0xffffbe88543cf7b0,0xffffbe885397a300,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6c130000,0x1fd6c32ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a260,0xffffbe88543cf490,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ff4e6620000,0x7ff4e671ffff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe8853979b80,0xffffbe885397b160,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6d8d0000,0x1fd6dc07fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a440,0xffffbe8853979b80,\\Windows\\Globalization\\Sorting\\SortDefault.nls
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6c4c0000,0x1fd6d8c0fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397ab20,0xffffbe885397a440,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6dc10000,0x1fd6de0ffff,VadS,PAGE_READWRITE,511,1,,,,0xffffbe88543cf530,0xffffbe885397a440,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x1fd6de10000,0x1fd6e20ffff,VadS,PAGE_READWRITE,303,1,,,,0xffffbe88543cf580,0xffffbe88543cf530,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ff5e6740000,0x7ff5e8740fff,VadS,PAGE_READWRITE,1,1,,,,0xffffbe88543cf990,0xffffbe8853979b80,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ff4e6720000,0x7ff5e673ffff,VadS,PAGE_READWRITE,0,1,,,,0xffffbe88543cf760,0xffffbe88543cf990,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ff5e8750000,0x7ff5e8750fff,Vad ,PAGE_READONLY,0,0,,,,0xffffbe885397a1c0,0xffffbe88543cf990,N/A
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe762a0000,0x7ffe7634dfff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe8853979ea0,0xffffbe8853979720,\\Windows\\System32\\SHCore.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75a80000,0x7ffe75b1cfff,Vad ,PAGE_EXECUTE_WRITECOPY,7,0,,,,0xffffbe8853979cc0,0xffffbe8853979ea0,\\Windows\\System32\\msvcp_win.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75760000,0x7ffe75a27fff,Vad ,PAGE_EXECUTE_WRITECOPY,8,0,,,,0xffffbe8853979860,0xffffbe8853979cc0,\\Windows\\System32\\KernelBase.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ff663770000,0x7ff663844fff,Vad ,PAGE_EXECUTE_WRITECOPY,8,0,,,,0xffffbe885397a120,0xffffbe8853979860,\\Windows\\System32\\conhost.exe
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75ea0000,0x7ffe75f4bfff,Vad ,PAGE_EXECUTE_WRITECOPY,8,0,,,,0xffffbe885397b200,0xffffbe8853979cc0,\\Windows\\System32\\advapi32.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75c50000,0x7ffe75c71fff,Vad ,PAGE_EXECUTE_WRITECOPY,1,0,,,,0xffffbe885397b020,0xffffbe885397b200,\\Windows\\System32\\win32u.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75b50000,0x7ffe75c4ffff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe8853979d60,0xffffbe885397b020,\\Windows\\System32\\ucrtbase.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75c80000,0x7ffe75d88fff,Vad ,PAGE_EXECUTE_WRITECOPY,9,0,,,,0xffffbe885397a6c0,0xffffbe885397b020,\\Windows\\System32\\gdi32full.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe75fd0000,0x7ffe7616ffff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe885397abc0,0xffffbe885397b200,\\Windows\\System32\\user32.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe77390000,0x7ffe7744cfff,Vad ,PAGE_EXECUTE_WRITECOPY,7,0,,,,0xffffbe8853979e00,0xffffbe8853979ea0,\\Windows\\System32\\kernel32.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe76a10000,0x7ffe77150fff,Vad ,PAGE_EXECUTE_WRITECOPY,17,0,,,,0xffffbe885397b2a0,0xffffbe8853979e00,\\Windows\\System32\\shell32.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe76690000,0x7ffe769e4fff,Vad ,PAGE_EXECUTE_WRITECOPY,9,0,,,,0xffffbe885397b3e0,0xffffbe885397b2a0,\\Windows\\System32\\combase.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe77170000,0x7ffe7720afff,Vad ,PAGE_EXECUTE_WRITECOPY,6,0,,,,0xffffbe885397a8a0,0xffffbe885397b2a0,\\Windows\\System32\\sechost.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe77d30000,0x7ffe77dcdfff,Vad ,PAGE_EXECUTE_WRITECOPY,10,0,,,,0xffffbe8853979f40,0xffffbe8853979e00,\\Windows\\System32\\msvcrt.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe77540000,0x7ffe77663fff,Vad ,PAGE_EXECUTE_WRITECOPY,5,0,,,,0xffffbe885397a620,0xffffbe8853979f40,\\Windows\\System32\\rpcrt4.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe77d00000,0x7ffe77d29fff,Vad ,PAGE_EXECUTE_WRITECOPY,4,0,,,,0xffffbe885397b520,0xffffbe885397a620,\\Windows\\System32\\gdi32.dll
+windows.vadinfo,2026-03-09 12:46:15,8016,,,/mnt/c/Users/Patrick/Documents/Virtual Machines/Windows 10 x64/Windows 10 x64-Snapshot23.vmem,0,,,,,,,,Disabled,conhost.exe,,,,,,,,,,,,,0x7ffe77e10000,0x7ffe78005fff,Vad ,PAGE_EXECUTE_WRITECOPY,16,0,,,,0xffffbe88539797c0,0xffffbe8853979f40,\\Windows\\System32\\ntdll.dll
