@@ -3,3 +3,19 @@ Datasets/memory-images/boomer-win2003-2006-03-17.img
 /Datasets/memory-images
 /Datasets/Resources
 Datasets/2020JimmyWilson.E01
+
+# Unused / old scripts
+wannacry_automate.ps1
+realtime_detection.py
+unused scripts/
+
+# Generated output
+# model_output/
+# features.csv
+vol3_output_*/
+vol3_*.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
