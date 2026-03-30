@@ -1,5 +1,6 @@
 # =============================================================================
 # ransomware_automate_v3.ps1
+# Pass -FamilyArg and -NumRunsArg to run non-interactively (e.g. from overnight.ps1)
 # Stage-Aware Ransomware Memory Collection - Multi-Family Edition
 #
 # Changes from v2:
@@ -11,15 +12,23 @@
 #   - WSL autovol4.py replaces per-plugin vol3 calls (PID-filtered output)
 # =============================================================================
 
+param(
+    [string]$FamilyArg = "",   # pass "ALL" or a family name to skip the prompt
+    [int]$NumRunsArg   = 0     # pass a number to skip the cycles prompt
+)
+
 # -- SYSTEM CONFIG - edit these once, leave alone after ----------------------
 $VMRUN      = "C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe"
 $VMX        = "C:\Users\Patrick\Documents\Virtual Machines\Windows 10 x64\Windows 10 x64.vmx"
-$CLEAN_SNAP = "CleanFamily3"
+$CLEAN_SNAP = "CleanFamily4"
 $VM_USER    = "patrick"
 $VM_PASS    = "kali"
 
 # autovol4.py in WSL - full path to the script inside WSL
 $AUTOVOL4_WSL = "/home/patrick/tools/volatility3/autovol4.py"
+
+# run_pipeline.py in WSL - set to "" to skip pipeline after collection
+$PIPELINE_WSL = "/mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/run_pipeline.py"
 
 # Output root on D drive - all families write here
 $OUTPUT_ROOT = "D:\Patrick\VMSnapshots"
@@ -35,7 +44,9 @@ $FAMILIES = @{
     "WannaCry" = "C:\Malware\WannaCry\WannaCry.exe"
     "Cerber"   = "C:\Malware\Cerber\Cerber.exe"
     "Jigsaw"   = "C:\Malware\Jigsaw\jigsaw"
-    "Petrwrap" = "C:\Malware\Petrwrap\Petrwrap.exe"
+    # "Petrwrap" = "C:\Malware\Petrwrap\Petrwrap.exe"
+    # "Ryuk"     = "C:\Malware\Ryuk\Ryuk.exe"
+    "Dharma"   = "C:\Malware\Dharma\Dharma\Dharma.exe"
 }
 # Add/remove entries above to match what you actually have staged in the VM.
 # The guest path must be the full Windows path inside the guest.
@@ -58,15 +69,17 @@ function Run-VMRun {
     return $rc
 }
 
-# -- RUNTIME PROMPT -----------------------------------------------------------
-Write-Host ""
-Write-Host "Available families:" -ForegroundColor Cyan
-$FAMILIES.Keys | Sort-Object | ForEach-Object { Write-Host "  - $_" }
-Write-Host "  - ALL  (run every family in sequence)" -ForegroundColor Cyan
-Write-Host ""
+# -- RUNTIME PROMPT (bypassed if -FamilyArg / -NumRunsArg passed) ------------
+if ($FamilyArg -eq "" -or $NumRunsArg -eq 0) {
+    Write-Host ""
+    Write-Host "Available families:" -ForegroundColor Cyan
+    $FAMILIES.Keys | Sort-Object | ForEach-Object { Write-Host "  - $_" }
+    Write-Host "  - ALL  (run every family in sequence)" -ForegroundColor Cyan
+    Write-Host ""
+}
 
-$familyInput = (Read-Host "Which family to run? (name or ALL)").Trim()
-$NUM_RUNS    = [int](Read-Host "How many full infection cycles per family?")
+$familyInput = if ($FamilyArg -ne "") { $FamilyArg } else { (Read-Host "Which family to run? (name or ALL)").Trim() }
+$NUM_RUNS    = if ($NumRunsArg -gt 0)  { $NumRunsArg } else { [int](Read-Host "How many full infection cycles per family?") }
 $runAnalysis = $false   # set to $true to run autovol4 on each snapshot after collection
 
 if ($familyInput -eq "ALL") {
@@ -325,3 +338,24 @@ Log "============================================" Cyan
 
 Write-Host ""
 Write-Host "All families done." -ForegroundColor Green
+
+# -- Run pipeline (autovol + features + training) in WSL ---------------------
+if ($PIPELINE_WSL -ne "") {
+    Write-Host ""
+    Write-Host "============================================" -ForegroundColor Cyan
+    Write-Host " Running analysis pipeline in WSL..."       -ForegroundColor Cyan
+    Write-Host "============================================" -ForegroundColor Cyan
+
+    $wslScanDir = "$(ConvertTo-WslPath $OUTPUT_ROOT)"
+    $wslCmd     = "python3 '$PIPELINE_WSL' --scan-dir '$wslScanDir'"
+
+    $proc = Start-Process -FilePath "wsl.exe" `
+                          -ArgumentList @("-e", "bash", "-c", $wslCmd) `
+                          -NoNewWindow -PassThru -Wait
+
+    if ($proc.ExitCode -eq 0) {
+        Write-Host "Pipeline complete." -ForegroundColor Green
+    } else {
+        Write-Host "[!] Pipeline failed (exit $($proc.ExitCode)) - run manually in WSL." -ForegroundColor Red
+    }
+}

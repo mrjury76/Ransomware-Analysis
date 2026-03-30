@@ -32,7 +32,9 @@ SYSTEM_DLL_PATHS = {"\\windows\\system32", "\\windows\\syswow64",
 # Known ransomware encrypted file extensions
 ENCRYPTED_EXTENSIONS = {".wncry", ".cerber", ".cerber2", ".cerber3",
                         ".jigsaw", ".fun", ".btc", ".encrypted",
-                        ".locked", ".petya", ".petrwrap"}
+                        ".locked", ".petya", ".petrwrap",
+                        ".dharma", ".wallet", ".arena", ".adobe",
+                        ".java", ".id", ".email", ".zzzzz"}
 
 
 def read_csv(path):

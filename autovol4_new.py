@@ -12,14 +12,15 @@ FAMILY_PROCESS_NAMES = {
     "Cerber":     ["cerber"],
     "Jigsaw":     ["jigsaw"],
     "Petrwrap":     ["petrwrap"],
+    "Ryuk":   ["ryuk", "lsass"],
+    "Dharma": ["dharma", "csrss"],
 
     # "HiddenTear": ["hiddentear"],
-    # "Dharma":     ["dharma", "bit"],
     # "LockBit":    ["lockbit"],
 }
 
 # Plugins that are NOT filtered by PID (no PID column or global scope)
-NO_PID_FILTER_PLUGINS = {"windows.malfind", "windows.filescan", "windows.svcscan"}
+NO_PID_FILTER_PLUGINS = {"windows.malfind", "windows.filescan", "windows.svcscan", "windows.netstat"}
 
 VOL_COMMAND = "/home/patrick/tools/volatility3/venv/bin/vol"
 PLUGINS = [
@@ -157,18 +158,36 @@ def run_analysis(family, memory_image, output_dir):
     all_fieldnames = []
     seen_fields    = set()
 
-    for plugin in PLUGINS:
-        log(f"\n[+] Running {plugin}...")
-        plugin_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Run plugins in parallel — each is an independent subprocess so no GIL issues.
+    # MAX_PLUGIN_WORKERS controls how many vol3 processes run simultaneously.
+    # Keep at 4 unless you have lots of RAM (each vol3 process loads the full vmem).
+    MAX_PLUGIN_WORKERS = 6
 
+    def run_plugin(plugin):
+        plugin_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         result = subprocess.run(
             [VOL_COMMAND, "-q", "-r", "csv", "-f", memory_image, plugin],
             capture_output=True, text=True
         )
-        raw = result.stdout
+        return plugin, plugin_ts, result.stdout
+
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    plugin_results = {}
+    with ThreadPoolExecutor(max_workers=MAX_PLUGIN_WORKERS) as executor:
+        futures = {executor.submit(run_plugin, p): p for p in PLUGINS}
+        for future in as_completed(futures):
+            plugin, plugin_ts, raw = future.result()
+            log(f"[+] Done: {plugin}")
+            plugin_results[plugin] = (plugin_ts, raw)
+
+    # Merge results in original plugin order so combined CSV is consistent
+    for plugin in PLUGINS:
+        if plugin not in plugin_results:
+            continue
+        plugin_ts, raw = plugin_results[plugin]
 
         if not raw.strip():
-            log(f"    -> No output")
+            log(f"    -> {plugin}: no output")
             continue
 
         raw_path = os.path.join(output_dir, f"{plugin}.csv")
@@ -182,7 +201,7 @@ def run_analysis(family, memory_image, output_dir):
             rows = list(reader)
             fieldnames = reader.fieldnames
 
-        log(f"    {len(rows)} rows")
+        log(f"    {plugin}: {len(rows)} rows")
 
         for row in rows:
             row["family"]       = family
