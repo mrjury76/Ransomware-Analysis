@@ -20,7 +20,7 @@ param(
 # -- SYSTEM CONFIG - edit these once, leave alone after ----------------------
 $VMRUN      = "C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe"
 $VMX        = "C:\Users\Patrick\Documents\Virtual Machines\Windows 10 x64\Windows 10 x64.vmx"
-$CLEAN_SNAP = "CleanFamily4"
+$CLEAN_SNAP = "CleanFamily5"
 $VM_USER    = "patrick"
 $VM_PASS    = "kali"
 
@@ -35,7 +35,7 @@ $OUTPUT_ROOT = "D:\Patrick\VMSnapshots"
 
 # Snapshot timings - seconds post-launch to capture
 # T=0 baseline always captured automatically before launch
-$SNAP_OFFSETS = @(15, 30, 60, 120, 180, 240)
+$SNAP_OFFSETS = @(15, 30, 60, 120, 180)
 
 # -- MULTI-FAMILY CONFIG TABLE ------------------------------------------------
 # Key   = display name (also used in output folder names and CSV family column)
@@ -266,7 +266,8 @@ for ($rep = 1; $rep -le $NUM_RUNS; $rep++) {
         }
 
         $actualOffset = [int]((Get-Date) - $launchTime).TotalSeconds
-        $snapName     = "${FAMILY}_T$('{0:D3}' -f $targetOffset)_rep$('{0:D2}' -f $rep)"
+        $snapTs       = Get-Date -Format "HHmmss"
+        $snapName     = "${FAMILY}_T$('{0:D3}' -f $targetOffset)_rep$('{0:D2}' -f $rep)_${snapTs}"
 
         Log "[+] Snapshot at T+${actualOffset}s: $snapName" Yellow
         $rc = Run-VMRun @("snapshot", $VMX, $snapName)
@@ -346,8 +347,8 @@ if ($PIPELINE_WSL -ne "") {
     Write-Host " Running analysis pipeline in WSL..."       -ForegroundColor Cyan
     Write-Host "============================================" -ForegroundColor Cyan
 
-    $wslScanDir = "$(ConvertTo-WslPath $OUTPUT_ROOT)"
-    $wslCmd     = "python3 '$PIPELINE_WSL' --scan-dir '$wslScanDir'"
+    $wslScanDir = ConvertTo-WslPath $OUTPUT_ROOT
+    $wslCmd     = "python3 $PIPELINE_WSL --scan-dir $wslScanDir"
 
     $proc = Start-Process -FilePath "wsl.exe" `
                           -ArgumentList @("-e", "bash", "-c", $wslCmd) `

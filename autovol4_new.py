@@ -11,9 +11,10 @@ FAMILY_PROCESS_NAMES = {
     "WannaCry":   ["wannacry", "tasksche", "mssecsvc"],
     "Cerber":     ["cerber"],
     "Jigsaw":     ["jigsaw"],
-    "Petrwrap":     ["petrwrap"],
-    "Ryuk":   ["ryuk", "lsass"],
     "Dharma": ["dharma", "csrss"],
+    
+    # "Petrwrap":     ["petrwrap"],
+    # "Ryuk":   ["ryuk", "lsass"],
 
     # "HiddenTear": ["hiddentear"],
     # "LockBit":    ["lockbit"],
@@ -161,7 +162,7 @@ def run_analysis(family, memory_image, output_dir):
     # Run plugins in parallel — each is an independent subprocess so no GIL issues.
     # MAX_PLUGIN_WORKERS controls how many vol3 processes run simultaneously.
     # Keep at 4 unless you have lots of RAM (each vol3 process loads the full vmem).
-    MAX_PLUGIN_WORKERS = 6
+    MAX_PLUGIN_WORKERS = 12
 
     def run_plugin(plugin):
         plugin_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

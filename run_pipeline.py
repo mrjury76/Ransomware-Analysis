@@ -95,8 +95,8 @@ def main():
         sys.exit(1)
 
     import csv
-    meta_cols = ["family", "stage_hint", "actual_offset_s", "target_offset_s",
-                 "rep", "run", "snap_name", "snap_dir"]
+    meta_cols = ["family", "stage_hint", "behavior_stage", "actual_offset_s",
+                 "target_offset_s", "rep", "run", "snap_name", "snap_dir"]
     feat_cols  = [k for k in rows[0] if k not in meta_cols]
     fieldnames = meta_cols + feat_cols
 
@@ -120,14 +120,27 @@ def main():
     import train_stage_model
 
     os.makedirs(model_out, exist_ok=True)
-    df       = train_stage_model.load_data(out_csv)
-    X, y, fc = train_stage_model.prepare_xy(df)
+    df = train_stage_model.load_data(out_csv)
 
-    print(f"[+] Using {'XGBoost' if train_stage_model.HAS_XGBOOST else 'RandomForest'}\n")
-    train_stage_model.run_standard_split(X, y, fc, model_out)
+    # Train with both label types: time-based and behavior-based
+    for label_col, stage_names in [("stage_hint", train_stage_model.STAGE_NAMES_TIME),
+                                   ("behavior_stage", train_stage_model.STAGE_NAMES_BEHAVIOR)]:
+        if label_col not in df.columns:
+            continue
 
-    if not args.no_loo and len(df["family"].unique()) > 1:
-        train_stage_model.run_loo(df, fc, model_out)
+        label_dir = os.path.join(model_out, label_col)
+        os.makedirs(label_dir, exist_ok=True)
+
+        print(f"\n{'#' * 60}")
+        print(f" LABEL: {label_col}")
+        print(f"{'#' * 60}")
+
+        X, y, fc = train_stage_model.prepare_xy(df, label_col=label_col)
+        print(f"[+] Using {'XGBoost' if train_stage_model.HAS_XGBOOST else 'RandomForest'}\n")
+        train_stage_model.run_standard_split(X, y, fc, label_dir, stage_names=stage_names)
+
+        if not args.no_loo and len(df["family"].unique()) > 1:
+            train_stage_model.run_loo(df, fc, label_dir, label_col=label_col, stage_names=stage_names)
 
     print(f"\n{'=' * 60}")
     print(f" Pipeline complete")

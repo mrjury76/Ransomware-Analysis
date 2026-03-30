@@ -34,7 +34,8 @@ ENCRYPTED_EXTENSIONS = {".wncry", ".cerber", ".cerber2", ".cerber3",
                         ".jigsaw", ".fun", ".btc", ".encrypted",
                         ".locked", ".petya", ".petrwrap",
                         ".dharma", ".wallet", ".arena", ".adobe",
-                        ".java", ".id", ".email", ".zzzzz"}
+                        ".java", ".id", ".email", ".zzzzz", ".2023",
+                        ".9aee"}
 
 
 def read_csv(path):
@@ -373,9 +374,63 @@ def process_snapshot(snap_dir):
     features.update(feat_privileges(plugin_rows["windows.privileges"]))
     features.update(feat_netstat(plugin_rows["windows.netstat"]))
 
+    # ── Ratio features (normalize across system load) ──────────────────────
+    vad_total = features.get("vad_total", 0)
+    if vad_total > 0:
+        features["vad_exec_ratio"]     = round(features.get("vad_exec_count", 0) / vad_total, 4)
+        features["vad_priv_exec_ratio"] = round(features.get("vad_private_exec", 0) / vad_total, 4)
+    else:
+        features["vad_exec_ratio"]     = 0
+        features["vad_priv_exec_ratio"] = 0
+
+    handle_total = features.get("handle_total", 0)
+    if handle_total > 0:
+        features["handle_file_ratio"]     = round(features.get("handle_file_count", 0) / handle_total, 4)
+        features["handle_registry_ratio"] = round(features.get("handle_registry_count", 0) / handle_total, 4)
+        features["handle_mutex_ratio"]    = round(features.get("handle_mutex_count", 0) / handle_total, 4)
+    else:
+        features["handle_file_ratio"]     = 0
+        features["handle_registry_ratio"] = 0
+        features["handle_mutex_ratio"]    = 0
+
+    ldr_total = features.get("ldrmodules_total", 0)
+    if ldr_total > 0:
+        features["ldrmodules_hidden_ratio"] = round(features.get("ldrmodules_hidden_count", 0) / ldr_total, 4)
+    else:
+        features["ldrmodules_hidden_ratio"] = 0
+
+    filescan_total = features.get("filescan_total", 0)
+    if filescan_total > 0:
+        features["filescan_encrypted_ratio"] = round(features.get("filescan_encrypted", 0) / filescan_total, 4)
+    else:
+        features["filescan_encrypted_ratio"] = 0
+
+    netstat_total = features.get("netstat_total", 0)
+    if netstat_total > 0:
+        features["netstat_established_ratio"] = round(features.get("netstat_established", 0) / netstat_total, 4)
+    else:
+        features["netstat_established_ratio"] = 0
+
+    # ── Behavior-based stage label ──────────────────────────────────────────
+    # Assigns stage from observable indicators rather than time elapsed.
+    # Used as an alternative to stage_hint (time-based).
+    encrypted     = features.get("filescan_encrypted", 0)
+    malfind_exe   = features.get("malfind_exe_regions", 0)
+    malfind_count = features.get("malfind_count", 0)
+
+    if encrypted == 0 and malfind_exe == 0 and malfind_count == 0:
+        behavior_stage = 0   # baseline — no malware indicators
+    elif encrypted == 0:
+        behavior_stage = 1   # executing — injection/malfind but no encryption yet
+    elif encrypted < 100:
+        behavior_stage = 2   # encrypting — files being encrypted
+    else:
+        behavior_stage = 3   # post-encryption — heavy encryption observed
+
     row = {
         "family":           meta.get("family", ""),
         "stage_hint":       meta.get("stage_hint", ""),
+        "behavior_stage":   behavior_stage,
         "actual_offset_s":  meta.get("actual_offset_s", ""),
         "target_offset_s":  meta.get("target_offset_s", ""),
         "rep":              meta.get("rep", ""),
@@ -423,8 +478,8 @@ def main():
         return
 
     # Build consistent field order: metadata first, then features
-    meta_cols = ["family", "stage_hint", "actual_offset_s", "target_offset_s",
-                 "rep", "run", "snap_name", "snap_dir"]
+    meta_cols = ["family", "stage_hint", "behavior_stage", "actual_offset_s",
+                 "target_offset_s", "rep", "run", "snap_name", "snap_dir"]
     feat_cols = [k for k in rows[0] if k not in meta_cols]
     fieldnames = meta_cols + feat_cols
 

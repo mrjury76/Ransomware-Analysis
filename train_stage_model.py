@@ -48,23 +48,39 @@ except ImportError:
 # Config
 # -----------------------------------------------------------------------------
 
-STAGE_NAMES = {
+STAGE_NAMES_TIME = {
     0: "Pre-launch (baseline)",
     1: "Pre-encryption",
     2: "Encrypting",
     3: "Post-encryption",
 }
 
+STAGE_NAMES_BEHAVIOR = {
+    0: "Baseline (no indicators)",
+    1: "Executing (no encryption)",
+    2: "Encrypting (< 100 files)",
+    3: "Heavy encryption (100+ files)",
+}
+
 # Columns to drop — not forensic features
 DROP_COLS = {
     "family",           # don't let the model use family identity
-    "stage_hint",       # label
+    "stage_hint",       # time-based label
+    "behavior_stage",   # behavior-based label
     "actual_offset_s",  # time since launch — not available in real detection
     "target_offset_s",
     "rep",
     "run",
     "snap_name",
     "snap_dir",
+}
+
+# Extra columns to drop when using behavior labels to avoid data leakage
+# (these features directly define the behavior_stage label)
+BEHAVIOR_LEAKAGE_COLS = {
+    "filescan_encrypted",
+    "handle_encrypted_files",
+    "filescan_encrypted_ratio",
 }
 
 
@@ -88,11 +104,14 @@ def load_data(features_csv):
     return df
 
 
-def prepare_xy(df):
+def prepare_xy(df, label_col="stage_hint"):
     """Split into feature matrix X and label vector y."""
-    feat_cols = [c for c in df.columns if c not in DROP_COLS]
+    drop = set(DROP_COLS)
+    if label_col == "behavior_stage":
+        drop |= BEHAVIOR_LEAKAGE_COLS
+    feat_cols = [c for c in df.columns if c not in drop]
     X = df[feat_cols].copy()
-    y = df["stage_hint"].astype(int)
+    y = df[label_col].astype(int)
 
     # Coerce everything to numeric, fill non-numeric with NaN
     X = X.apply(pd.to_numeric, errors="coerce")
@@ -139,7 +158,8 @@ def make_pipeline():
 # Scenario 1: standard stratified split
 # -----------------------------------------------------------------------------
 
-def run_standard_split(X, y, feat_cols, out_dir):
+def run_standard_split(X, y, feat_cols, out_dir, stage_names=None):
+    stage_names = stage_names or STAGE_NAMES_TIME
     print("=" * 60)
     print(" SCENARIO 1: Standard 80/20 split (all families mixed)")
     print("=" * 60)
@@ -154,7 +174,7 @@ def run_standard_split(X, y, feat_cols, out_dir):
 
     acc = accuracy_score(y_test, preds)
     present_stages = sorted(y.unique())
-    target_names   = [STAGE_NAMES[s] for s in present_stages]
+    target_names   = [stage_names.get(s, f"Stage {s}") for s in present_stages]
 
     print(f"\nAccuracy: {acc:.4f}")
     print("\nClassification report:")
@@ -174,7 +194,7 @@ def run_standard_split(X, y, feat_cols, out_dir):
     # Save model
     model_path = os.path.join(out_dir, "stage_model.joblib")
     joblib.dump({"pipeline": pipe, "feature_cols": feat_cols,
-                 "stage_names": STAGE_NAMES}, model_path)
+                 "stage_names": stage_names}, model_path)
     print(f"\n[✓] Model saved: {model_path}")
 
     return acc
@@ -184,14 +204,15 @@ def run_standard_split(X, y, feat_cols, out_dir):
 # Scenario 2: leave-one-family-out
 # -----------------------------------------------------------------------------
 
-def run_loo(df, feat_cols, out_dir):
+def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None):
+    stage_names = stage_names or STAGE_NAMES_TIME
     print("\n" + "=" * 60)
     print(" SCENARIO 2: Leave-one-family-out (generalization test)")
     print(" Train on N-1 families, test on the held-out family.")
     print("=" * 60)
 
     families  = sorted(df["family"].unique())
-    X_all, y_all, _ = prepare_xy(df)
+    X_all, y_all, _ = prepare_xy(df, label_col=label_col)
     results = []
 
     for held_out in families:
@@ -214,7 +235,7 @@ def run_loo(df, feat_cols, out_dir):
         print(f"\n  Held-out: {held_out:12s}  |  test rows: {len(y_test):4d}  |  accuracy: {acc:.4f}")
 
         present = sorted(y_test.unique())
-        names   = [STAGE_NAMES[s] for s in present]
+        names   = [stage_names.get(s, f"Stage {s}") for s in present]
         report = classification_report(y_test, preds,
                                        labels=present,
                                        target_names=names,
@@ -289,25 +310,49 @@ def main():
     parser.add_argument("--features", required=True, help="Path to features.csv from extract_features.py")
     parser.add_argument("--out",      default="model_output", help="Output directory (default: model_output)")
     parser.add_argument("--no-loo",   action="store_true",    help="Skip leave-one-family-out evaluation")
+    parser.add_argument("--label",    default="both",
+                        choices=["stage_hint", "behavior_stage", "both"],
+                        help="Label column to use (default: both)")
     args = parser.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
 
     df = load_data(args.features)
-    X, y, feat_cols = prepare_xy(df)
 
-    print(f"[+] Feature columns: {len(feat_cols)}")
-    print(f"[+] Using {'XGBoost' if HAS_XGBOOST else 'RandomForest'}\n")
+    labels_to_run = []
+    if args.label in ("stage_hint", "both"):
+        labels_to_run.append(("stage_hint", STAGE_NAMES_TIME))
+    if args.label in ("behavior_stage", "both"):
+        if "behavior_stage" in df.columns:
+            labels_to_run.append(("behavior_stage", STAGE_NAMES_BEHAVIOR))
+        else:
+            print("[!] behavior_stage not found in features.csv — skipping")
 
-    acc = run_standard_split(X, y, feat_cols, args.out)
+    for label_col, stage_names in labels_to_run:
+        label_dir = os.path.join(args.out, label_col) if len(labels_to_run) > 1 else args.out
+        os.makedirs(label_dir, exist_ok=True)
 
-    if not args.no_loo and len(df["family"].unique()) > 1:
-        run_loo(df, feat_cols, args.out)
+        print("\n" + "#" * 60)
+        print(f" LABEL: {label_col}")
+        print(f" Stages: {stage_names}")
+        print("#" * 60)
 
-    print("\n" + "=" * 60)
-    print(f" Done.  Standard accuracy: {acc:.4f}")
-    print(f" Output directory: {args.out}")
-    print("=" * 60)
+        print(f"\n    Distribution:\n{df.groupby(['family', label_col]).size().to_string()}\n")
+
+        X, y, feat_cols = prepare_xy(df, label_col=label_col)
+
+        print(f"[+] Feature columns: {len(feat_cols)}")
+        print(f"[+] Using {'XGBoost' if HAS_XGBOOST else 'RandomForest'}\n")
+
+        acc = run_standard_split(X, y, feat_cols, label_dir, stage_names=stage_names)
+
+        if not args.no_loo and len(df["family"].unique()) > 1:
+            run_loo(df, feat_cols, label_dir, label_col=label_col, stage_names=stage_names)
+
+        print("\n" + "=" * 60)
+        print(f" Done ({label_col}).  Standard accuracy: {acc:.4f}")
+        print(f" Output directory: {label_dir}")
+        print("=" * 60)
 
 
 if __name__ == "__main__":

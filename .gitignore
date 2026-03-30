@@ -19,3 +19,4 @@ vol3_*.csv
 __pycache__/
 *.pyc
 .venv/
+Datasets/Windows 10 x64-Snapshot4.vmem
