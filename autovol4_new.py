@@ -11,13 +11,7 @@ FAMILY_PROCESS_NAMES = {
     "WannaCry":   ["wannacry", "tasksche", "mssecsvc"],
     "Cerber":     ["cerber"],
     "Jigsaw":     ["jigsaw"],
-    "Dharma": ["dharma", "csrss"],
-    
-    # "Petrwrap":     ["petrwrap"],
-    # "Ryuk":   ["ryuk", "lsass"],
-
-    # "HiddenTear": ["hiddentear"],
-    # "LockBit":    ["lockbit"],
+    "Dharma":     ["dharma"],
 }
 
 # Plugins that are NOT filtered by PID (no PID column or global scope)
@@ -135,8 +129,14 @@ def filter_csv_by_pid(raw_csv, pid_set):
                 break
     return rows, reader.fieldnames
 
-def run_analysis(family, memory_image, output_dir):
-    """Core analysis logic. Called from both CLI and interactive modes."""
+def run_analysis(family, memory_image, output_dir, executor=None):
+    """Core analysis logic. Called from both CLI and interactive modes.
+
+    If executor is passed, plugin tasks are submitted to the shared pool.
+    Otherwise a local pool is created (single-snapshot mode).
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
     csv_out  = os.path.join(output_dir, "vol3_combined.csv")
     log_file = os.path.join(output_dir, "run.log")
     os.makedirs(output_dir, exist_ok=True)
@@ -159,11 +159,6 @@ def run_analysis(family, memory_image, output_dir):
     all_fieldnames = []
     seen_fields    = set()
 
-    # Run plugins in parallel — each is an independent subprocess so no GIL issues.
-    # MAX_PLUGIN_WORKERS controls how many vol3 processes run simultaneously.
-    # Keep at 4 unless you have lots of RAM (each vol3 process loads the full vmem).
-    MAX_PLUGIN_WORKERS = 12
-
     def run_plugin(plugin):
         plugin_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         result = subprocess.run(
@@ -172,14 +167,20 @@ def run_analysis(family, memory_image, output_dir):
         )
         return plugin, plugin_ts, result.stdout
 
-    from concurrent.futures import ThreadPoolExecutor, as_completed
+    # Submit all plugins to the shared pool, or create a local one
+    owns_executor = executor is None
+    if owns_executor:
+        executor = ThreadPoolExecutor(max_workers=12)
+
+    futures = {executor.submit(run_plugin, p): p for p in PLUGINS}
     plugin_results = {}
-    with ThreadPoolExecutor(max_workers=MAX_PLUGIN_WORKERS) as executor:
-        futures = {executor.submit(run_plugin, p): p for p in PLUGINS}
-        for future in as_completed(futures):
-            plugin, plugin_ts, raw = future.result()
-            log(f"[+] Done: {plugin}")
-            plugin_results[plugin] = (plugin_ts, raw)
+    for future in as_completed(futures):
+        plugin, plugin_ts, raw = future.result()
+        log(f"[+] Done: {plugin}")
+        plugin_results[plugin] = (plugin_ts, raw)
+
+    if owns_executor:
+        executor.shutdown(wait=False)
 
     # Merge results in original plugin order so combined CSV is consistent
     for plugin in PLUGINS:
@@ -254,8 +255,15 @@ def batch_mode(scan_dir):
     Walk scan_dir, find every .vmem file, read the family from meta.json
     in the same folder, and run analysis into that same folder.
     Skips any folder that already has vol3_combined.csv (resume-safe).
+
+    Uses a single shared thread pool for all plugin work across all snapshots.
+    12 workers = 12 cores always busy regardless of how many snapshots remain.
     """
     import json
+    import multiprocessing
+    from concurrent.futures import ThreadPoolExecutor
+
+    MAX_WORKERS = multiprocessing.cpu_count()
 
     vmem_files = []
     for root, _, files in os.walk(scan_dir):
@@ -268,21 +276,23 @@ def batch_mode(scan_dir):
         return
 
     print(f"\n[+] Found {len(vmem_files)} vmem file(s) to process")
+    print(f"[+] Shared pool workers: {MAX_WORKERS}")
 
-    done, skipped, failed = 0, 0, 0
+    # Build work list
+    work = []
+    skipped = 0
+    failed  = 0
 
     for vmem_path in sorted(vmem_files):
         snap_dir   = os.path.dirname(vmem_path)
         csv_out    = os.path.join(snap_dir, "vol3_combined.csv")
         meta_path  = os.path.join(snap_dir, "meta.json")
 
-        # Skip if already processed
         if os.path.exists(csv_out):
             print(f"[~] Skipping (already done): {vmem_path}")
             skipped += 1
             continue
 
-        # Read family from meta.json
         family = None
         if os.path.exists(meta_path):
             try:
@@ -291,7 +301,6 @@ def batch_mode(scan_dir):
             except Exception:
                 pass
 
-        # Fall back: infer family from path (parent session folder is FamilyName_timestamp)
         if not family:
             parts = vmem_path.split(os.sep)
             for part in parts:
@@ -307,15 +316,28 @@ def batch_mode(scan_dir):
             failed += 1
             continue
 
-        print(f"\n[+] Processing: {vmem_path}")
-        print(f"    Family: {family}  |  Output: {snap_dir}")
+        work.append((family, vmem_path, snap_dir))
 
-        try:
-            run_analysis(family, vmem_path, snap_dir)
-            done += 1
-        except Exception as e:
-            print(f"[!] Failed: {e}")
-            failed += 1
+    if not work:
+        print(f"\n[✓] Batch complete — done: 0, skipped: {skipped}, failed: {failed}")
+        return
+
+    print(f"[+] Queued {len(work)} snapshot(s) for processing")
+
+    # One shared pool — all plugin tasks from all snapshots compete for cores.
+    # Whether 1 or 50 snapshots remain, all cores stay busy.
+    done = 0
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as shared_pool:
+        for family, vmem_path, snap_dir in work:
+            print(f"\n[+] Processing: {vmem_path}")
+            print(f"    Family: {family}  |  Output: {snap_dir}")
+            try:
+                run_analysis(family, vmem_path, snap_dir, executor=shared_pool)
+                done += 1
+            except Exception as e:
+                print(f"[!] Failed: {e}")
+                failed += 1
+            print(f"    [{done + failed}/{len(work)}] completed")
 
     print(f"\n[✓] Batch complete — done: {done}, skipped: {skipped}, failed: {failed}")
 

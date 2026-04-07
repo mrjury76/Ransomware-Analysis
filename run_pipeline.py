@@ -41,9 +41,21 @@ def main():
                         help="Skip leave-one-family-out evaluation during training")
     args = parser.parse_args()
 
-    scan_dir  = os.path.abspath(args.scan_dir)
-    out_csv   = args.out       or os.path.join(scan_dir, "features.csv")
-    model_out = args.model_out or os.path.join(scan_dir, "model_output")
+    scan_dir   = os.path.abspath(args.scan_dir)
+    output_base = os.path.join(SCRIPT_DIR, "output")
+
+    if args.model_out:
+        model_out = args.model_out
+    else:
+        base = os.path.join(output_base, "model_output")
+        n = 1
+        while os.path.isdir(f"{base}_run{n:02d}"):
+            n += 1
+        model_out = f"{base}_run{n:02d}"
+
+    out_csv = args.out or os.path.join(output_base, "features.csv")
+
+    os.makedirs(output_base, exist_ok=True)
 
     if not os.path.isdir(scan_dir):
         print(f"[-] Directory not found: {scan_dir}")
@@ -135,12 +147,12 @@ def main():
         print(f" LABEL: {label_col}")
         print(f"{'#' * 60}")
 
-        X, y, fc = train_stage_model.prepare_xy(df, label_col=label_col)
-        print(f"[+] Using {'XGBoost' if train_stage_model.HAS_XGBOOST else 'RandomForest'}\n")
-        train_stage_model.run_standard_split(X, y, fc, label_dir, stage_names=stage_names)
+        X, y, fc, lm = train_stage_model.prepare_xy(df, label_col=label_col)
+        print(f"[+] Models: {', '.join(train_stage_model.get_models().keys())}\n")
+        train_stage_model.run_standard_split(X, y, fc, label_dir, stage_names=stage_names, label_map=lm)
 
         if not args.no_loo and len(df["family"].unique()) > 1:
-            train_stage_model.run_loo(df, fc, label_dir, label_col=label_col, stage_names=stage_names)
+            train_stage_model.run_loo(df, fc, label_dir, label_col=label_col, stage_names=stage_names, label_map=lm)
 
     print(f"\n{'=' * 60}")
     print(f" Pipeline complete")

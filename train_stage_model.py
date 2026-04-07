@@ -27,7 +27,11 @@ warnings.filterwarnings("ignore")
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier,
+                              ExtraTreesClassifier)
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import (classification_report, confusion_matrix,
                              accuracy_score, ConfusionMatrixDisplay)
@@ -56,10 +60,8 @@ STAGE_NAMES_TIME = {
 }
 
 STAGE_NAMES_BEHAVIOR = {
-    0: "Baseline (no indicators)",
-    1: "Executing (no encryption)",
-    2: "Encrypting (< 100 files)",
-    3: "Heavy encryption (100+ files)",
+    0: "Pre-encryption",
+    1: "Encryption-active",
 }
 
 # Columns to drop — not forensic features
@@ -79,6 +81,8 @@ DROP_COLS = {
 # (these features directly define the behavior_stage label)
 BEHAVIOR_LEAKAGE_COLS = {
     "filescan_encrypted",
+    "filescan_ransom_notes",
+    "pslist_ransom_procs",
     "handle_encrypted_files",
     "filescan_encrypted_ratio",
 }
@@ -105,48 +109,74 @@ def load_data(features_csv):
 
 
 def prepare_xy(df, label_col="stage_hint"):
-    """Split into feature matrix X and label vector y."""
+    """Split into feature matrix X and label vector y.
+
+    Remaps labels to 0..N-1 so XGBoost works with non-contiguous classes.
+    Returns (X, y, feat_cols, label_map) where label_map converts idx->original.
+    """
     drop = set(DROP_COLS)
     if label_col == "behavior_stage":
         drop |= BEHAVIOR_LEAKAGE_COLS
     feat_cols = [c for c in df.columns if c not in drop]
     X = df[feat_cols].copy()
-    y = df[label_col].astype(int)
+    y_raw = df[label_col].astype(int)
+
+    # Remap to 0..N-1
+    unique_sorted = sorted(y_raw.unique())
+    to_idx = {v: i for i, v in enumerate(unique_sorted)}
+    y = y_raw.map(to_idx)
+    label_map = {i: v for v, i in to_idx.items()}
 
     # Coerce everything to numeric, fill non-numeric with NaN
     X = X.apply(pd.to_numeric, errors="coerce")
 
-    return X, y, feat_cols
+    return X, y, feat_cols, label_map
 
 
 # -----------------------------------------------------------------------------
-# Model factory
+# Model zoo
 # -----------------------------------------------------------------------------
 
-def make_pipeline():
+def get_models():
+    """Return dict of name -> classifier for multi-model comparison."""
+    models = {
+        "RandomForest": RandomForestClassifier(
+            n_estimators=400, max_depth=12, min_samples_leaf=2,
+            class_weight="balanced", random_state=42, n_jobs=-1,
+        ),
+        "ExtraTrees": ExtraTreesClassifier(
+            n_estimators=400, max_depth=12, min_samples_leaf=2,
+            class_weight="balanced", random_state=42, n_jobs=-1,
+        ),
+        "GradientBoosting": GradientBoostingClassifier(
+            n_estimators=200, max_depth=4, learning_rate=0.1,
+            random_state=42,
+        ),
+        "SVM": SVC(
+            kernel="rbf", C=1.0, class_weight="balanced",
+            random_state=42,
+        ),
+        "LogisticRegression": LogisticRegression(
+            max_iter=1000, class_weight="balanced",
+            random_state=42, n_jobs=-1,
+        ),
+        "KNN": KNeighborsClassifier(
+            n_neighbors=5, n_jobs=-1,
+        ),
+    }
     if HAS_XGBOOST:
-        clf = XGBClassifier(
-            objective="multi:softprob",
-            n_estimators=300,
-            max_depth=5,
-            learning_rate=0.07,
-            subsample=0.85,
-            colsample_bytree=0.85,
-            reg_lambda=1.2,
-            random_state=42,
-            eval_metric="mlogloss",
-            verbosity=0,
+        models["XGBoost"] = XGBClassifier(
+            n_estimators=300, max_depth=5, learning_rate=0.07,
+            subsample=0.85, colsample_bytree=0.85, reg_lambda=1.2,
+            random_state=42, verbosity=0,
         )
-    else:
-        clf = RandomForestClassifier(
-            n_estimators=400,
-            max_depth=12,
-            min_samples_leaf=2,
-            class_weight="balanced",
-            random_state=42,
-            n_jobs=-1,
-        )
+    return models
 
+
+def make_pipeline(clf=None):
+    """Wrap a classifier in an imputer+scaler pipeline."""
+    if clf is None:
+        clf = list(get_models().values())[0]
     return Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler",  StandardScaler()),
@@ -158,8 +188,9 @@ def make_pipeline():
 # Scenario 1: standard stratified split
 # -----------------------------------------------------------------------------
 
-def run_standard_split(X, y, feat_cols, out_dir, stage_names=None):
+def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=None):
     stage_names = stage_names or STAGE_NAMES_TIME
+    label_map = label_map or {}
     print("=" * 60)
     print(" SCENARIO 1: Standard 80/20 split (all families mixed)")
     print("=" * 60)
@@ -168,52 +199,73 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None):
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    pipe = make_pipeline()
-    pipe.fit(X_train, y_train)
-    preds = pipe.predict(X_test)
-
-    acc = accuracy_score(y_test, preds)
     present_stages = sorted(y.unique())
-    target_names   = [stage_names.get(s, f"Stage {s}") for s in present_stages]
+    target_names   = [stage_names.get(label_map.get(s, s), f"Stage {s}") for s in present_stages]
 
-    print(f"\nAccuracy: {acc:.4f}")
-    print("\nClassification report:")
-    print(classification_report(y_test, preds,
-                                labels=present_stages,
-                                target_names=target_names,
-                                zero_division=0))
+    models = get_models()
+    comparison = []
+    best_acc, best_name, best_pipe = 0, None, None
 
-    _save_confusion_matrix(y_test, preds, present_stages, target_names,
-                           os.path.join(out_dir, "cm_standard.png"),
-                           title="Standard split confusion matrix")
+    for name, clf in models.items():
+        pipe = make_pipeline(clf)
+        pipe.fit(X_train, y_train)
+        preds = pipe.predict(X_test)
+        acc = accuracy_score(y_test, preds)
+        comparison.append({"model": name, "accuracy": round(acc, 4)})
 
-    _save_feature_importance(pipe, feat_cols,
+        print(f"\n  {name}: {acc:.4f}")
+        print(classification_report(y_test, preds,
+                                    labels=present_stages,
+                                    target_names=target_names,
+                                    zero_division=0))
+
+        _save_confusion_matrix(y_test, preds, present_stages, target_names,
+                               os.path.join(out_dir, f"cm_standard_{name}.png"),
+                               title=f"Standard split — {name}")
+
+        if acc > best_acc:
+            best_acc, best_name, best_pipe = acc, name, pipe
+
+    # Save comparison table
+    comp_df = pd.DataFrame(comparison).sort_values("accuracy", ascending=False)
+    comp_df.to_csv(os.path.join(out_dir, "model_comparison.csv"), index=False)
+    print(f"\n{'=' * 40}")
+    print(f" Model comparison (standard split):")
+    print(f"{'=' * 40}")
+    print(comp_df.to_string(index=False))
+
+    # Save best model
+    print(f"\n  Best: {best_name} ({best_acc:.4f})")
+    _save_feature_importance(best_pipe, feat_cols,
                              os.path.join(out_dir, "feature_importance.csv"),
                              os.path.join(out_dir, "feature_importance.png"))
 
-    # Save model
     model_path = os.path.join(out_dir, "stage_model.joblib")
-    joblib.dump({"pipeline": pipe, "feature_cols": feat_cols,
-                 "stage_names": stage_names}, model_path)
-    print(f"\n[✓] Model saved: {model_path}")
+    joblib.dump({"pipeline": best_pipe, "feature_cols": feat_cols,
+                 "stage_names": stage_names, "model_name": best_name}, model_path)
+    print(f"  [✓] Model saved: {model_path}")
 
-    return acc
+    return best_acc
 
 
 # -----------------------------------------------------------------------------
 # Scenario 2: leave-one-family-out
 # -----------------------------------------------------------------------------
 
-def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None):
+def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, label_map=None):
     stage_names = stage_names or STAGE_NAMES_TIME
+    label_map = label_map or {}
     print("\n" + "=" * 60)
     print(" SCENARIO 2: Leave-one-family-out (generalization test)")
     print(" Train on N-1 families, test on the held-out family.")
     print("=" * 60)
 
     families  = sorted(df["family"].unique())
-    X_all, y_all, _ = prepare_xy(df, label_col=label_col)
-    results = []
+    X_all, y_all, _, _ = prepare_xy(df, label_col=label_col)
+    models = get_models()
+
+    # results[model_name] = list of per-family dicts
+    all_results = {name: [] for name in models}
 
     for held_out in families:
         train_mask = df["family"] != held_out
@@ -227,35 +279,60 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None):
         if len(X_test) == 0 or len(y_test.unique()) < 1:
             continue
 
-        pipe = make_pipeline()
-        pipe.fit(X_train, y_train)
-        preds = pipe.predict(X_test)
-
-        acc = accuracy_score(y_test, preds)
-        print(f"\n  Held-out: {held_out:12s}  |  test rows: {len(y_test):4d}  |  accuracy: {acc:.4f}")
+        # Remap train labels to 0..N-1 for XGBoost
+        unique_train = sorted(int(x) for x in y_train.unique())
+        to_idx = {v: i for i, v in enumerate(unique_train)}
+        from_idx = {i: v for v, i in to_idx.items()}
+        y_train_enc = np.array([to_idx[int(v)] for v in y_train])
 
         present = sorted(y_test.unique())
-        names   = [stage_names.get(s, f"Stage {s}") for s in present]
-        report = classification_report(y_test, preds,
-                                       labels=present,
-                                       target_names=names,
-                                       zero_division=0)
-        print("\n".join("    " + l for l in report.splitlines()))
+        names   = [stage_names.get(label_map.get(s, s), f"Stage {s}") for s in present]
 
+        print(f"\n  --- Held-out: {held_out} ({len(y_test)} rows) ---")
+
+        best_acc, best_name, best_preds = 0, None, None
+
+        for model_name, clf in models.items():
+            pipe = make_pipeline(clf)
+            pipe.fit(X_train, y_train_enc)
+            preds_enc = pipe.predict(X_test)
+            preds = np.array([from_idx.get(int(p), int(p)) for p in preds_enc])
+
+            acc = accuracy_score(y_test, preds)
+            print(f"    {model_name:20s}  accuracy: {acc:.4f}")
+            all_results[model_name].append({
+                "held_out_family": held_out, "accuracy": acc,
+                "n_test": len(y_test),
+            })
+
+            if acc > best_acc:
+                best_acc, best_name, best_preds = acc, model_name, preds
+
+        # Save confusion matrix for best model per family
         _save_confusion_matrix(
-            y_test, preds, present, names,
+            y_test, best_preds, present, names,
             os.path.join(out_dir, f"cm_loo_{held_out}.png"),
-            title=f"LOO confusion matrix — held-out: {held_out}"
+            title=f"LOO — {held_out} (best: {best_name})"
         )
 
-        results.append({"held_out_family": held_out, "accuracy": acc,
-                        "n_test": len(y_test)})
+    # Build LOO comparison table
+    loo_summary = []
+    for model_name, results in all_results.items():
+        if not results:
+            continue
+        rdf = pd.DataFrame(results)
+        mean_acc = rdf["accuracy"].mean()
+        row = {"model": model_name, "mean_accuracy": round(mean_acc, 4)}
+        for _, r in rdf.iterrows():
+            row[r["held_out_family"]] = round(r["accuracy"], 4)
+        loo_summary.append(row)
 
-    if results:
-        loo_df = pd.DataFrame(results)
-        print(f"\n  LOO summary:")
+    if loo_summary:
+        loo_df = pd.DataFrame(loo_summary).sort_values("mean_accuracy", ascending=False)
+        print(f"\n{'=' * 60}")
+        print(f" LOO Model Comparison:")
+        print(f"{'=' * 60}")
         print(loo_df.to_string(index=False))
-        print(f"\n  Mean LOO accuracy: {loo_df['accuracy'].mean():.4f}")
         loo_df.to_csv(os.path.join(out_dir, "loo_results.csv"), index=False)
 
 
@@ -339,15 +416,15 @@ def main():
 
         print(f"\n    Distribution:\n{df.groupby(['family', label_col]).size().to_string()}\n")
 
-        X, y, feat_cols = prepare_xy(df, label_col=label_col)
+        X, y, feat_cols, lm = prepare_xy(df, label_col=label_col)
 
         print(f"[+] Feature columns: {len(feat_cols)}")
-        print(f"[+] Using {'XGBoost' if HAS_XGBOOST else 'RandomForest'}\n")
+        print(f"[+] Models: {', '.join(get_models().keys())}\n")
 
-        acc = run_standard_split(X, y, feat_cols, label_dir, stage_names=stage_names)
+        acc = run_standard_split(X, y, feat_cols, label_dir, stage_names=stage_names, label_map=lm)
 
         if not args.no_loo and len(df["family"].unique()) > 1:
-            run_loo(df, feat_cols, label_dir, label_col=label_col, stage_names=stage_names)
+            run_loo(df, feat_cols, label_dir, label_col=label_col, stage_names=stage_names, label_map=lm)
 
         print("\n" + "=" * 60)
         print(f" Done ({label_col}).  Standard accuracy: {acc:.4f}")

@@ -10,8 +10,7 @@ realtime_detection.py
 unused scripts/
 
 # Generated output
-# model_output/
-# features.csv
+output/
 vol3_output_*/
 vol3_*.csv
 
