@@ -213,11 +213,22 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
         acc = accuracy_score(y_test, preds)
         comparison.append({"model": name, "accuracy": round(acc, 4)})
 
+        report = classification_report(y_test, preds,
+                                       labels=present_stages,
+                                       target_names=target_names,
+                                       zero_division=0)
         print(f"\n  {name}: {acc:.4f}")
-        print(classification_report(y_test, preds,
-                                    labels=present_stages,
-                                    target_names=target_names,
-                                    zero_division=0))
+        print(report)
+
+        # Save per-model classification report
+        report_df = pd.DataFrame(
+            classification_report(y_test, preds,
+                                  labels=present_stages,
+                                  target_names=target_names,
+                                  output_dict=True,
+                                  zero_division=0)
+        ).T
+        report_df.to_csv(os.path.join(out_dir, f"report_standard_{name}.csv"))
 
         _save_confusion_matrix(y_test, preds, present_stages, target_names,
                                os.path.join(out_dir, f"cm_standard_{name}.png"),
@@ -308,12 +319,20 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
             if acc > best_acc:
                 best_acc, best_name, best_preds = acc, model_name, preds
 
-        # Save confusion matrix for best model per family
+        # Save confusion matrix and classification report for best model per family
         _save_confusion_matrix(
             y_test, best_preds, present, names,
             os.path.join(out_dir, f"cm_loo_{held_out}.png"),
             title=f"LOO — {held_out} (best: {best_name})"
         )
+        report_df = pd.DataFrame(
+            classification_report(y_test, best_preds,
+                                  labels=present,
+                                  target_names=names,
+                                  output_dict=True,
+                                  zero_division=0)
+        ).T
+        report_df.to_csv(os.path.join(out_dir, f"report_loo_{held_out}.csv"))
 
     # Build LOO comparison table
     loo_summary = []

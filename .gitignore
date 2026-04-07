@@ -3,6 +3,8 @@ Datasets/memory-images/boomer-win2003-2006-03-17.img
 /Datasets/memory-images
 /Datasets/Resources
 Datasets/2020JimmyWilson.E01
+.claude
+.vscode
 
 # Unused / old scripts
 wannacry_automate.ps1

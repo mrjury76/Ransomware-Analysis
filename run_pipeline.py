@@ -11,6 +11,7 @@ Usage:
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis --skip-training
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --model-out /mnt/d/Patrick/model
+    └─$ python3 /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/run_pipeline.py   --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis
 """
 
 import argparse
@@ -47,7 +48,7 @@ def main():
     if args.model_out:
         model_out = args.model_out
     else:
-        base = os.path.join(output_base, "model_output")
+        base = os.path.join(scan_dir, "model_output")
         n = 1
         while os.path.isdir(f"{base}_run{n:02d}"):
             n += 1

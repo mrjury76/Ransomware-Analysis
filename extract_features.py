@@ -173,14 +173,14 @@ def feat_pslist(rows):
         "pslist_count":        len(pids),
         "pslist_unique_names": len(names),
         "pslist_avg_threads":  round(sum(threads) / len(threads), 2) if threads else 0,
-        "pslist_avg_handles":  round(sum(handles) / len(handles), 2) if handles else 0,
+        # "pslist_avg_handles":  round(sum(handles) / len(handles), 2) if handles else 0,  # always 0 — Handles col missing from pslist CSV
         "pslist_wow64_count":  wow64_count,
         "pslist_exited_count": exited_count,
         "pslist_ransom_procs": ransom_procs,
         "_pslist_pids":        pids,   # internal, stripped before output
 
-        "pslist_avg_runtimes": avg(runtimes),
-        "pslist_max_runtimes": round(max_or_zero(runtimes), 2),
+        # "pslist_avg_runtimes": avg(runtimes),              # always 0 — CreateTime/ExitTime not parsed
+        # "pslist_max_runtimes": round(max_or_zero(runtimes), 2),
         "pslist_avg_children": avg(child_values),
         "pslist_max_children": max_or_zero(child_values),
         "pslist_parent_missing_count": hidden_parent_count,
@@ -226,30 +226,30 @@ def feat_cmdline(rows):
 
             if any(tok in args_lower for tok in SUSPICIOUS_ARGS):
                 suspicious += 1
-            if SUS_ARG_PAT.search(args_norm):
-                sus_args_count += 1
-            if SCRIPT_EXEC_PAT.search(args_norm):
-                script_exec_count += 1
+            # if SUS_ARG_PAT.search(args_norm):           # always 0 — patterns never match cmdline data
+            #     sus_args_count += 1
+            # if SCRIPT_EXEC_PAT.search(args_norm):
+            #     script_exec_count += 1
             if UNUSUAL_DIR_PAT.search(args_norm):
                 unusual_dir_count += 1
             if SCRIPT_TOOL_PAT.search(args_norm):
                 script_tool_count += 1
-            if ENCODED_PAT.search(args_norm):
-                encoded_count += 1
-            if any(tok in args for tok in RANSOM_CMDLINE_TOKENS):
-                ransom_cmds += 1
+            # if ENCODED_PAT.search(args_norm):            # always 0 — no encoded commands in data
+            #     encoded_count += 1
+            # if any(tok in args for tok in RANSOM_CMDLINE_TOKENS):  # always 0 — tokens not in cmdline CSV args
+            #     ransom_cmds += 1
     return {
         "cmdline_count":            total,
         "cmdline_with_args":        has_args,
         "cmdline_suspicious_count": suspicious,
         "cmdline_avg_length": avg(cmd_lengths),
         "cmdline_max_length": max_or_zero(cmd_lengths),
-        "cmdline_sus_args_count": sus_args_count,
-        "cmdline_script_exec_count": script_exec_count,
+        # "cmdline_sus_args_count": sus_args_count,       # always 0
+        # "cmdline_script_exec_count": script_exec_count, # always 0
         "cmdline_unusual_dir_count": unusual_dir_count,
         "cmdline_script_tool_count": script_tool_count,
-        "cmdline_encoded_count": encoded_count,
-        "cmdline_ransom_indicators": ransom_cmds,
+        # "cmdline_encoded_count": encoded_count,         # always 0
+        # "cmdline_ransom_indicators": ransom_cmds,       # always 0
     }
 
 
@@ -350,7 +350,7 @@ def feat_ldrmodules(rows):
         "ldrmodules_not_in_load":  not_in_load,
         "ldrmodules_not_in_init":  not_in_init,
         "ldrmodules_not_in_mem":   not_in_mem,
-        "ldrmodules_hidden_count": hidden,
+        # "ldrmodules_hidden_count": hidden,               # always 0
         "ldrmodules_avg_per_process": avg(module_counts),
         "ldrmodules_max_per_process": max_or_zero(module_counts),
         "ldrmodules_suspicious_path_pid_count": len({pid for pid in suspicious_path_pids if pid}),
@@ -402,9 +402,9 @@ def feat_vadinfo(rows):
         "vad_pid_count": len(pids),
         "vad_avg_regions_per_process": avg(vads_per_pid),
         "vad_max_regions_per_process": max_or_zero(vads_per_pid),
-        "vad_avg_total_mem_per_process": round(avg(total_sizes), 2) if total_sizes else 0,
-        "vad_max_total_mem_per_process": round(max_or_zero(total_sizes), 2),
-        "vad_avg_max_region_size_per_process": round(avg(max_region_sizes), 2) if max_region_sizes else 0,
+        # "vad_avg_total_mem_per_process": round(avg(total_sizes), 2) if total_sizes else 0,    # always 0 — Size col missing
+        # "vad_max_total_mem_per_process": round(max_or_zero(total_sizes), 2),
+        # "vad_avg_max_region_size_per_process": round(avg(max_region_sizes), 2) if max_region_sizes else 0,
         "vad_private_pid_count": sum(1 for v in private_counts if v > 0),
         "vad_private_region_count": sum(private_counts),
         "vad_rwx_pid_count": sum(1 for v in rwx_counts if v > 0),
@@ -543,7 +543,7 @@ def feat_privileges(rows):
                 sedebug += 1
     return {
         "priv_total_enabled": enabled,
-        "priv_sedebug_count": sedebug,
+        # "priv_sedebug_count": sedebug,                   # always 0
     }
 
 
@@ -617,8 +617,8 @@ def feat_netstat(rows):
         "netstat_avg_unique_ips_per_process": avg(unique_remote_ips_per_pid),
         "netstat_outbound_count": outbound_count,
         "netstat_outbound_pid_count": len(outbound_pids),
-        "netstat_suspicious_port_hit_count": suspicious_port_hits,
-        "netstat_suspicious_port_pid_count": len(suspicious_port_pids),
+        # "netstat_suspicious_port_hit_count": suspicious_port_hits,   # always 0
+        # "netstat_suspicious_port_pid_count": len(suspicious_port_pids),
         "netstat_tcp_pid_count": len(tcp_pids),
         "netstat_udp_pid_count": len(udp_pids),
         "netstat_established_pid_count": len(established_pids),
@@ -717,10 +717,10 @@ def process_snapshot(snap_dir, use_cache=True):
 
     ldr_total = features.get("ldrmodules_total", 0)
     if ldr_total > 0:
-        features["ldrmodules_hidden_ratio"] = round(features.get("ldrmodules_hidden_count", 0) / ldr_total, 4)
+        # features["ldrmodules_hidden_ratio"] = round(features.get("ldrmodules_hidden_count", 0) / ldr_total, 4)  # always 0
         features["ldrmodules_suspicious_path_ratio"] = round(features.get("ldrmodules_suspicious_path_hit_count", 0) / ldr_total, 4)
     else:
-        features["ldrmodules_hidden_ratio"] = 0
+        # features["ldrmodules_hidden_ratio"] = 0
         features["ldrmodules_suspicious_path_ratio"] = 0
         
     filescan_total = features.get("filescan_total", 0)
@@ -733,20 +733,20 @@ def process_snapshot(snap_dir, use_cache=True):
     if netstat_total > 0:
         features["netstat_established_ratio"] = round(features.get("netstat_established", 0) / netstat_total, 4)
         features["netstat_outbound_ratio"] = round(features.get("netstat_outbound_count", 0) / netstat_total, 4)
-        features["netstat_suspicious_port_ratio"] = round(features.get("netstat_suspicious_port_hit_count", 0) / netstat_total, 4)
+        # features["netstat_suspicious_port_ratio"] = round(features.get("netstat_suspicious_port_hit_count", 0) / netstat_total, 4)  # always 0
     else:
         features["netstat_established_ratio"] = 0
         features["netstat_outbound_ratio"] = 0
-        features["netstat_suspicious_port_ratio"] = 0
+        # features["netstat_suspicious_port_ratio"] = 0
 
     cmdline_total = features.get("cmdline_count", 0)
     if cmdline_total > 0:
-        features["cmdline_encoded_ratio"] = round(features.get("cmdline_encoded_count", 0) / cmdline_total, 4)
-        features["cmdline_script_exec_ratio"] = round(features.get("cmdline_script_exec_count", 0) / cmdline_total, 4)
+        # features["cmdline_encoded_ratio"] = round(features.get("cmdline_encoded_count", 0) / cmdline_total, 4)        # always 0
+        # features["cmdline_script_exec_ratio"] = round(features.get("cmdline_script_exec_count", 0) / cmdline_total, 4)  # always 0
         features["cmdline_unusual_dir_ratio"] = round(features.get("cmdline_unusual_dir_count", 0) / cmdline_total, 4)
     else:
-        features["cmdline_encoded_ratio"] = 0
-        features["cmdline_script_exec_ratio"] = 0
+        # features["cmdline_encoded_ratio"] = 0
+        # features["cmdline_script_exec_ratio"] = 0
         features["cmdline_unusual_dir_ratio"] = 0
 
     dll_total = features.get("dlllist_total", 0)
