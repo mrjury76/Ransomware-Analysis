@@ -196,9 +196,9 @@ def run_analysis(family, memory_image, output_dir, executor=None):
         with open(raw_path, "w") as f:
             f.write(raw)
 
-        if malware_pids and plugin not in NO_PID_FILTER_PLUGINS:
-            rows, fieldnames = filter_csv_by_pid(raw, malware_pids)
-        else:
+        # if malware_pids and plugin not in NO_PID_FILTER_PLUGINS:
+        #     rows, fieldnames = filter_csv_by_pid(raw, malware_pids)
+        # else:
             reader = csv.DictReader(io.StringIO(raw))
             rows = list(reader)
             fieldnames = reader.fieldnames
