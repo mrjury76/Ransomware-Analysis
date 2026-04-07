@@ -25,9 +25,18 @@ EXEC_PROTECTIONS = {"PAGE_EXECUTE", "PAGE_EXECUTE_READ",
 SUSPICIOUS_ARGS = {"/c", "/q", "cmd", "powershell", "wscript", "cscript",
                    "regsvr32", "rundll32", "mshta", "certutil", "bitsadmin"}
 
+# Ransomware-specific cmdline tokens (strong stage indicators per PERD/RENTAKA)
+RANSOM_CMDLINE_TOKENS = {"vssadmin", "delete", "shadows", "bcdedit",
+                         "wbadmin", "recoveryenabled", "bootstatuspolicy",
+                         "wmic", "shadowcopy"}
+
 # Non-system DLL path prefixes (flags DLLs loaded from unusual locations)
 SYSTEM_DLL_PATHS = {"\\windows\\system32", "\\windows\\syswow64",
                     "\\windows\\winsxs"}
+
+# Crypto-related DLLs (loading these indicates cryptographic setup)
+CRYPTO_DLLS = {"advapi32.dll", "crypt32.dll", "bcrypt.dll", "ncrypt.dll",
+               "rsaenh.dll", "cryptsp.dll", "cryptbase.dll"}
 
 # Known ransomware encrypted file extensions
 ENCRYPTED_EXTENSIONS = {".wncry", ".cerber", ".cerber2", ".cerber3",
@@ -36,6 +45,20 @@ ENCRYPTED_EXTENSIONS = {".wncry", ".cerber", ".cerber2", ".cerber3",
                         ".dharma", ".wallet", ".arena", ".adobe",
                         ".java", ".id", ".email", ".zzzzz", ".2023",
                         ".9aee"}
+
+# Substrings in filenames that indicate encryption activity (not just extensions)
+ENCRYPTED_SUBSTRINGS = {"wncry", ".cerber", ".dharma", ".2023", ".9aee",
+                        ".encrypted", ".locked"}
+
+# Ransom note filenames (family-agnostic indicators of encryption completion)
+RANSOM_NOTE_NAMES = {"@please_read_me@", "readme_for_decrypt", "_readme_",
+                     "help_decrypt", "how_to_decrypt", "restore_files",
+                     "decrypt_instruction", "your_files_are_encrypted",
+                     "recover_your_files"}
+
+# Process names that indicate ransomware pre-encryption behavior
+RANSOM_PROCESS_NAMES = {"vssadmin.exe", "wbadmin.exe", "bcdedit.exe",
+                        "wmic.exe"}
 
 
 def read_csv(path):
@@ -92,6 +115,7 @@ def feat_pslist(rows):
             wow64_count += 1
         if r.get("ExitTime", "").strip() not in {"", "N/A", "0"}:
             exited_count += 1
+    ransom_procs = sum(1 for n in names if n in RANSOM_PROCESS_NAMES)
     return {
         "pslist_count":        len(pids),
         "pslist_unique_names": len(names),
@@ -99,6 +123,7 @@ def feat_pslist(rows):
         "pslist_avg_handles":  round(sum(handles) / len(handles), 2) if handles else 0,
         "pslist_wow64_count":  wow64_count,
         "pslist_exited_count": exited_count,
+        "pslist_ransom_procs": ransom_procs,
         "_pslist_pids":        pids,   # internal, stripped before output
     }
 
@@ -122,17 +147,20 @@ def feat_cmdline(rows):
     if not rows:
         return {}
     total = len(rows)
-    has_args = suspicious = 0
+    has_args = suspicious = ransom_cmds = 0
     for r in rows:
         args = r.get("Args", "").strip().lower()
         if args and args not in {"n/a", "required memory at", ""}:
             has_args += 1
             if any(tok in args for tok in SUSPICIOUS_ARGS):
                 suspicious += 1
+            if any(tok in args for tok in RANSOM_CMDLINE_TOKENS):
+                ransom_cmds += 1
     return {
         "cmdline_count":            total,
         "cmdline_with_args":        has_args,
         "cmdline_suspicious_count": suspicious,
+        "cmdline_ransom_indicators": ransom_cmds,
     }
 
 
@@ -152,12 +180,14 @@ def feat_dlllist(rows):
             pids[pid].add(name)
         if path and not any(path.startswith(s) for s in SYSTEM_DLL_PATHS):
             non_system += 1
+    crypto_loaded = sum(1 for d in dll_names if d in CRYPTO_DLLS)
     counts = [len(v) for v in pids.values()]
     return {
         "dlllist_total":           sum(counts),
         "dlllist_unique_dlls":     len(dll_names),
         "dlllist_avg_per_process": round(sum(counts) / len(counts), 2) if counts else 0,
         "dlllist_non_system":      non_system,
+        "dlllist_crypto_dlls":     crypto_loaded,
     }
 
 
@@ -255,31 +285,51 @@ def feat_filescan(rows):
         return {}
     total = len(rows)
     encrypted = 0
+    ransom_notes = 0
     for r in rows:
         name = r.get("Name", "").strip().lower()
-        ext  = os.path.splitext(name)[1]
+        # Extension-based match
+        ext = os.path.splitext(name)[1]
         if ext in ENCRYPTED_EXTENSIONS:
             encrypted += 1
+            continue
+        # Substring-based match (catches WannaCry .WNCRYT embedded in path)
+        if any(sub in name for sub in ENCRYPTED_SUBSTRINGS):
+            encrypted += 1
+            continue
+        # Ransom note detection
+        basename = name.rsplit("\\", 1)[-1] if "\\" in name else name
+        if any(note in basename for note in RANSOM_NOTE_NAMES):
+            ransom_notes += 1
     return {
-        "filescan_total":     total,
-        "filescan_encrypted": encrypted,
+        "filescan_total":        total,
+        "filescan_encrypted":    encrypted,
+        "filescan_ransom_notes": ransom_notes,
     }
 
+
+SECURITY_SERVICES = {"windefend", "msmpeng", "mbamlservice", "vsserv",
+                     "sophos", "mcafee", "vss", "swprv", "wbengine",
+                     "sqlwriter", "sqlbrowser", "mssqlserver"}
 
 def feat_svcscan(rows):
     if not rows:
         return {}
-    running = stopped = 0
+    running = stopped = security_stopped = 0
     for r in rows:
         state = r.get("State", "").strip().upper()
+        name  = r.get("Name", r.get("ServiceName", "")).strip().lower()
         if "RUNNING" in state:
             running += 1
         elif "STOPPED" in state:
             stopped += 1
+            if any(svc in name for svc in SECURITY_SERVICES):
+                security_stopped += 1
     return {
-        "svcscan_total":   len(rows),
-        "svcscan_running": running,
-        "svcscan_stopped": stopped,
+        "svcscan_total":            len(rows),
+        "svcscan_running":          running,
+        "svcscan_stopped":          stopped,
+        "svcscan_security_stopped": security_stopped,
     }
 
 
@@ -342,11 +392,25 @@ PLUGIN_FILES = {
 }
 
 
-def process_snapshot(snap_dir):
-    """Extract feature row from a single snapshot directory."""
-    meta_path = os.path.join(snap_dir, "meta.json")
+def process_snapshot(snap_dir, use_cache=True):
+    """Extract feature row from a single snapshot directory.
+
+    Caches results to features_cache.json in the snapshot folder.
+    Subsequent runs load from cache instead of re-reading plugin CSVs.
+    """
+    meta_path  = os.path.join(snap_dir, "meta.json")
+    cache_path = os.path.join(snap_dir, "features_cache.json")
+
     if not os.path.exists(meta_path):
         return None
+
+    # Return cached features if available
+    if use_cache and os.path.exists(cache_path):
+        try:
+            with open(cache_path) as f:
+                return json.load(f)
+        except Exception:
+            pass
 
     with open(meta_path) as f:
         meta = json.load(f)
@@ -411,21 +475,19 @@ def process_snapshot(snap_dir):
     else:
         features["netstat_established_ratio"] = 0
 
-    # ── Behavior-based stage label ──────────────────────────────────────────
-    # Assigns stage from observable indicators rather than time elapsed.
-    # Used as an alternative to stage_hint (time-based).
-    encrypted     = features.get("filescan_encrypted", 0)
-    malfind_exe   = features.get("malfind_exe_regions", 0)
-    malfind_count = features.get("malfind_count", 0)
+    # ── Behavior-based stage label (2-class) ─────────────────────────────────
+    # Binary: has the ransomware produced observable encryption artifacts?
+    # Combines multiple signals since no single indicator works across all families:
+    #   - filescan_encrypted: encrypted files in memory (Dharma, WannaCry)
+    #   - filescan_ransom_notes: ransom note files dropped
+    #   - pslist_ransom_procs: shadow-delete tools like vssadmin.exe spawned
+    has_encryption_evidence = (
+        features.get("filescan_encrypted", 0) > 0
+        or features.get("filescan_ransom_notes", 0) > 0
+        or features.get("pslist_ransom_procs", 0) > 0
+    )
 
-    if encrypted == 0 and malfind_exe == 0 and malfind_count == 0:
-        behavior_stage = 0   # baseline — no malware indicators
-    elif encrypted == 0:
-        behavior_stage = 1   # executing — injection/malfind but no encryption yet
-    elif encrypted < 100:
-        behavior_stage = 2   # encrypting — files being encrypted
-    else:
-        behavior_stage = 3   # post-encryption — heavy encryption observed
+    behavior_stage = 1 if has_encryption_evidence else 0
 
     row = {
         "family":           meta.get("family", ""),
@@ -439,6 +501,14 @@ def process_snapshot(snap_dir):
         "snap_dir":         snap_dir,
     }
     row.update(features)
+
+    # Cache for future runs
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(row, f)
+    except Exception:
+        pass
+
     return row
 
 
