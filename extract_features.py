@@ -523,7 +523,7 @@ def feat_netstat(rows):
 
         if "ESTABLISHED" in state:
             established += 1
-             if pid:
+            if pid:
                 established_pids.add(pid)
         if "LISTEN" in state:
             listening += 1
