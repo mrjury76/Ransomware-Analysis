@@ -12,6 +12,7 @@ FAMILY_PROCESS_NAMES = {
     "Cerber":     ["cerber"],
     "Jigsaw":     ["jigsaw"],
     "Dharma":     ["dharma"],
+    "Benign":     [],  # no PID filter — capture all processes as baseline
 }
 
 # Plugins that are NOT filtered by PID (no PID column or global scope)
@@ -40,7 +41,7 @@ def prompt_family():
     for k in sorted(FAMILY_PROCESS_NAMES.keys()):
         print(f"  - {k}")
     print("")
-    family = input("Which ransomware family? ").strip()
+    family = input("Which family? ").strip()
     if family not in FAMILY_PROCESS_NAMES:
         print(f"[!] Unknown family '{family}'. Add it to FAMILY_PROCESS_NAMES or check spelling.")
         exit(1)
@@ -70,8 +71,14 @@ def resolve_memory_image(family, version):
     return None
 
 def get_malware_pids(family, memory_image, log_fn):
-    """Run pstree, return set of PIDs belonging to the target family process tree."""
+    """Run pstree, return set of PIDs belonging to the target family process tree.
+    For Benign, returns empty set immediately (no PID filter needed)."""
     name_hints = FAMILY_PROCESS_NAMES[family]
+
+    if not name_hints:
+        log_fn(f"\n[+] {family} family — no PID filter, capturing all processes.")
+        return set()
+
     log_fn(f"\n[+] Running windows.pstree to find {family} PIDs (hints: {name_hints})...")
 
     result = subprocess.run(
@@ -196,9 +203,9 @@ def run_analysis(family, memory_image, output_dir, executor=None):
         with open(raw_path, "w") as f:
             f.write(raw)
 
-        # if malware_pids and plugin not in NO_PID_FILTER_PLUGINS:
-        #     rows, fieldnames = filter_csv_by_pid(raw, malware_pids)
-        # else:
+        if malware_pids and plugin not in NO_PID_FILTER_PLUGINS:
+            rows, fieldnames = filter_csv_by_pid(raw, malware_pids)
+        else:
             reader = csv.DictReader(io.StringIO(raw))
             rows = list(reader)
             fieldnames = reader.fieldnames
@@ -250,11 +257,14 @@ def run_analysis(family, memory_image, output_dir, executor=None):
     log(f"[+] Output directory: {output_dir}")
 
 
-def batch_mode(scan_dir):
+def batch_mode(scan_dir, only_families=None):
     """
     Walk scan_dir, find every .vmem file, read the family from meta.json
     in the same folder, and run analysis into that same folder.
-    Skips any folder that already has vol3_combined.csv (resume-safe).
+    Skips any folder that already has vol3_combined.csv.
+
+    If only_families is a set/list, only process snapshots whose family is in
+    that set (e.g. {"WannaCry", "Benign"}).
 
     Uses a single shared thread pool for all plugin work across all snapshots.
     12 workers = 12 cores always busy regardless of how many snapshots remain.
@@ -314,6 +324,10 @@ def batch_mode(scan_dir):
         if not family or family not in FAMILY_PROCESS_NAMES:
             print(f"[!] Cannot determine family for {vmem_path} — skipping")
             failed += 1
+            continue
+
+        if only_families and family not in only_families:
+            skipped += 1
             continue
 
         work.append((family, vmem_path, snap_dir))

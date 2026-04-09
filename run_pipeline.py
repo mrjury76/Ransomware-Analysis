@@ -11,10 +11,11 @@ Usage:
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis --skip-training
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --model-out /mnt/d/Patrick/model
-    └─$ python3 /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/run_pipeline.py   --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis
+    python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --family WannaCry --skip-analysis
 """
 
 import argparse
+import json
 import os
 import sys
 
@@ -40,19 +41,27 @@ def main():
                         help="Skip model training — stop after features.csv")
     parser.add_argument("--no-loo",         action="store_true",
                         help="Skip leave-one-family-out evaluation during training")
+    parser.add_argument("--family",        default=None,
+                        help="Run only this family + Benign (e.g. --family WannaCry)")
     args = parser.parse_args()
 
     scan_dir   = os.path.abspath(args.scan_dir)
     output_base = os.path.join(SCRIPT_DIR, "output")
 
+    # --family filter: run only this family + Benign
+    only_families = None
+    if args.family:
+        only_families = {args.family, "Benign"}
+        print(f"[+] Family filter: {sorted(only_families)}")
+
     if args.model_out:
         model_out = args.model_out
     else:
-        base = os.path.join(scan_dir, "model_output")
+        base = os.path.join(SCRIPT_DIR, "model_results", "run")
         n = 1
-        while os.path.isdir(f"{base}_run{n:02d}"):
+        while os.path.isdir(f"{base}{n:02d}"):
             n += 1
-        model_out = f"{base}_run{n:02d}"
+        model_out = f"{base}{n:02d}"
 
     out_csv = args.out or os.path.join(output_base, "features.csv")
 
@@ -74,7 +83,7 @@ def main():
         autovol4 = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(autovol4)
 
-        autovol4.batch_mode(scan_dir)
+        autovol4.batch_mode(scan_dir, only_families=only_families)
     else:
         print("\n[~] Skipping autovol4 analysis (--skip-analysis)")
 
@@ -88,6 +97,14 @@ def main():
     snap_dirs = []
     for root, _, files in os.walk(scan_dir):
         if "meta.json" in files:
+            if only_families:
+                try:
+                    with open(os.path.join(root, "meta.json")) as f:
+                        fam = json.load(f).get("family", "")
+                except Exception:
+                    fam = ""
+                if fam not in only_families:
+                    continue
             snap_dirs.append(root)
 
     if not snap_dirs:
@@ -99,7 +116,7 @@ def main():
     rows = []
     for i, snap_dir_path in enumerate(sorted(snap_dirs), 1):
         print(f"  [{i}/{len(snap_dirs)}] {snap_dir_path}")
-        row = extract_features.process_snapshot(snap_dir_path)
+        row = extract_features.process_snapshot(snap_dir_path, use_cache=False)
         if row:
             rows.append(row)
 

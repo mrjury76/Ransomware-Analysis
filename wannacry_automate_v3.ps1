@@ -31,7 +31,7 @@ $AUTOVOL4_WSL = "/home/patrick/tools/volatility3/autovol4.py"
 $PIPELINE_WSL = "/mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/run_pipeline.py"
 
 # Output root on D drive - all families write here
-$OUTPUT_ROOT = "D:\Patrick\VMSnapshots"
+$OUTPUT_ROOT = "D:\Patrick\VMSnapshots\Datasets"
 
 # Snapshot timings - seconds post-launch to capture
 # T=0 baseline always captured automatically before launch
@@ -40,6 +40,7 @@ $SNAP_OFFSETS = @(15, 30, 60, 120, 180)
 # -- MULTI-FAMILY CONFIG TABLE ------------------------------------------------
 # Key   = display name (also used in output folder names and CSV family column)
 # Value = path to malware executable INSIDE the guest VM
+#         Use "BENIGN" as the value for the benign baseline family.
 $FAMILIES = @{
     "WannaCry" = "C:\Malware\WannaCry\WannaCry.exe"
     "Cerber"   = "C:\Malware\Cerber\Cerber.exe"
@@ -47,9 +48,34 @@ $FAMILIES = @{
     # "Petrwrap" = "C:\Malware\Petrwrap\Petrwrap.exe"
     # "Ryuk"     = "C:\Malware\Ryuk\Ryuk.exe"
     "Dharma"   = "C:\Malware\Dharma\Dharma\Dharma.exe"
+    "Benign"   = "BENIGN"
 }
 # Add/remove entries above to match what you actually have staged in the VM.
 # The guest path must be the full Windows path inside the guest.
+
+# -- BENIGN PROCESS POOL -----------------------------------------------------
+# Common user applications to simulate normal desktop activity.
+# Each entry: [display name, guest exe path, optional arguments]
+# The script randomly picks $BENIGN_PICK_COUNT of these per run.
+$BENIGN_PICK_COUNT = 5
+
+$BENIGN_PROCESSES = @(
+    @{ Name = "Notepad";       Exe = "C:\Windows\System32\notepad.exe";                Args = "" }
+    @{ Name = "WordPad";       Exe = "C:\Program Files\Windows NT\Accessories\wordpad.exe"; Args = "" }
+    @{ Name = "Calculator";    Exe = "C:\Windows\System32\calc.exe";                   Args = "" }
+    @{ Name = "Paint";         Exe = "C:\Windows\System32\mspaint.exe";                Args = "" }
+    @{ Name = "Explorer";      Exe = "C:\Windows\explorer.exe";                        Args = "C:\Users\$VM_USER\Documents" }
+    @{ Name = "PowerShell";    Exe = "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"; Args = "-NoExit -Command Get-Process" }
+    @{ Name = "CMD";           Exe = "C:\Windows\System32\cmd.exe";                    Args = "/k dir C:\Users\$VM_USER" }
+    @{ Name = "SnippingTool";  Exe = "C:\Windows\System32\SnippingTool.exe";           Args = "" }
+    @{ Name = "Firefox";       Exe = "C:\Program Files\Mozilla Firefox\firefox.exe";   Args = "" }
+    @{ Name = "Chrome";        Exe = "C:\Program Files\Google\Chrome\Application\chrome.exe"; Args = "" }
+    @{ Name = "Word";          Exe = "C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE"; Args = "" }
+    @{ Name = "Excel";         Exe = "C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";   Args = "" }
+    # @{ Name = "Outlook";       Exe = "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"; Args = "" }
+    @{ Name = "MediaPlayer";   Exe = "C:\Program Files\Windows Media Player\wmplayer.exe"; Args = "" }
+    @{ Name = "TaskManager";   Exe = "C:\Windows\System32\Taskmgr.exe";               Args = "" }
+)
 
 # -- FUNCTION DEFINITIONS -----------------------------------------------------
 function Log {
@@ -244,17 +270,46 @@ for ($rep = 1; $rep -le $NUM_RUNS; $rep++) {
         Log "[+] Waiting 20s for boot..." White
         Start-Sleep -Seconds 20
 
-        # -- Launch malware ---------------------------------------------------
+        # -- Launch processes -------------------------------------------------
         $launchTime = Get-Date
-        Log "[+] Launching $FAMILY..." Yellow
 
-        $rc = Run-VMRun @("-gu", $VM_USER, "-gp", $VM_PASS,
-                          "runProgramInGuest", $VMX,
-                          "-activeWindow", "-nowait",
-                          $MALWARE_PATH)
+        if ($MALWARE_PATH -eq "BENIGN") {
+            # Pick random benign user processes for this run
+            $picked = $BENIGN_PROCESSES | Get-Random -Count ([math]::Min($BENIGN_PICK_COUNT, $BENIGN_PROCESSES.Count))
+            $pickedNames = ($picked | ForEach-Object { $_.Name }) -join ", "
+            Log "[+] Launching $($picked.Count) benign processes: $pickedNames" Yellow
 
-        if ($rc -ne 0) { Log "[!] Launch failed - skipping" Red; continue }
-        Log "    -> $FAMILY launched" Green
+            $launchFailed = $false
+            foreach ($proc in $picked) {
+                $runArgs = @("-gu", $VM_USER, "-gp", $VM_PASS,
+                             "runProgramInGuest", $VMX,
+                             "-activeWindow", "-nowait",
+                             $proc.Exe)
+                if ($proc.Args -ne "") { $runArgs += $proc.Args }
+
+                $rc = Run-VMRun $runArgs
+                if ($rc -ne 0) {
+                    Log "    [!] $($proc.Name) failed to launch (exit $rc) - skipping it" Yellow
+                } else {
+                    Log "    -> $($proc.Name) launched" Green
+                }
+                Start-Sleep -Milliseconds 15000
+            }
+
+            # Write which processes were picked so autovol4/pipeline can reference them
+            $picked | ForEach-Object { $_.Name } | Set-Content (Join-Path $runDir "benign_processes.txt")
+            Log "    -> Benign process list saved to benign_processes.txt" Green
+        } else {
+            Log "[+] Launching $FAMILY..." Yellow
+
+            $rc = Run-VMRun @("-gu", $VM_USER, "-gp", $VM_PASS,
+                              "runProgramInGuest", $VMX,
+                              "-activeWindow", "-nowait",
+                              $MALWARE_PATH)
+
+            if ($rc -ne 0) { Log "[!] Launch failed - skipping" Red; continue }
+            Log "    -> $FAMILY launched" Green
+        }
 
         # -- Wait for target offset then snapshot -----------------------------
         $alreadyElapsed = [int]((Get-Date) - $launchTime).TotalSeconds
@@ -294,10 +349,11 @@ for ($rep = 1; $rep -le $NUM_RUNS; $rep++) {
             snap_name       = $snapName
             launch_time     = $launchTime.ToString("o")
             snap_time       = (Get-Date).ToString("o")
-            stage_hint      = if ($actualOffset -lt 20)  { 0 }
-                              elseif ($actualOffset -lt 50)  { 1 }
-                              elseif ($actualOffset -lt 150) { 2 }
-                              else                           { 3 }
+            stage_hint      = if ($MALWARE_PATH -eq "BENIGN") { 0 }
+                              elseif ($actualOffset -lt 20)  { 1 }
+                              elseif ($actualOffset -lt 50)  { 2 }
+                              elseif ($actualOffset -lt 150) { 3 }
+                              else                           { 4 }
         } | ConvertTo-Json | Set-Content (Join-Path $runDir "meta.json")
 
         if ($vmemSrc -and (Test-Path $vmemSrc)) {

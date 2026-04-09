@@ -3,7 +3,7 @@ train_stage_model.py
 --------------------
 Trains a family-agnostic ransomware stage classifier from features.csv.
 
-Label:   stage_hint  (0=pre-launch, 1=pre-encryption, 2=encrypting, 3=post-encryption)
+Label:   stage_hint  (0=benign, 1=pre-launch, 2=pre-encryption, 3=encrypting, 4=post-encryption)
 Goal:    detect the stage of ransomware execution from memory forensics alone,
          regardless of which ransomware family produced the snapshot.
 
@@ -53,10 +53,11 @@ except ImportError:
 # -----------------------------------------------------------------------------
 
 STAGE_NAMES_TIME = {
-    0: "Pre-launch (baseline)",
-    1: "Pre-encryption",
-    2: "Encrypting",
-    3: "Post-encryption",
+    0: "Benign (baseline)",
+    1: "Pre-launch",
+    2: "Pre-encryption",
+    3: "Encrypting",
+    4: "Post-encryption",
 }
 
 STAGE_NAMES_BEHAVIOR = {
@@ -65,7 +66,7 @@ STAGE_NAMES_BEHAVIOR = {
 }
 
 STAGE_NAMES_EARLY_LATE = {
-    0: "Early (pre-launch/pre-encryption)",
+    0: "Early (benign/pre-launch/pre-encryption)",
     1: "Late (encrypting/post-encryption)",
 }
 
@@ -111,8 +112,8 @@ def load_data(features_csv):
     print(f"    Stages   : {sorted(df['stage_hint'].unique())}")
     print(f"    Distribution:\n{df.groupby(['family','stage_hint']).size().to_string()}\n")
 
-    # Collapsed binary label: 0+1 -> 0 (early), 2+3 -> 1 (late)
-    df["stage_binary"] = (df["stage_hint"].astype(int) >= 2).astype(int)
+    # Collapsed binary label: 0+1+2 -> 0 (early/benign), 3+4 -> 1 (late/active)
+    df["stage_binary"] = (df["stage_hint"].astype(int) >= 3).astype(int)
 
     return df
 
