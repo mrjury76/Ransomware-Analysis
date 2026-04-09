@@ -64,10 +64,16 @@ STAGE_NAMES_BEHAVIOR = {
     1: "Encryption-active",
 }
 
+STAGE_NAMES_EARLY_LATE = {
+    0: "Early (pre-launch/pre-encryption)",
+    1: "Late (encrypting/post-encryption)",
+}
+
 # Columns to drop — not forensic features
 DROP_COLS = {
     "family",           # don't let the model use family identity
     "stage_hint",       # time-based label
+    "stage_binary",     # collapsed time-based label (0+1 -> 0, 2+3 -> 1)
     "behavior_stage",   # behavior-based label
     "actual_offset_s",  # time since launch — not available in real detection
     "target_offset_s",
@@ -104,6 +110,9 @@ def load_data(features_csv):
     print(f"    Families : {sorted(df['family'].unique())}")
     print(f"    Stages   : {sorted(df['stage_hint'].unique())}")
     print(f"    Distribution:\n{df.groupby(['family','stage_hint']).size().to_string()}\n")
+
+    # Collapsed binary label: 0+1 -> 0 (early), 2+3 -> 1 (late)
+    df["stage_binary"] = (df["stage_hint"].astype(int) >= 2).astype(int)
 
     return df
 
@@ -406,9 +415,9 @@ def main():
     parser.add_argument("--features", required=True, help="Path to features.csv from extract_features.py")
     parser.add_argument("--out",      default="model_output", help="Output directory (default: model_output)")
     parser.add_argument("--no-loo",   action="store_true",    help="Skip leave-one-family-out evaluation")
-    parser.add_argument("--label",    default="both",
-                        choices=["stage_hint", "behavior_stage", "both"],
-                        help="Label column to use (default: both)")
+    parser.add_argument("--label",    default="all",
+                        choices=["stage_hint", "stage_binary", "behavior_stage", "all"],
+                        help="Label column to use (default: all)")
     args = parser.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
@@ -416,9 +425,11 @@ def main():
     df = load_data(args.features)
 
     labels_to_run = []
-    if args.label in ("stage_hint", "both"):
+    if args.label in ("stage_hint", "all"):
         labels_to_run.append(("stage_hint", STAGE_NAMES_TIME))
-    if args.label in ("behavior_stage", "both"):
+    if args.label in ("stage_binary", "all"):
+        labels_to_run.append(("stage_binary", STAGE_NAMES_EARLY_LATE))
+    if args.label in ("behavior_stage", "all"):
         if "behavior_stage" in df.columns:
             labels_to_run.append(("behavior_stage", STAGE_NAMES_BEHAVIOR))
         else:

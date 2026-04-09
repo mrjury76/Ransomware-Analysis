@@ -135,8 +135,9 @@ def main():
     os.makedirs(model_out, exist_ok=True)
     df = train_stage_model.load_data(out_csv)
 
-    # Train with both label types: time-based and behavior-based
+    # Train with all label types: time-based (4-class), binary time-based, and behavior-based
     for label_col, stage_names in [("stage_hint", train_stage_model.STAGE_NAMES_TIME),
+                                   ("stage_binary", train_stage_model.STAGE_NAMES_EARLY_LATE),
                                    ("behavior_stage", train_stage_model.STAGE_NAMES_BEHAVIOR)]:
         if label_col not in df.columns:
             continue
