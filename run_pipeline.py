@@ -17,6 +17,7 @@ Usage:
 import argparse
 import json
 import os
+import subprocess
 import sys
 
 # -- locate sibling scripts ---------------------------------------------------
@@ -84,6 +85,22 @@ def main():
         spec.loader.exec_module(autovol4)
 
         autovol4.batch_mode(scan_dir, only_families=only_families)
+
+        # Auto-commit and push new CSVs to dataset repo
+        print("\n[+] Pushing new plugin CSVs to dataset repo...")
+        try:
+            git = ["git", "-C", scan_dir]
+            subprocess.run(git + ["add", "-A"], check=True)
+            result = subprocess.run(git + ["diff", "--cached", "--quiet"])
+            if result.returncode != 0:
+                subprocess.run(git + ["commit", "-m",
+                               "Add volatility plugin CSVs from pipeline run"], check=True)
+                subprocess.run(git + ["push"], check=True)
+                print("[+] Dataset repo pushed.")
+            else:
+                print("[~] No new CSVs to commit.")
+        except subprocess.CalledProcessError as e:
+            print(f"[!] Git push failed: {e} — continuing pipeline")
     else:
         print("\n[~] Skipping autovol4 analysis (--skip-analysis)")
 
