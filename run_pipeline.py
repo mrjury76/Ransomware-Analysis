@@ -42,8 +42,17 @@ def main():
                         help="Skip model training — stop after features.csv")
     parser.add_argument("--no-loo",         action="store_true",
                         help="Skip leave-one-family-out evaluation during training")
+    parser.add_argument("--cv-mode",        default="family",
+                        choices=["family", "instance", "both", "none"],
+                        help="CV mode: 'family' (LOO), 'instance' (LOIO hold one family×rep), 'both', 'none'")
     parser.add_argument("--family",        default=None,
                         help="Run only this family + Benign (e.g. --family WannaCry)")
+    parser.add_argument("--cache",         action="store_true",
+                        help="Use cached feature extraction results (features_cache.json) when available")
+    parser.add_argument("--top-features",  default=None,
+                        help="Path to a feature_importance.csv — restrict stage training to its top N features")
+    parser.add_argument("--top-n",         type=int, default=20,
+                        help="Number of top features to use when --top-features is set (default: 20)")
     args = parser.parse_args()
 
     scan_dir   = os.path.abspath(args.scan_dir)
@@ -133,7 +142,7 @@ def main():
     rows = []
     for i, snap_dir_path in enumerate(sorted(snap_dirs), 1):
         print(f"  [{i}/{len(snap_dirs)}] {snap_dir_path}")
-        row = extract_features.process_snapshot(snap_dir_path, use_cache=False)
+        row = extract_features.process_snapshot(snap_dir_path, use_cache=args.cache)
         if row:
             rows.append(row)
 
@@ -169,6 +178,12 @@ def main():
     os.makedirs(model_out, exist_ok=True)
     df = train_stage_model.load_data(out_csv)
 
+    selected_features = None
+    if args.top_features:
+        selected_features = train_stage_model.load_top_features(args.top_features, top_n=args.top_n)
+        print(f"[+] Restricting stage training to top {args.top_n} features from {args.top_features}")
+        print(f"    {selected_features}\n")
+
     # Train with all label types: time-based (4-class), binary time-based, and behavior-based
     for label_col, stage_names in [("stage_hint", train_stage_model.STAGE_NAMES_TIME),
                                    ("stage_binary", train_stage_model.STAGE_NAMES_EARLY_LATE),
@@ -183,12 +198,22 @@ def main():
         print(f" LABEL: {label_col}")
         print(f"{'#' * 60}")
 
-        X, y, fc, lm = train_stage_model.prepare_xy(df, label_col=label_col)
+        X, y, fc, lm = train_stage_model.prepare_xy(df, label_col=label_col,
+                                                    selected_features=selected_features)
         print(f"[+] Models: {', '.join(train_stage_model.get_models().keys())}\n")
         train_stage_model.run_standard_split(X, y, fc, label_dir, stage_names=stage_names, label_map=lm)
 
-        if not args.no_loo and len(df["family"].unique()) > 1:
-            train_stage_model.run_loo(df, fc, label_dir, label_col=label_col, stage_names=stage_names, label_map=lm)
+        cv_mode = "none" if args.no_loo else args.cv_mode
+
+        if cv_mode in ("family", "both") and len(df["family"].unique()) > 1:
+            train_stage_model.run_loo(df, fc, label_dir, label_col=label_col,
+                                      stage_names=stage_names, label_map=lm,
+                                      selected_features=selected_features)
+
+        if cv_mode in ("instance", "both"):
+            train_stage_model.run_loio(df, fc, label_dir, label_col=label_col,
+                                       stage_names=stage_names, label_map=lm,
+                                       selected_features=selected_features)
 
     print(f"\n{'=' * 60}")
     print(f" Pipeline complete")
