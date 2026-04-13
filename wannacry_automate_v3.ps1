@@ -35,7 +35,7 @@ $OUTPUT_ROOT = "D:\Patrick\VMSnapshots\Datasets"
 
 # Snapshot timings - seconds post-launch to capture
 # T=0 baseline always captured automatically before launch
-$SNAP_OFFSETS = @(15, 30, 60, 120, 180)
+$SNAP_OFFSETS = @(5, 10, 20, 45, 90)
 
 # -- MULTI-FAMILY CONFIG TABLE ------------------------------------------------
 # Key   = display name (also used in output folder names and CSV family column)

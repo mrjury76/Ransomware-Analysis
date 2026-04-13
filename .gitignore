@@ -12,7 +12,7 @@ realtime_detection.py
 unused scripts/
 
 # Generated output
-output/
+# output/
 vol3_output_*/
 vol3_*.csv
 unused data
