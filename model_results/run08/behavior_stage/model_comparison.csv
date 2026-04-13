@@ -1,0 +1,8 @@
+model,accuracy
+RandomForest,0.963
+ExtraTrees,0.9444
+GradientBoosting,0.9444
+LogisticRegression,0.9259
+XGBoost,0.8889
+SVM,0.8704
+KNN,0.8704

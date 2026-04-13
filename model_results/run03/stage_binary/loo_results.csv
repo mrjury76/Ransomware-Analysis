@@ -1,0 +1,8 @@
+model,mean_accuracy,Benign
+XGBoost,0.62,0.62
+ExtraTrees,0.6,0.6
+RandomForest,0.6,0.6
+KNN,0.6,0.6
+LogisticRegression,0.6,0.6
+GradientBoosting,0.52,0.52
+SVM,0.2,0.2

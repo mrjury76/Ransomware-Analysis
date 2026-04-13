@@ -1,0 +1,5 @@
+,precision,recall,f1-score,support
+Encryption-active,1.0,0.8,0.8888888888888888,55.0
+micro avg,1.0,0.8,0.8888888888888888,55.0
+macro avg,1.0,0.8,0.8888888888888888,55.0
+weighted avg,1.0,0.8,0.8888888888888888,55.0

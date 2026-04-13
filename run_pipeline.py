@@ -184,10 +184,31 @@ def main():
         print(f"[+] Restricting stage training to top {args.top_n} features from {args.top_features}")
         print(f"    {selected_features}\n")
 
+    cv_mode      = "none" if args.no_loo else args.cv_mode
+    models_used  = list(train_stage_model.get_models().keys())
+    label_pairs  = [("stage_hint",    train_stage_model.STAGE_NAMES_TIME),
+                    ("stage_binary",  train_stage_model.STAGE_NAMES_EARLY_LATE),
+                    ("behavior_stage",train_stage_model.STAGE_NAMES_BEHAVIOR)]
+    label_cols   = [lc for lc, _ in label_pairs if lc in df.columns]
+    scenarios    = ["Standard 80/20 split"]
+    if cv_mode in ("family", "both"):
+        scenarios.append("LOO (leave-one-family-out)")
+    if cv_mode in ("instance", "both"):
+        scenarios.append("LOIO (leave-one-instance-out)")
+
+    # Top-level run log for the whole model_out directory
+    train_stage_model.write_run_log(
+        model_out, df, label_cols, models_used, scenarios,
+        extra={"features_csv":  out_csv,
+               "scan_dir":      scan_dir,
+               "family_filter": sorted(only_families) if only_families else "all",
+               "cv_mode":       cv_mode,
+               "top_features":  args.top_features or "all",
+               "top_n":         args.top_n if args.top_features else "—"},
+    )
+
     # Train with all label types: time-based (4-class), binary time-based, and behavior-based
-    for label_col, stage_names in [("stage_hint", train_stage_model.STAGE_NAMES_TIME),
-                                   ("stage_binary", train_stage_model.STAGE_NAMES_EARLY_LATE),
-                                   ("behavior_stage", train_stage_model.STAGE_NAMES_BEHAVIOR)]:
+    for label_col, stage_names in label_pairs:
         if label_col not in df.columns:
             continue
 
@@ -200,10 +221,8 @@ def main():
 
         X, y, fc, lm = train_stage_model.prepare_xy(df, label_col=label_col,
                                                     selected_features=selected_features)
-        print(f"[+] Models: {', '.join(train_stage_model.get_models().keys())}\n")
-        train_stage_model.run_standard_split(X, y, fc, label_dir, stage_names=stage_names, label_map=lm)
-
-        cv_mode = "none" if args.no_loo else args.cv_mode
+        print(f"[+] Models: {', '.join(models_used)}\n")
+        acc = train_stage_model.run_standard_split(X, y, fc, label_dir, stage_names=stage_names, label_map=lm)
 
         if cv_mode in ("family", "both") and len(df["family"].unique()) > 1:
             train_stage_model.run_loo(df, fc, label_dir, label_col=label_col,
@@ -214,6 +233,12 @@ def main():
             train_stage_model.run_loio(df, fc, label_dir, label_col=label_col,
                                        stage_names=stage_names, label_map=lm,
                                        selected_features=selected_features)
+
+        # Per-label log inside each label sub-folder
+        train_stage_model.write_run_log(
+            label_dir, df, [label_col], models_used, scenarios,
+            extra={"standard_accuracy": acc, "cv_mode": cv_mode},
+        )
 
     print(f"\n{'=' * 60}")
     print(f" Pipeline complete")

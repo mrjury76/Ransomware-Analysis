@@ -1,0 +1,8 @@
+model,mean_accuracy,std,n_instances,Benign_mean,Cerber_mean,Dharma_mean,Jigsaw_mean,WannaCry_mean
+ExtraTrees,0.9848,0.0419,30,1.0,1.0,0.9091,1.0,1.0
+RandomForest,0.9788,0.0743,30,1.0,1.0,0.8727,1.0,1.0
+XGBoost,0.9785,0.0621,30,1.0,0.98,0.8909,1.0,1.0
+GradientBoosting,0.9743,0.0498,30,1.0,0.955,0.9273,0.9818,0.9818
+LogisticRegression,0.9688,0.0573,30,0.98,0.9073,0.9636,0.9818,1.0
+KNN,0.963,0.0629,30,0.98,0.9455,0.8909,1.0,0.9818
+SVM,0.9495,0.0647,30,0.98,0.9005,0.9273,0.9091,1.0

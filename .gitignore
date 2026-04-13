@@ -16,7 +16,7 @@ output/
 vol3_output_*/
 vol3_*.csv
 unused data
-model_results
+# model_results
 
 # Python
 __pycache__/

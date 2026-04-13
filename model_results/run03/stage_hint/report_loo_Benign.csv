@@ -1,0 +1,5 @@
+,precision,recall,f1-score,support
+Benign (baseline),0.0,0.0,0.0,50.0
+micro avg,0.0,0.0,0.0,50.0
+macro avg,0.0,0.0,0.0,50.0
+weighted avg,0.0,0.0,0.0,50.0

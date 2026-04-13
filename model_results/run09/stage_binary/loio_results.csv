@@ -1,0 +1,8 @@
+model,mean_accuracy,std,n_instances,Benign_mean,WannaCry_mean
+RandomForest,1.0,0.0,15,1.0,1.0
+ExtraTrees,1.0,0.0,15,1.0,1.0
+GradientBoosting,1.0,0.0,15,1.0,1.0
+SVM,1.0,0.0,15,1.0,1.0
+LogisticRegression,1.0,0.0,15,1.0,1.0
+KNN,1.0,0.0,15,1.0,1.0
+XGBoost,1.0,0.0,15,1.0,1.0

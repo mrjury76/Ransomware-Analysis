@@ -1,0 +1,6 @@
+,precision,recall,f1-score,support
+Pre-encryption,0.0,0.0,0.0,18.0
+Encryption-active,0.64,1.0,0.7804878048780488,32.0
+accuracy,0.64,0.64,0.64,0.64
+macro avg,0.32,0.5,0.3902439024390244,50.0
+weighted avg,0.4096,0.64,0.4995121951219512,50.0
