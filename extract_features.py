@@ -790,19 +790,43 @@ def process_snapshot(snap_dir, use_cache=True):
     else:
         features["malfind_rwx_ratio"] = 0
         
-    # ── Behavior-based stage label (2-class) ─────────────────────────────────
-    # Binary: has the ransomware produced observable encryption artifacts?
-    # Combines multiple signals since no single indicator works across all families:
-    #   - filescan_encrypted: encrypted files in memory (Dharma, WannaCry)
-    #   - filescan_ransom_notes: ransom note files dropped
-    #   - pslist_ransom_procs: shadow-delete tools like vssadmin.exe spawned
-    has_encryption_evidence = (
-        features.get("filescan_encrypted", 0) > 0
+    # ── Behavior-based stage label (3-class) ─────────────────────────────────
+    # Grounded in ransomware lifecycle research (Kharraz 2016, Scaife 2016):
+    #
+    #   0 — Benign / Dormant
+    #       No observable ransomware activity.
+    #
+    #   1 — Pre-encryption active  (defense evasion / recon phase)
+    #       Ransomware is running and preparing but no files damaged yet.
+    #       Thresholds derived from WannaCry vs Benign comparison:
+    #         - ldrmodules discrepancies > 100: benign peaks ~43, ransomware 200-2370
+    #         - security services stopped > 30: benign ~14-18, WannaCry T030 = 147
+    #         - wow64 processes > 3: 32-bit payloads on 64-bit OS common in WannaCry/Cerber
+    #         - privilege tokens enabled > 1500: spike from token acquisition
+    #         - pslist_ransom_procs: vssadmin/wbadmin shadow-copy deletion
+    #
+    #   2 — Encryption observed
+    #       Files are being or have been encrypted.
+    #         - filescan_encrypted > 5: benign has 1 system file with enc-like ext → threshold of 5
+    #         - filescan_ransom_notes > 0: ransom note dropped on disk
+    has_encryption = (
+        features.get("filescan_encrypted", 0) > 5
         or features.get("filescan_ransom_notes", 0) > 0
+    )
+    has_preenc_activity = (
+        features.get("ldrmodules_not_in_load", 0) > 100
+        or features.get("svcscan_security_stopped", 0) > 30
+        or features.get("pslist_wow64_count", 0) > 3
+        or features.get("priv_total_enabled", 0) > 1500
         or features.get("pslist_ransom_procs", 0) > 0
     )
 
-    behavior_stage = 1 if has_encryption_evidence else 0
+    if has_encryption:
+        behavior_stage = 2
+    elif has_preenc_activity:
+        behavior_stage = 1
+    else:
+        behavior_stage = 0
 
     row = {
         "family":           meta.get("family", ""),

@@ -65,8 +65,9 @@ STAGE_NAMES_TIME = {
 }
 
 STAGE_NAMES_BEHAVIOR = {
-    0: "Pre-encryption",
-    1: "Encryption-active",
+    0: "Benign/Dormant",
+    1: "Pre-enc Active",
+    2: "Encryption-observed",
 }
 
 STAGE_NAMES_EARLY_LATE = {
