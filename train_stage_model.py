@@ -95,6 +95,12 @@ BEHAVIOR_LEAKAGE_COLS = {
     "filescan_encrypted_ratio",
 }
 
+STAGE_SHORTCUT_COLS = {
+    "filescan_encrypted",
+    "filescan_ransom_notes",
+    "handle_encrypted_files",
+    "filescan_encrypted_ratio",
+}
 
 # -----------------------------------------------------------------------------
 # Data loading
@@ -136,10 +142,15 @@ def prepare_xy(df, label_col="stage_hint", selected_features=None):
     drop = set(DROP_COLS)
     if label_col == "behavior_stage":
         drop |= BEHAVIOR_LEAKAGE_COLS
+
+    if label_col in {"stage_hint", "stage_binary"}:
+        drop |= STAGE_SHORTCUT_COLS
+
     if selected_features:
         feat_cols = [c for c in selected_features if c in df.columns and c not in drop]
     else:
         feat_cols = [c for c in df.columns if c not in drop]
+    
     X = df[feat_cols].copy()
     y_raw = df[label_col].astype(int)
 
@@ -213,7 +224,8 @@ def make_pipeline(clf=None):
 # Scenario 1: standard stratified split
 # -----------------------------------------------------------------------------
 
-def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=None):
+def run_standard_split(X, y, feat_cols, out_dir, df_full=None, label_col="stage_hint",
+                       stage_names=None, label_map=None):
     stage_names = stage_names or STAGE_NAMES_TIME
     label_map = label_map or {}
     print("=" * 60)
@@ -262,6 +274,26 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
         if acc > best_acc:
             best_acc, best_name, best_pipe = acc, name, pipe
 
+        #shows which stages are hardest to predict
+        _save_per_class_f1_bar(
+            report_df,
+            os.path.join(out_dir, f"f1_standard_{name}.png"),
+            title=f"Per-class F1 — {name}"
+        )
+        
+        _save_precision_recall_heatmap(
+            report_df,
+            os.path.join(out_dir, f"pr_heatmap_standard_{name}.png"),
+            title=f"Precision / Recall — {name}"
+        )
+
+        #less confusing matrix
+        _save_normalized_confusion_matrix(
+            y_test, preds, present_stages, target_names,
+            os.path.join(out_dir, f"cm_standard_norm_{name}.png"),
+            title=f"Normalized confusion matrix — {name}"
+        )
+
     # Save comparison table
     comp_df = pd.DataFrame(comparison).sort_values("accuracy", ascending=False)
     comp_df.to_csv(os.path.join(out_dir, "model_comparison.csv"), index=False)
@@ -270,11 +302,62 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
     print(f"{'=' * 40}")
     print(comp_df.to_string(index=False))
 
+    _save_model_comparison_bar(
+        comp_df,
+        os.path.join(out_dir, "model_comparison.png"),
+        title="Model Comparison (Standard Split)"
+    )
+
+
     # Save best model
     print(f"\n  Best: {best_name} ({best_acc:.4f})")
     _save_feature_importance(best_pipe, feat_cols,
                              os.path.join(out_dir, "feature_importance.csv"),
                              os.path.join(out_dir, "feature_importance.png"))
+
+    fi_path = os.path.join(out_dir, "feature_importance.csv")
+    fi_df = pd.read_csv(fi_path)
+    top_features = fi_df["feature"].head(10).tolist()
+
+    if df_full is not None:
+        numeric_top_features = [f for f in top_features if f in df_full.columns]
+
+        if numeric_top_features:
+            _save_correlation_heatmap(
+                df_full,
+                numeric_top_features,
+                os.path.join(out_dir, "top_feature_correlation.png"),
+                title="Correlation Heatmap — Top Features"
+            )
+
+            _save_boxplots_by_stage(
+                df_full,
+                numeric_top_features[:5],
+                label_col,
+                stage_names,
+                os.path.join(out_dir, "boxplot")
+            )
+
+            _save_histograms(
+                df_full,
+                numeric_top_features[:5],
+                os.path.join(out_dir, "hist")
+            )
+
+        _save_family_stage_heatmap(
+            df_full,
+            label_col,
+            os.path.join(out_dir, "family_stage_heatmap.png"),
+            title=f"Family × {label_col} Heatmap"
+        )
+
+        _save_stage_distribution(
+            df_full,
+            label_col,
+            stage_names,
+            os.path.join(out_dir, "stage_distribution.png"),
+            title=f"{label_col} Distribution"
+        )
 
     model_path = os.path.join(out_dir, "stage_model.joblib")
     joblib.dump({"pipeline": best_pipe, "feature_cols": feat_cols,
@@ -382,6 +465,15 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
         print(f"{'=' * 60}")
         print(loo_df.to_string(index=False))
         loo_df.to_csv(os.path.join(out_dir, "loo_results.csv"), index=False)
+        
+        best_model_name = loo_df.iloc[0]["model"]
+        best_model_results = pd.DataFrame(all_results[best_model_name])
+
+        _save_family_accuracy_bar(
+            best_model_results,
+            os.path.join(out_dir, "family_accuracy_bar.png"),
+            title=f"Accuracy by Held-out Family — {best_model_name}"
+        )
 
 
 # -----------------------------------------------------------------------------
@@ -524,6 +616,184 @@ def _save_feature_importance(pipe, feat_cols, csv_path, plot_path, top_n=20):
     print(fi.head(10).to_string(index=False))
     print(f"  [✓] Saved: {csv_path}")
 
+def _save_model_comparison_bar(comp_df, path, title="Model Accuracy Comparison"):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(comp_df["model"], comp_df["accuracy"])
+    ax.set_title(title)
+    ax.set_ylabel("Accuracy")
+    plt.xticks(rotation=25, ha="right")
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_per_class_f1_bar(report_df, path, title="Per-class F1 Score"):
+    plot_df = report_df.loc[
+        ~report_df.index.isin(["accuracy", "macro avg", "weighted avg"]),
+        ["f1-score"]
+    ].copy()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(plot_df.index, plot_df["f1-score"])
+    ax.set_title(title)
+    ax.set_ylabel("F1 Score")
+    plt.xticks(rotation=25, ha="right")
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_normalized_confusion_matrix(y_true, y_pred, labels, names, path, title=""):
+    cm = confusion_matrix(y_true, y_pred, labels=labels, normalize="true")
+    fig, ax = plt.subplots(figsize=(8, 6))
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=names)
+    disp.plot(ax=ax, colorbar=True, cmap="GnBu", values_format=".2f")
+    ax.set_title(title)
+    plt.xticks(rotation=20, ha="right")
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_precision_recall_heatmap(report_df, path, title="Precision / Recall by Class"):
+    plot_df = report_df.loc[
+        ~report_df.index.isin(["accuracy", "macro avg", "weighted avg"]),
+        ["precision", "recall"]
+    ].copy()
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    im = ax.imshow(plot_df.values, aspect="auto", cmap="winter")
+    
+    ax.set_xticks(range(len(plot_df.columns)))
+    ax.set_xticklabels(plot_df.columns)
+    ax.set_yticks(range(len(plot_df.index)))
+    ax.set_yticklabels(plot_df.index)
+    ax.set_title(title)
+
+    for i in range(plot_df.shape[0]):
+        for j in range(plot_df.shape[1]):
+            ax.text(j, i, f"{plot_df.iloc[i, j]:.2f}", ha="center", va="center")
+
+    fig.colorbar(im, ax=ax)
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_correlation_heatmap(df, feature_cols, path, title="Correlation Heatmap"):
+    corr = df[feature_cols].corr(numeric_only=True)
+
+    fig, ax = plt.subplots(figsize=(12, 10))
+    im = ax.imshow(corr.values, aspect="auto", cmap="winter")
+
+    ax.set_xticks(range(len(corr.columns)))
+    ax.set_xticklabels(corr.columns, rotation=90)
+    ax.set_yticks(range(len(corr.index)))
+    ax.set_yticklabels(corr.index)
+    ax.set_title(title)
+    fig.colorbar(im, ax=ax)
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_boxplots_by_stage(df, feature_cols, label_col, stage_names, path_prefix):
+    for feat in feature_cols:
+        fig, ax = plt.subplots(figsize=(8, 5))
+        groups = []
+        labels = []
+        for stage in sorted(df[label_col].dropna().unique()):
+            vals = pd.to_numeric(df.loc[df[label_col] == stage, feat], errors="coerce").dropna()
+            if len(vals) > 0:
+                groups.append(vals)
+                labels.append(stage_names.get(stage, str(stage)))
+
+        if not groups:
+            plt.close()
+            continue
+
+        ax.boxplot(groups, tick_labels=labels)
+        ax.set_title(f"{feat} by {label_col}")
+        ax.set_ylabel(feat)
+        plt.xticks(rotation=20, ha="right")
+        plt.tight_layout()
+        out_path = f"{path_prefix}_{feat}.png"
+        plt.savefig(out_path, dpi=120)
+        plt.close()
+        print(f"  [✓] Saved: {out_path}")
+
+
+def _save_histograms(df, feature_cols, path_prefix):
+    for feat in feature_cols:
+        vals = pd.to_numeric(df[feat], errors="coerce").dropna()
+        if len(vals) == 0:
+            continue
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.hist(vals, bins=30)
+        ax.set_title(f"Distribution of {feat}")
+        ax.set_xlabel(feat)
+        ax.set_ylabel("Count")
+        plt.tight_layout()
+        out_path = f"{path_prefix}_{feat}.png"
+        plt.savefig(out_path, dpi=120)
+        plt.close()
+        print(f"  [✓] Saved: {out_path}")
+
+
+def _save_family_stage_heatmap(df, label_col, path, title="Family × Stage Heatmap"):
+    ct = pd.crosstab(df["family"], df[label_col])
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.imshow(ct.values, aspect="auto", cmap="winter")
+    ax.set_xticks(range(len(ct.columns)))
+    ax.set_xticklabels(ct.columns)
+    ax.set_yticks(range(len(ct.index)))
+    ax.set_yticklabels(ct.index)
+    ax.set_title(title)
+    ax.set_xlabel(label_col)
+    ax.set_ylabel("Family")
+
+    for i in range(ct.shape[0]):
+        for j in range(ct.shape[1]):
+            ax.text(j, i, str(ct.iloc[i, j]), ha="center", va="center")
+
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_stage_distribution(df, label_col, stage_names, path, title="Stage Distribution"):
+    counts = df[label_col].value_counts().sort_index()
+    tick_labels = [stage_names.get(i, str(i)) for i in counts.index]
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar(tick_labels, counts.values)
+    ax.set_title(title)
+    ax.set_ylabel("Count")
+    plt.xticks(rotation=25, ha="right")
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
+
+
+def _save_family_accuracy_bar(results_df, path, title="Accuracy by Held-out Family"):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(results_df["held_out_family"], results_df["accuracy"])
+    ax.set_title(title)
+    ax.set_ylabel("Accuracy")
+    plt.xticks(rotation=25, ha="right")
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f"  [✓] Saved: {path}")
 
 # -----------------------------------------------------------------------------
 # Main
@@ -583,7 +853,13 @@ def main():
         print(f"[+] Feature columns: {len(feat_cols)}")
         print(f"[+] Models: {', '.join(get_models().keys())}\n")
 
-        acc = run_standard_split(X, y, feat_cols, label_dir, stage_names=stage_names, label_map=lm)
+        acc = run_standard_split(
+            X, y, feat_cols, label_dir,
+            df_full=df,
+            label_col=label_col,
+            stage_names=stage_names,
+            label_map=lm
+        )
 
         # --no-loo overrides --cv-mode for backwards compatibility
         cv_mode = "none" if args.no_loo else args.cv_mode
