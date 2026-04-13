@@ -95,6 +95,16 @@ BEHAVIOR_LEAKAGE_COLS = {
     "filescan_encrypted_ratio",
 }
 
+    # Features that act as shortcuts to the ransomware stage (late-stage indicators).
+# Dropped during stage_hint / stage_binary training to avoid trivial leakage.
+STAGE_SHORTCUT_COLS = {
+    "filescan_encrypted",
+    "filescan_ransom_notes",
+    "handle_encrypted_files",
+    "filescan_encrypted_ratio",
+}
+
+
 
 # -----------------------------------------------------------------------------
 # Data loading
@@ -133,9 +143,12 @@ def prepare_xy(df, label_col="stage_hint", selected_features=None):
 
     If selected_features is provided, only those columns are used.
     """
+    # from extract_features import STAGE_SHORTCUT_COLS
     drop = set(DROP_COLS)
     if label_col == "behavior_stage":
         drop |= BEHAVIOR_LEAKAGE_COLS
+    if label_col in {"stage_hint", "stage_binary"}:
+        drop |= STAGE_SHORTCUT_COLS
     if selected_features:
         feat_cols = [c for c in selected_features if c in df.columns and c not in drop]
     else:
@@ -177,17 +190,17 @@ def get_models(only=None):
             n_estimators=200, max_depth=4, learning_rate=0.1,
             random_state=42,
         ),
-        "SVM": SVC(
-            kernel="rbf", C=1.0, class_weight="balanced",
-            random_state=42,
-        ),
+        # "SVM": SVC(
+        #     kernel="rbf", C=1.0, class_weight="balanced",
+        #     random_state=42,
+        # ),
         "LogisticRegression": LogisticRegression(
             max_iter=1000, class_weight="balanced",
             random_state=42, n_jobs=-1,
         ),
-        "KNN": KNeighborsClassifier(
-            n_neighbors=5, n_jobs=-1,
-        ),
+        # "KNN": KNeighborsClassifier(
+        #     n_neighbors=5, n_jobs=-1,
+        # ),
     }
     if HAS_XGBOOST:
         models["XGBoost"] = XGBClassifier(

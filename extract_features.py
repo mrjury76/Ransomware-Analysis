@@ -416,41 +416,54 @@ def feat_malfind(rows):
     if not rows:
         return {}
     total = len(rows)
-    exe_regions = private_count = 0
+    mz_regions = 0        # injected PE header (MZ) in hexdump
+    rwx_regions = 0       # PAGE_EXECUTE_READWRITE (writable shellcode staging)
+    private_exec = 0      # private + any executable prot (process hollowing pattern)
+    private_count = 0
+    shellcode_regions = 0 # disasm starts with call/jmp = shellcode entry
     pids = defaultdict(int)
     rwx_pids = set()
-    rwx_regions = 0
-    
+
     for r in rows:
         pid = safe_int(r.get("PID", 0))
-        prot = (r.get("Protection", "") or "").strip()
+        prot = (r.get("Protection", "") or "").strip().upper()
         private = is_true(r.get("PrivateMemory", ""))
-        hexdump = (r.get("Hexdump", "") or "").strip()
-        
-        # MZ header in dump = likely injected PE
-        if "4d 5a" in hexdump.lower() or prot == "PAGE_EXECUTE_READWRITE":
-            exe_regions += 1
+        # strip spaces before searching so "4D 5A" and "4d 5a" both match
+        hexdump = (r.get("Hexdump", "") or "").replace(" ", "").lower()
+        disasm = (r.get("Disasm", "") or "").lower()
+
+        if "4d5a" in hexdump:
+            mz_regions += 1
         if private:
             private_count += 1
         if pid:
             pids[pid] += 1
-        if "RWX" in prot.upper() or "EXECUTE_READWRITE" in prot.upper():
+        is_rwx = "EXECUTE_READWRITE" in prot or prot == "RWX"
+        if is_rwx:
             rwx_regions += 1
             if pid:
                 rwx_pids.add(pid)
+        # private memory that is executable (but not necessarily writable)
+        if private and "EXECUTE" in prot:
+            private_exec += 1
+        # disasm starting with a call or jmp strongly suggests shellcode
+        first_line = disasm.split("\n")[0] if disasm else ""
+        if first_line and re.search(r"\bcall\b|\bjmp\b|\bjne\b|\bjz\b", first_line):
+            shellcode_regions += 1
 
     regions_per_pid = list(pids.values())
-    
+
     return {
-        "malfind_count":       total,
-        "malfind_exe_regions": exe_regions,
-        "malfind_private":     private_count,
-        "malfind_pid_count": len(pids),
-        "malfind_avg_regions_per_process": avg(regions_per_pid),
-        "malfind_max_regions_per_process": max_or_zero(regions_per_pid),
-        "malfind_rwx_pid_count": len(rwx_pids),
-        "malfind_rwx_region_count": rwx_regions,
-        "malfind_injected_pid_count": len(pids),  # any malfind hit -> suspicious/injected
+        "malfind_count":                    total,
+        "malfind_mz_regions":               mz_regions,
+        "malfind_rwx_region_count":         rwx_regions,
+        "malfind_private":                  private_count,
+        "malfind_private_exec":             private_exec,
+        "malfind_shellcode_regions":        shellcode_regions,
+        "malfind_pid_count":                len(pids),
+        "malfind_avg_regions_per_process":  avg(regions_per_pid),
+        "malfind_max_regions_per_process":  max_or_zero(regions_per_pid),
+        "malfind_rwx_pid_count":            len(rwx_pids),
     }
 
 
@@ -690,7 +703,7 @@ def process_snapshot(snap_dir, use_cache=True):
     features.update(feat_filescan(plugin_rows["windows.filescan"]))
     features.update(feat_svcscan(plugin_rows["windows.svcscan"]))
     features.update(feat_privileges(plugin_rows["windows.privileges"]))
-    features.update(feat_netstat(plugin_rows["windows.netstat"]))
+    # features.update(feat_netstat(plugin_rows["windows.netstat"]))
 
     # ── Ratio features (normalize across system load) ──────────────────────
     vad_total = features.get("vad_total", 0)
@@ -717,10 +730,10 @@ def process_snapshot(snap_dir, use_cache=True):
 
     ldr_total = features.get("ldrmodules_total", 0)
     if ldr_total > 0:
-        # features["ldrmodules_hidden_ratio"] = round(features.get("ldrmodules_hidden_count", 0) / ldr_total, 4)  # always 0
+        features["ldrmodules_hidden_ratio"] = round(features.get("ldrmodules_hidden_count", 0) / ldr_total, 4)  # always 0
         features["ldrmodules_suspicious_path_ratio"] = round(features.get("ldrmodules_suspicious_path_hit_count", 0) / ldr_total, 4)
     else:
-        # features["ldrmodules_hidden_ratio"] = 0
+        features["ldrmodules_hidden_ratio"] = 0
         features["ldrmodules_suspicious_path_ratio"] = 0
         
     filescan_total = features.get("filescan_total", 0)
