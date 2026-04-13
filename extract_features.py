@@ -547,10 +547,17 @@ SECURITY_SERVICES = {"windefend", "msmpeng", "mbamlservice", "vsserv",
 def feat_svcscan(rows):
     if not rows:
         return {}
+    # Vol3 svcscan duplicates entries across service tables — deduplicate by
+    # (name, state) so that VSS/wbengine/swprv don't inflate counts on benign machines.
+    seen = set()
     running = stopped = security_stopped = 0
     for r in rows:
         state = r.get("State", "").strip().upper()
         name  = r.get("Name", r.get("ServiceName", "")).strip().lower()
+        key   = (name, state)
+        if key in seen:
+            continue
+        seen.add(key)
         if "RUNNING" in state:
             running += 1
         elif "STOPPED" in state:
@@ -558,7 +565,7 @@ def feat_svcscan(rows):
             if any(svc in name for svc in SECURITY_SERVICES):
                 security_stopped += 1
     return {
-        "svcscan_total":            len(rows),
+        "svcscan_total":            len(seen),
         "svcscan_running":          running,
         "svcscan_stopped":          stopped,
         "svcscan_security_stopped": security_stopped,
@@ -790,41 +797,60 @@ def process_snapshot(snap_dir, use_cache=True):
     else:
         features["malfind_rwx_ratio"] = 0
         
-    # ── Behavior-based stage label (3-class) ─────────────────────────────────
-    # Grounded in ransomware lifecycle research (Kharraz 2016, Scaife 2016):
+    # ── Behavior-based stage label (4-class) ─────────────────────────────────
+    # Grounded in ransomware lifecycle research (Kharraz 2016, Scaife 2016,
+    # Sgandurra 2016, Continella 2016):
     #
     #   0 — Benign / Dormant
     #       No observable ransomware activity.
     #
     #   1 — Pre-encryption active  (defense evasion / recon phase)
-    #       Ransomware is running and preparing but no files damaged yet.
-    #       Thresholds derived from WannaCry vs Benign comparison:
-    #         - ldrmodules discrepancies > 100: benign peaks ~43, ransomware 200-2370
-    #         - security services stopped > 30: benign ~14-18, WannaCry T030 = 147
-    #         - wow64 processes > 3: 32-bit payloads on 64-bit OS common in WannaCry/Cerber
-    #         - privilege tokens enabled > 1500: spike from token acquisition
-    #         - pslist_ransom_procs: vssadmin/wbadmin shadow-copy deletion
+    #       Ransomware is running and preparing — files are still INTACT.
+    #       This is the highest-value detection window.
+    #       Thresholds derived from WannaCry vs Benign empirical comparison:
+    #         - ldrmodules_not_in_load > 100: benign peaks ~43, active ransomware 200-2370
+    #         - svcscan_security_stopped > 30: benign ~14-18, WannaCry T030 = 147
+    #         - pslist_wow64_count > 3: 32-bit payloads injected on 64-bit OS
+    #         - priv_total_enabled > 1500: token privilege acquisition spike
+    #         - pslist_ransom_procs: vssadmin/wbadmin shadow-copy deletion seen
     #
-    #   2 — Encryption observed
-    #       Files are being or have been encrypted.
-    #         - filescan_encrypted > 5: benign has 1 system file with enc-like ext → threshold of 5
-    #         - filescan_ransom_notes > 0: ransom note dropped on disk
-    has_encryption = (
-        features.get("filescan_encrypted", 0) > 5
-        or features.get("filescan_ransom_notes", 0) > 0
-    )
+    #   2 — Active encryption
+    #       Files are being encrypted AND injection activity is still elevated.
+    #       ldrmodules anomalies still high (>80) + encrypted files visible.
+    #       The ransomware process is actively working.
+    #
+    #   3 — Post-encryption
+    #       Encryption has completed — ldrmodules anomalies have settled back
+    #       to near-benign levels (<80) but encrypted files/notes remain on disk.
+    #       The injection/loading phase is over; ransomware may show ransom UI
+    #       or have exited. Recovery window — files are already damaged.
+    #       NOTE: Jigsaw is largely invisible here (no .fun files in filescan,
+    #       process terminated by AV in our dataset) — a known limitation.
+    #
+    ldr_anomaly      = features.get("ldrmodules_not_in_load", 0)
+    enc_files        = features.get("filescan_encrypted", 0)
+    ransom_notes     = features.get("filescan_ransom_notes", 0)
+    svc_sec_stopped  = features.get("svcscan_security_stopped", 0)
+    wow64            = features.get("pslist_wow64_count", 0)
+    priv             = features.get("priv_total_enabled", 0)
+    ransom_procs     = features.get("pslist_ransom_procs", 0)
+
+    has_enc_artifacts   = enc_files > 5 or ransom_notes > 0
+    ldr_settled         = ldr_anomaly < 80          # injection phase wound down
     has_preenc_activity = (
-        features.get("ldrmodules_not_in_load", 0) > 100
-        or features.get("svcscan_security_stopped", 0) > 30
-        or features.get("pslist_wow64_count", 0) > 3
-        or features.get("priv_total_enabled", 0) > 1500
-        or features.get("pslist_ransom_procs", 0) > 0
+        ldr_anomaly > 100
+        or svc_sec_stopped > 30
+        or wow64 > 3
+        or priv > 1500
+        or ransom_procs > 0
     )
 
-    if has_encryption:
-        behavior_stage = 2
+    if has_enc_artifacts and ldr_settled:
+        behavior_stage = 3          # post-encryption: artifacts on disk, injection done
+    elif has_enc_artifacts:
+        behavior_stage = 2          # active encryption: artifacts + injection still hot
     elif has_preenc_activity:
-        behavior_stage = 1
+        behavior_stage = 1          # pre-enc active: ransomware running, files intact
     else:
         behavior_stage = 0
 

@@ -67,7 +67,8 @@ STAGE_NAMES_TIME = {
 STAGE_NAMES_BEHAVIOR = {
     0: "Benign/Dormant",
     1: "Pre-enc Active",
-    2: "Encryption-observed",
+    2: "Active Encryption",
+    3: "Post-Encryption",
 }
 
 STAGE_NAMES_EARLY_LATE = {
@@ -123,7 +124,7 @@ DEAD_FEATURES = {
     "dlllist_crypto_dlls",
     "vad_avg_total_mem_per_process",
     "vad_max_total_mem_per_process",
-    # "malfind_shellcode_regions",       # new feature — no data yet
+    "malfind_shellcode_regions",       # new feature — no data yet
     "vad_avg_max_region_size_per_process",
     "netstat_established_ratio",       # network plugin not producing data
     "netstat_suspicious_port_ratio",
@@ -345,9 +346,9 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
         return 0
 
     comp_df = pd.DataFrame(comparison).sort_values("macro_f1", ascending=False)
-    comp_df.to_csv(os.path.join(out_dir, "model_comparison.csv"), index=False)
+    comp_df.to_csv(os.path.join(out_dir, "standard_results.csv"), index=False)
     print(f"\n{'=' * 40}")
-    print(f" Model comparison (standard split):")
+    print(f" SCENARIO 1 — Standard 80/20 split — Model comparison:")
     print(f"{'=' * 40}")
     cols_display = ["model", "accuracy", "acc_ci_lo", "acc_ci_hi",
                     "macro_f1", "f1_ci_lo", "f1_ci_hi",
@@ -430,6 +431,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
         print(f"\n  --- Held-out: {held_out} ({len(y_test)} rows, {len(y_train)} train) ---")
 
         best_macro_f1, best_name, best_preds = -1, None, None
+        fold_preds = {}   # model_name -> preds array, saved for per-model outputs
 
         for model_name, clf in models.items():
             try:
@@ -440,6 +442,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
                 print(f"    {model_name:20s}  [!] failed: {type(e).__name__}: {e}")
                 continue
             preds = np.array([from_idx.get(int(p), int(p)) for p in preds_enc])
+            fold_preds[model_name] = preds
 
             m = _metrics(y_test, preds)
             print(f"    {model_name:20s}  acc: {m['accuracy']:.4f}  "
@@ -453,21 +456,24 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
             if m["macro_f1"] > best_macro_f1:
                 best_macro_f1, best_name, best_preds = m["macro_f1"], model_name, preds
 
-        if best_preds is None:
+        if not fold_preds:
             print(f"    [!] All models failed for {held_out} — skipping outputs.")
             continue
 
-        _save_confusion_matrix(
-            y_test, best_preds, present, names,
-            os.path.join(out_dir, f"cm_loo_{held_out}.png"),
-            title=f"LOO — {held_out} (best macro F1: {best_name})",
-            normalize=True,
-        )
-        report_df = pd.DataFrame(
-            classification_report(y_test, best_preds, labels=present,
-                                  target_names=names, output_dict=True, zero_division=0)
-        ).T
-        report_df.to_csv(os.path.join(out_dir, f"report_loo_{held_out}.csv"))
+        # Per-model confusion matrix + report CSV for every model
+        for model_name, preds in fold_preds.items():
+            tag = "best" if model_name == best_name else ""
+            _save_confusion_matrix(
+                y_test, preds, present, names,
+                os.path.join(out_dir, f"loo_cm_{held_out}_{model_name}.png"),
+                title=f"LOO — {held_out} — {model_name}{' [best]' if tag else ''}",
+                normalize=True,
+            )
+            report_df = pd.DataFrame(
+                classification_report(y_test, preds, labels=present,
+                                      target_names=names, output_dict=True, zero_division=0)
+            ).T
+            report_df.to_csv(os.path.join(out_dir, f"loo_report_{held_out}_{model_name}.csv"))
 
     # ── Benign holdout: dedicated 80/20 split to measure real FPR ────────────────
     benign_fpr_by_model = {}
@@ -543,8 +549,8 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
     if loo_summary:
         loo_df = pd.DataFrame(loo_summary).sort_values("mean_macro_f1", ascending=False)
         print(f"\n{'=' * 60}")
-        print(f" LOO Model Comparison (ransomware families, sorted by mean macro F1):")
-        print(f" benign_fpr = fraction of held-out benign samples flagged as ransomware.")
+        print(f" SCENARIO 2 — LOO — Model Comparison (sorted by mean macro F1):")
+        print(f" benign_fpr = fraction of benign samples flagged as ransomware.")
         print(f"{'=' * 60}")
         summary_cols = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
                         "wtd_accuracy", "std_accuracy", "mean_balanced_acc",
@@ -586,6 +592,9 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
     X_all, y_all, _, _ = prepare_xy(df_work, label_col=label_col, selected_features=selected_features)
     models = get_models()
     all_results = {name: [] for name in models}
+    # Track best preds per family for per-family confusion matrices
+    # best_by_family[family] = (best_macro_f1, best_model_name, y_test_concat, preds_concat)
+    best_by_family = {}
 
     print(f"[+] {len(instances)} instances (family × rep groups)\n")
 
@@ -626,6 +635,15 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
                 "n_test":   len(y_test),
                 **m,
             })
+            # Accumulate best-model predictions per family for aggregated confusion matrix
+            prev = best_by_family.get((fam_label, model_name))
+            if prev is None:
+                best_by_family[(fam_label, model_name)] = (
+                    np.array(y_test), np.array(preds))
+            else:
+                best_by_family[(fam_label, model_name)] = (
+                    np.concatenate([prev[0], y_test]),
+                    np.concatenate([prev[1], preds]))
 
     # Build LOIO summary: unweighted and n_test-weighted means per model
     loio_summary = []
@@ -661,7 +679,7 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
     if loio_summary:
         loio_df = pd.DataFrame(loio_summary).sort_values("mean_macro_f1", ascending=False)
         print(f"\n{'=' * 60}")
-        print(f" LOIO Model Comparison (sorted by mean macro F1):")
+        print(f" SCENARIO 3 — LOIO — Model Comparison (sorted by mean macro F1):")
         print(f"{'=' * 60}")
         summary_cols = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
                         "wtd_accuracy", "std_accuracy",
@@ -670,13 +688,37 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
         print(loio_df[[c for c in summary_cols if c in loio_df.columns]].to_string(index=False))
         loio_df.to_csv(os.path.join(out_dir, "loio_results.csv"), index=False)
 
-        # Save per-instance detail for every model so nothing is lost
+        # Per-instance detail CSV for every model
         for model_name, results in all_results.items():
             if results:
                 pd.DataFrame(results).to_csv(
                     os.path.join(out_dir, f"loio_detail_{model_name}.csv"), index=False
                 )
-        print(f"  [✓] Per-instance detail CSVs saved for all models.")
+
+        # Per-family aggregated confusion matrix + report CSV (all instances of a family combined)
+        # Use the best model per family (highest mean macro F1 in loio_summary)
+        best_model_overall = loio_df.iloc[0]["model"] if not loio_df.empty else None
+        all_families_loio  = sorted({k[0] for k in best_by_family})
+        for fam in all_families_loio:
+            key = (fam, best_model_overall)
+            if key not in best_by_family:
+                continue
+            yt, yp = best_by_family[key]
+            present = sorted(np.unique(np.concatenate([yt, yp])))
+            names   = [stage_names.get(label_map.get(s, s), f"Stage {s}") for s in present]
+            _save_confusion_matrix(
+                yt, yp, present, names,
+                os.path.join(out_dir, f"loio_cm_{fam}.png"),
+                title=f"LOIO — {fam} (all reps, {best_model_overall})",
+                normalize=True,
+            )
+            report_df = pd.DataFrame(
+                classification_report(yt, yp, labels=present,
+                                      target_names=names, output_dict=True, zero_division=0)
+            ).T
+            report_df.to_csv(os.path.join(out_dir, f"loio_report_{fam}.csv"))
+
+        print(f"  [✓] Per-family confusion matrices + reports saved (model: {best_model_overall}).")
 
 
 # -----------------------------------------------------------------------------
@@ -739,6 +781,150 @@ def write_run_log(out_dir, df, label_cols, models_used, scenarios_run, extra=Non
     with open(path, "w") as f:
         f.write("\n".join(lines) + "\n")
     print(f"  [✓] Run log: {path}")
+
+
+def write_master_summary(run_dir, label_cols, df=None):
+    """
+    Reads standard_results.csv, loo_results.csv, loio_results.csv from each
+    label sub-folder and writes a single master_summary.txt + master_summary.csv
+    at the top level of run_dir.
+
+    master_summary.csv  — one row per (label, scenario, model) with all metrics
+    master_summary.txt  — human-readable highlight: best model per scenario/label
+    """
+    SCENARIO_FILES = {
+        "Standard 80/20": "standard_results.csv",
+        "LOO":            "loo_results.csv",
+        "LOIO":           "loio_results.csv",
+    }
+    # Columns we want from each scenario (rename to a common schema)
+    # Standard uses 'accuracy'/'macro_f1'; LOO/LOIO use 'mean_accuracy'/'mean_macro_f1'
+    RENAME = {
+        "accuracy":         "mean_accuracy",
+        "balanced_acc":     "mean_balanced_acc",
+        "macro_f1":         "mean_macro_f1",
+        "weighted_f1":      "mean_weighted_f1",
+        "acc_ci_lo":        "acc_ci95_lo",
+        "acc_ci_hi":        "acc_ci95_hi",
+        "f1_ci_lo":         "f1_ci95_lo",
+        "f1_ci_hi":         "f1_ci95_hi",
+    }
+    KEEP = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
+            "mean_balanced_acc", "mean_macro_f1", "f1_ci95_lo", "f1_ci95_hi",
+            "mean_weighted_f1"]
+
+    all_rows = []
+    for label_col in label_cols:
+        label_dir = os.path.join(run_dir, label_col)
+        if not os.path.isdir(label_dir):
+            continue
+        for scenario, fname in SCENARIO_FILES.items():
+            fpath = os.path.join(label_dir, fname)
+            if not os.path.isfile(fpath):
+                continue
+            try:
+                sdf = pd.read_csv(fpath)
+            except Exception:
+                continue
+            sdf = sdf.rename(columns=RENAME)
+            # Keep only common metric columns that exist
+            cols = [c for c in KEEP if c in sdf.columns]
+            if "model" not in cols:
+                continue
+            sdf = sdf[cols].copy()
+            sdf.insert(0, "label",    label_col)
+            sdf.insert(1, "scenario", scenario)
+            all_rows.append(sdf)
+
+    if not all_rows:
+        print("  [!] No result CSVs found — skipping master summary.")
+        return
+
+    master = pd.concat(all_rows, ignore_index=True)
+
+    # Sort: best macro_f1 first
+    if "mean_macro_f1" in master.columns:
+        master = master.sort_values("mean_macro_f1", ascending=False)
+
+    csv_path = os.path.join(run_dir, "master_summary.csv")
+    master.to_csv(csv_path, index=False)
+
+    # ── Human-readable text report ───────────────────────────────────────────
+    lines = [
+        "=" * 70,
+        " MASTER RESULTS SUMMARY",
+        f" Run dir : {run_dir}",
+        f" Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        "=" * 70,
+    ]
+
+    if df is not None:
+        lines += [
+            "",
+            f"  Dataset  : {len(df)} snapshots, "
+            f"{len(df['family'].unique())} families",
+            f"  Families : {', '.join(sorted(df['family'].unique()))}",
+        ]
+
+    # Best model per (label, scenario)
+    lines += ["", " BEST MODEL PER LABEL x SCENARIO", " " + "-" * 66]
+
+    label_order    = label_cols
+    scenario_order = list(SCENARIO_FILES.keys())
+
+    for label_col in label_order:
+        lines.append(f"\n  [{label_col}]")
+        sub = master[master["label"] == label_col]
+        if sub.empty:
+            lines.append("    (no results)")
+            continue
+        for scenario in scenario_order:
+            row = sub[sub["scenario"] == scenario]
+            if row.empty:
+                continue
+            best = row.sort_values("mean_macro_f1", ascending=False).iloc[0]
+            f1_lo = best.get("f1_ci95_lo", "—")
+            f1_hi = best.get("f1_ci95_hi", "—")
+            ci_str = (f"  [{f1_lo:.4f}-{f1_hi:.4f} 95% CI]"
+                      if isinstance(f1_lo, float) else "")
+            lines.append(
+                f"    {scenario:<18}  {best['model']:<22}"
+                f"  acc={best.get('mean_accuracy', 0):.4f}"
+                f"  macro_f1={best.get('mean_macro_f1', 0):.4f}{ci_str}"
+                f"  bal_acc={best.get('mean_balanced_acc', 0):.4f}"
+            )
+
+    # Overall single best across everything
+    lines += ["", " OVERALL BEST (highest mean macro F1 across all labels/scenarios)", " " + "-" * 66]
+    overall_best = master.sort_values("mean_macro_f1", ascending=False).iloc[0]
+    lines.append(
+        f"  Label    : {overall_best['label']}\n"
+        f"  Scenario : {overall_best['scenario']}\n"
+        f"  Model    : {overall_best['model']}\n"
+        f"  Accuracy : {overall_best.get('mean_accuracy', '—')}\n"
+        f"  Macro F1 : {overall_best.get('mean_macro_f1', '—')}"
+        + (f"  [{overall_best.get('f1_ci95_lo','?'):.4f}-"
+           f"{overall_best.get('f1_ci95_hi','?'):.4f} 95% CI]"
+           if isinstance(overall_best.get('f1_ci95_lo'), float) else "")
+        + f"\n  Bal Acc  : {overall_best.get('mean_balanced_acc', '—')}"
+    )
+
+    # Full table sorted by macro_f1
+    lines += ["", " FULL TABLE (sorted by mean macro F1)", " " + "-" * 66]
+    display_cols = [c for c in ["label", "scenario", "model",
+                                 "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
+                                 "mean_balanced_acc", "mean_macro_f1",
+                                 "f1_ci95_lo", "f1_ci95_hi", "mean_weighted_f1"]
+                    if c in master.columns]
+    lines.append(master[display_cols].to_string(index=False))
+    lines.append("\n" + "=" * 70)
+
+    txt_path = os.path.join(run_dir, "master_summary.txt")
+    with open(txt_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+    print(f"  [+] Master summary: {txt_path}")
+    print(f"  [+] Master CSV    : {csv_path}")
 
 
 def _metrics(y_true, y_pred):

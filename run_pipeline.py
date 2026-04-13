@@ -240,6 +240,12 @@ def main():
             extra={"standard_accuracy": acc, "cv_mode": cv_mode},
         )
 
+    # ── Master summary across all labels and scenarios ───────────────────────
+    print("\n" + "=" * 60)
+    print(" Writing master summary...")
+    print("=" * 60)
+    train_stage_model.write_master_summary(model_out, label_cols, df=df)
+
     print(f"\n{'=' * 60}")
     print(f" Pipeline complete")
     print(f" Snapshots : {len(rows)}")
