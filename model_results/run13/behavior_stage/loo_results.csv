@@ -1,0 +1,6 @@
+model,mean_accuracy,std_accuracy,acc_ci95_lo,acc_ci95_hi,wtd_accuracy,mean_balanced_acc,mean_macro_f1,std_macro_f1,f1_ci95_lo,f1_ci95_hi,wtd_macro_f1,mean_weighted_f1,n_folds,benign_fpr,WannaCry
+GradientBoosting,0.1818,,0.1818,0.1818,0.1818,0.1667,0.1515,,0.1515,0.1515,0.1515,0.2204,1,1.0,0.1515
+LogisticRegression,0.1818,,0.1818,0.1818,0.1818,0.1667,0.1471,,0.1471,0.1471,0.1471,0.2139,1,1.0,0.1471
+RandomForest,0.0,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,1,0.72,0.0
+ExtraTrees,0.0,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,1,0.66,0.0
+XGBoost,0.0,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,1,0.88,0.0

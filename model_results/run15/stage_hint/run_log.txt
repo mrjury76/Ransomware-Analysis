@@ -1,0 +1,32 @@
+============================================================
+ TRAINING RUN LOG
+============================================================
+  Timestamp  : 2026-04-13 01:06:49
+  Output dir : /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/model_results/run15/stage_hint
+
+  Snapshots  : 101 rows
+  Families   : 2
+      Benign                     50 rows
+      Cerber                     51 rows
+
+  Feature cols (approx): 107
+
+  Labels trained:
+      stage_hint            {0: 50, 1: 8, 2: 9, 3: 19, 4: 15}
+
+  Models:
+      RandomForest
+      ExtraTrees
+      GradientBoosting
+      LogisticRegression
+      XGBoost
+
+  Scenarios run:
+      Standard 80/20 split
+      LOO (leave-one-family-out)
+      LOIO (leave-one-instance-out)
+
+  Notes:
+      standard_accuracy: 1.0
+      cv_mode: both
+============================================================

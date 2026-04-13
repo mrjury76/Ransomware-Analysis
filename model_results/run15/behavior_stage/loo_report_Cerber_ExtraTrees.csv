@@ -1,0 +1,7 @@
+,precision,recall,f1-score,support
+Pre-enc Active,0.0,0.0,0.0,5.0
+Active Encryption,0.0,0.0,0.0,10.0
+Post-Encryption,0.0,0.0,0.0,36.0
+micro avg,0.0,0.0,0.0,51.0
+macro avg,0.0,0.0,0.0,51.0
+weighted avg,0.0,0.0,0.0,51.0

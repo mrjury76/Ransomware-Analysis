@@ -1,0 +1,16 @@
+held_out,family,n_test,accuracy,balanced_acc,macro_f1,weighted_f1
+Benign::rep1,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep10,Benign,5,0.8,0.8,0.4444,0.8889
+Benign::rep2,Benign,5,0.8,0.5,0.4444,0.7111
+Benign::rep3,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep4,Benign,5,0.8,0.5,0.4444,0.7111
+Benign::rep5,Benign,5,0.8,0.8,0.4444,0.8889
+Benign::rep6,Benign,5,0.8,0.5,0.4444,0.7111
+Benign::rep7,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep8,Benign,5,0.8,0.8,0.4444,0.8889
+Benign::rep9,Benign,5,1.0,1.0,1.0,1.0
+Cerber::rep1,Cerber,8,1.0,1.0,1.0,1.0
+Cerber::rep2,Cerber,10,1.0,1.0,1.0,1.0
+Cerber::rep3,Cerber,11,0.9091,0.9583,0.9111,0.9152
+Cerber::rep4,Cerber,11,1.0,1.0,1.0,1.0
+Cerber::rep5,Cerber,11,0.9091,0.9583,0.9111,0.9152

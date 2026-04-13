@@ -1,0 +1,16 @@
+held_out,family,n_test,accuracy,balanced_acc,macro_f1,weighted_f1
+Benign::rep1,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep10,Benign,5,0.8,0.8,0.4444,0.8889
+Benign::rep2,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep3,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep4,Benign,5,0.8,0.5,0.4444,0.7111
+Benign::rep5,Benign,5,0.8,0.8,0.4444,0.8889
+Benign::rep6,Benign,5,0.8,0.5,0.4444,0.7111
+Benign::rep7,Benign,5,1.0,1.0,1.0,1.0
+Benign::rep8,Benign,5,0.8,0.8,0.4444,0.8889
+Benign::rep9,Benign,5,1.0,1.0,1.0,1.0
+Dharma::rep1,Dharma,11,0.9091,0.9091,0.4762,0.9524
+Dharma::rep2,Dharma,11,1.0,1.0,1.0,1.0
+Dharma::rep3,Dharma,11,0.8182,0.3333,0.3,0.7364
+Dharma::rep4,Dharma,11,1.0,1.0,1.0,1.0
+Dharma::rep5,Dharma,11,0.9091,0.6667,0.6491,0.866

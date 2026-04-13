@@ -1,0 +1,128 @@
+==========================================================================
+ MASTER RESULTS SUMMARY
+ Run     : /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/model_results/run13
+ Created : 2026-04-13 01:01:56
+==========================================================================
+
+  Snapshots : 105   Families : 2
+  Families  : Benign, WannaCry
+  Labels    : stage_hint, stage_binary, behavior_stage
+
+==========================================================================
+ SECTION 1 -- BEST MODEL PER SCENARIO (all labels)
+==========================================================================
+
+  Standard 80/20
+  ------------------------------------------------------------------------
+  stage_hint          RandomForest            acc=1.0000  macro_f1=1.0000 [1.0000-1.0000]  bal=1.0000  wtd_f1=1.0000  overfit=0.0000  conf=0.9933
+  stage_binary        RandomForest            acc=1.0000  macro_f1=1.0000 [1.0000-1.0000]  bal=1.0000  wtd_f1=1.0000  overfit=0.0000  conf=0.9716
+  behavior_stage      RandomForest            acc=0.9524  macro_f1=0.8939 [0.6874-1.0000]  bal=0.8750  wtd_f1=0.9466  overfit=0.0119  conf=0.8195
+
+  LOO
+  ------------------------------------------------------------------------
+  behavior_stage      GradientBoosting        acc=0.1818  macro_f1=0.1515 [0.1515-0.1515]  bal=0.1667  wtd_f1=0.2204  benign_fpr=1.0000
+
+  LOIO
+  ------------------------------------------------------------------------
+  stage_hint          ExtraTrees              acc=1.0000  macro_f1=1.0000 [1.0000-1.0000]  bal=1.0000  wtd_f1=1.0000
+  stage_binary        ExtraTrees              acc=1.0000  macro_f1=1.0000 [1.0000-1.0000]  bal=1.0000  wtd_f1=1.0000
+  behavior_stage      ExtraTrees              acc=0.9285  macro_f1=0.8303 [0.7064-0.9542]  bal=0.8700  wtd_f1=0.9169
+
+==========================================================================
+ SECTION 2 -- FULL BREAKDOWN PER LABEL
+==========================================================================
+
+  [stage_hint]
+  ========================================================================
+
+  -- Standard 80/20 --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  train_accuracy  overfit_gap  conf_mean  conf_pct_90
+      RandomForest            1.0          1.0          1.0                1.0            1.0         1.0         1.0               1.0             1.0          0.0     0.9933       1.0000
+        ExtraTrees            1.0          1.0          1.0                1.0            1.0         1.0         1.0               1.0             1.0          0.0     0.9883       1.0000
+  GradientBoosting            1.0          1.0          1.0                1.0            1.0         1.0         1.0               1.0             1.0          0.0     0.9678       0.9524
+LogisticRegression            1.0          1.0          1.0                1.0            1.0         1.0         1.0               1.0             1.0          0.0     0.9603       0.9048
+           XGBoost            1.0          1.0          1.0                1.0            1.0         1.0         1.0               1.0             1.0          0.0     0.7747       0.4286
+
+  -- LOIO --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  n_instances
+        ExtraTrees         1.0000       1.0000       1.0000             1.0000         1.0000      1.0000      1.0000            1.0000           15
+LogisticRegression         1.0000       1.0000       1.0000             1.0000         1.0000      1.0000      1.0000            1.0000           15
+           XGBoost         0.9939       0.9821       1.0058             0.9917         0.9926      0.9781      1.0071            0.9933           15
+      RandomForest         0.9879       0.9641       1.0116             0.9917         0.9903      0.9712      1.0093            0.9874           15
+  GradientBoosting         0.9818       0.9560       1.0076             0.9792         0.9795      0.9479      1.0111            0.9811           15
+
+  Per-family macro F1 (best model = ExtraTrees):
+    Benign          1.0000
+    WannaCry        1.0000
+
+  [stage_binary]
+  ========================================================================
+
+  -- Standard 80/20 --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  train_accuracy  overfit_gap  conf_mean  conf_pct_90
+      RandomForest         1.0000       1.0000          1.0             1.0000         1.0000      1.0000         1.0            1.0000             1.0       0.0000     0.9716       0.9524
+        ExtraTrees         1.0000       1.0000          1.0             1.0000         1.0000      1.0000         1.0            1.0000             1.0       0.0000     0.9848       0.9524
+  GradientBoosting         1.0000       1.0000          1.0             1.0000         1.0000      1.0000         1.0            1.0000             1.0       0.0000     1.0000       1.0000
+LogisticRegression         1.0000       1.0000          1.0             1.0000         1.0000      1.0000         1.0            1.0000             1.0       0.0000     0.9693       0.9524
+           XGBoost         0.9524       0.8571          1.0             0.9286         0.9443      0.8151         1.0            0.9514             1.0       0.0476     0.7965       0.2857
+
+  -- LOIO --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  n_instances
+        ExtraTrees         1.0000       1.0000       1.0000             1.0000         1.0000      1.0000      1.0000            1.0000           15
+LogisticRegression         1.0000       1.0000       1.0000             1.0000         1.0000      1.0000      1.0000            1.0000           15
+      RandomForest         0.9939       0.9821       1.0058             0.9952         0.9937      0.9815      1.0060            0.9940           15
+  GradientBoosting         0.9879       0.9717       1.0041             0.9869         0.9867      0.9690      1.0045            0.9877           15
+           XGBoost         0.9758       0.9485       1.0031             0.9810         0.9752      0.9475      1.0030            0.9762           15
+
+  Per-family macro F1 (best model = ExtraTrees):
+    Benign          1.0000
+    WannaCry        1.0000
+
+  [behavior_stage]
+  ========================================================================
+
+  -- Standard 80/20 --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  train_accuracy  overfit_gap  conf_mean  conf_pct_90
+      RandomForest         0.9524       0.8571       1.0000             0.8750         0.8939      0.6874      1.0000            0.9466          0.9643       0.0119     0.8195       0.5238
+        ExtraTrees         0.9048       0.7619       1.0000             0.8250         0.8530      0.5958      1.0000            0.8976          0.9762       0.0714     0.8052       0.4762
+           XGBoost         0.9048       0.7619       1.0000             0.8250         0.8530      0.5958      1.0000            0.8976          0.9762       0.0714     0.7858       0.3333
+LogisticRegression         0.8571       0.7143       1.0000             0.7972         0.8162      0.5487      1.0000            0.8514          1.0000       0.1429     0.9068       0.6667
+  GradientBoosting         0.8095       0.6190       0.9524             0.7250         0.7520      0.4423      0.9543            0.8014          1.0000       0.1905     0.9914       0.9524
+
+  -- LOO --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  benign_fpr  n_folds
+  GradientBoosting         0.1818       0.1818       0.1818             0.1667         0.1515      0.1515      0.1515            0.2204        1.00        1
+LogisticRegression         0.1818       0.1818       0.1818             0.1667         0.1471      0.1471      0.1471            0.2139        1.00        1
+      RandomForest         0.0000       0.0000       0.0000             0.0000         0.0000      0.0000      0.0000            0.0000        0.72        1
+        ExtraTrees         0.0000       0.0000       0.0000             0.0000         0.0000      0.0000      0.0000            0.0000        0.66        1
+           XGBoost         0.0000       0.0000       0.0000             0.0000         0.0000      0.0000      0.0000            0.0000        0.88        1
+
+  Per-family macro F1 (best model = GradientBoosting):
+    WannaCry        0.1515
+    Benign FPR      1.0000
+
+  -- LOIO --
+             model  mean_accuracy  acc_ci95_lo  acc_ci95_hi  mean_balanced_acc  mean_macro_f1  f1_ci95_lo  f1_ci95_hi  mean_weighted_f1  n_instances
+        ExtraTrees         0.9285       0.8840       0.9730             0.8700         0.8303      0.7064      0.9542            0.9169           15
+  GradientBoosting         0.9285       0.8840       0.9730             0.8900         0.8165      0.6924      0.9405            0.9316           15
+      RandomForest         0.9152       0.8658       0.9645             0.8585         0.7936      0.6610      0.9262            0.9091           15
+           XGBoost         0.9152       0.8689       0.9614             0.8578         0.7915      0.6609      0.9222            0.9100           15
+LogisticRegression         0.8764       0.8203       0.9325             0.8455         0.7547      0.6299      0.8795            0.8898           15
+
+  Per-family macro F1 (best model = ExtraTrees):
+    Benign          0.7778
+    WannaCry        0.9354
+
+==========================================================================
+ SECTION 3 -- OVERALL BEST (highest mean macro F1)
+==========================================================================
+
+  Label    : stage_hint
+  Scenario : Standard 80/20
+  Model    : RandomForest
+  Accuracy : 1.0000  [1.0000-1.0000]
+  Macro F1 : 1.0000  [1.0000-1.0000]
+  Bal Acc  : 1.0000
+  Wtd F1   : 1.0000
+
+==========================================================================

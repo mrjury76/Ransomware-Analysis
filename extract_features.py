@@ -799,60 +799,96 @@ def process_snapshot(snap_dir, use_cache=True):
         
     # ── Behavior-based stage label (4-class) ─────────────────────────────────
     # Grounded in ransomware lifecycle research (Kharraz 2016, Scaife 2016,
-    # Sgandurra 2016, Continella 2016):
+    # Sgandurra 2016, Continella 2016) and empirical analysis of universal signals.
     #
     #   0 — Benign / Dormant
     #       No observable ransomware activity.
     #
-    #   1 — Pre-encryption active  (defense evasion / recon phase)
+    #   1 — Pre-encryption active (defense evasion / recon phase)
     #       Ransomware is running and preparing — files are still INTACT.
     #       This is the highest-value detection window.
-    #       Thresholds derived from WannaCry vs Benign empirical comparison:
-    #         - ldrmodules_not_in_load > 100: benign peaks ~43, active ransomware 200-2370
-    #         - svcscan_security_stopped > 30: benign ~14-18, WannaCry T030 = 147
-    #         - pslist_wow64_count > 3: 32-bit payloads injected on 64-bit OS
-    #         - priv_total_enabled > 1500: token privilege acquisition spike
-    #         - pslist_ransom_procs: vssadmin/wbadmin shadow-copy deletion seen
+    #       Universal signals: elevated process counts, DLL injection anomalies,
+    #       suspicious handles, service manipulation.
     #
     #   2 — Active encryption
     #       Files are being encrypted AND injection activity is still elevated.
-    #       ldrmodules anomalies still high (>80) + encrypted files visible.
-    #       The ransomware process is actively working.
+    #       Universal signals peak: ldrmodules_not_in_load > 434, vad_exec_count > 5598,
+    #       handle_total > 37125, plus encryption artifacts visible.
     #
     #   3 — Post-encryption
-    #       Encryption has completed — ldrmodules anomalies have settled back
+    #       Encryption has completed — injection anomalies have settled back
     #       to near-benign levels (<80) but encrypted files/notes remain on disk.
     #       The injection/loading phase is over; ransomware may show ransom UI
     #       or have exited. Recovery window — files are already damaged.
-    #       NOTE: Jigsaw is largely invisible here (no .fun files in filescan,
-    #       process terminated by AV in our dataset) — a known limitation.
     #
+    family = meta.get("family", "")
+    # Core universal signals from empirical analysis
     ldr_anomaly      = features.get("ldrmodules_not_in_load", 0)
-    enc_files        = features.get("filescan_encrypted", 0)
-    ransom_notes     = features.get("filescan_ransom_notes", 0)
+    vad_exec         = features.get("vad_exec_count", 0)
+    handle_total     = features.get("handle_total", 0)
+    pslist_count     = features.get("pslist_count", 0)
+    malfind_count    = features.get("malfind_count", 0)
     svc_sec_stopped  = features.get("svcscan_security_stopped", 0)
-    wow64            = features.get("pslist_wow64_count", 0)
-    priv             = features.get("priv_total_enabled", 0)
+    dlllist_crypto   = features.get("dlllist_crypto_hit_count", 0)
+    handle_mutex     = features.get("handle_mutex_count", 0)
+    cmd_suspicious   = features.get("cmdline_suspicious_count", 0)
+    priv_enabled     = features.get("priv_total_enabled", 0)
+    wow64_count      = features.get("pslist_wow64_count", 0)
     ransom_procs     = features.get("pslist_ransom_procs", 0)
 
-    has_enc_artifacts   = enc_files > 5 or ransom_notes > 0
-    ldr_settled         = ldr_anomaly < 80          # injection phase wound down
-    has_preenc_activity = (
-        ldr_anomaly > 100
-        or svc_sec_stopped > 30
-        or wow64 > 3
-        or priv > 1500
-        or ransom_procs > 0
+    # Encryption artifacts (family-agnostic)
+    enc_files        = features.get("filescan_encrypted", 0)
+    ransom_notes     = features.get("filescan_ransom_notes", 0)
+    net_outbound     = features.get("netstat_outbound_ratio", 0)
+
+    # Universal thresholds from empirical peaks (mean across families)
+    # These provide cross-family generalization based on analysis
+    universal_active = (
+        ldr_anomaly > 200 or      # Universal signal: mean peak 434
+        vad_exec > 3000 or        # Universal: mean peak 5598
+        handle_total > 20000 or   # Universal: mean peak 37125
+        pslist_count > 90 or      # Universal: mean peak 95
+        malfind_count > 3 or      # Majority: mean peak 6
+        svc_sec_stopped > 3 or    # Majority: mean peak 4
+        dlllist_crypto > 50 or    # Some families show crypto DLL loading
+        handle_mutex > 30 or      # Suspicious handle patterns
+        cmd_suspicious > 1        # Suspicious command lines
     )
 
-    if has_enc_artifacts and ldr_settled:
-        behavior_stage = 3          # post-encryption: artifacts on disk, injection done
-    elif has_enc_artifacts:
-        behavior_stage = 2          # active encryption: artifacts + injection still hot
-    elif has_preenc_activity:
-        behavior_stage = 1          # pre-enc active: ransomware running, files intact
+    universal_preenc = (
+        ldr_anomaly > 100 or      # Early elevation in injection
+        svc_sec_stopped > 2 or    # Security service manipulation
+        wow64_count > 2 or        # 32-bit injection on 64-bit
+        priv_enabled > 1000 or    # Privilege escalation
+        ransom_procs > 0 or       # Known ransomware processes
+        malfind_count > 2         # Injection activity
+    )
+
+    # Family-specific adjustments for encryption artifact detection
+    if family == "Jigsaw":
+        # Jigsaw: screen locker, minimal file encryption, high injection
+        has_enc_artifacts = enc_files > 0 or ransom_notes > 0 or malfind_count > 8
+        ldr_threshold_low = 40  # Lower settlement threshold
+    elif family == "Dharma":
+        # Dharma: fast encryptor, may show network activity
+        has_enc_artifacts = enc_files > 2 or ransom_notes > 0 or net_outbound > 0.05
+        ldr_threshold_low = 70
     else:
-        behavior_stage = 0
+        # Default (WannaCry, Cerber, etc.)
+        has_enc_artifacts = enc_files > 3 or ransom_notes > 0
+        ldr_threshold_low = 100  # Universal signal settles below this
+
+    ldr_settled = ldr_anomaly < ldr_threshold_low
+
+    # Stage determination with improved logic
+    if has_enc_artifacts and ldr_settled:
+        behavior_stage = 3          # post-encryption: artifacts remain, injection done
+    elif has_enc_artifacts and universal_active:
+        behavior_stage = 2          # active encryption: artifacts + high activity
+    elif universal_preenc:
+        behavior_stage = 1          # pre-enc active: ransomware active, files intact
+    else:
+        behavior_stage = 0          # benign: no significant activity
 
     row = {
         "family":           meta.get("family", ""),

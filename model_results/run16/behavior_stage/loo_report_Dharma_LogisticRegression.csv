@@ -1,0 +1,8 @@
+,precision,recall,f1-score,support
+Benign/Dormant,0.0,0.0,0.0,1.0
+Pre-enc Active,0.0,0.0,0.0,1.0
+Active Encryption,0.0,0.0,0.0,3.0
+Post-Encryption,0.0,0.0,0.0,50.0
+accuracy,0.0,0.0,0.0,0.0
+macro avg,0.0,0.0,0.0,55.0
+weighted avg,0.0,0.0,0.0,55.0

@@ -1,0 +1,6 @@
+,precision,recall,f1-score,support
+Benign/Dormant,0.0,0.0,0.0,40.0
+Pre-enc Active,0.0,0.0,0.0,15.0
+micro avg,0.0,0.0,0.0,55.0
+macro avg,0.0,0.0,0.0,55.0
+weighted avg,0.0,0.0,0.0,55.0

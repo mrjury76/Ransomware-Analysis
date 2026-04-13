@@ -1,0 +1,32 @@
+============================================================
+ TRAINING RUN LOG
+============================================================
+  Timestamp  : 2026-04-13 01:01:56
+  Output dir : /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/model_results/run13/behavior_stage
+
+  Snapshots  : 105 rows
+  Families   : 2
+      Benign                     50 rows
+      WannaCry                   55 rows
+
+  Feature cols (approx): 107
+
+  Labels trained:
+      behavior_stage        {0: 47, 1: 23, 2: 10, 3: 25}
+
+  Models:
+      RandomForest
+      ExtraTrees
+      GradientBoosting
+      LogisticRegression
+      XGBoost
+
+  Scenarios run:
+      Standard 80/20 split
+      LOO (leave-one-family-out)
+      LOIO (leave-one-instance-out)
+
+  Notes:
+      standard_accuracy: 0.9524
+      cv_mode: both
+============================================================

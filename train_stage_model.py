@@ -786,34 +786,40 @@ def write_run_log(out_dir, df, label_cols, models_used, scenarios_run, extra=Non
 def write_master_summary(run_dir, label_cols, df=None):
     """
     Reads standard_results.csv, loo_results.csv, loio_results.csv from each
-    label sub-folder and writes a single master_summary.txt + master_summary.csv
-    at the top level of run_dir.
-
-    master_summary.csv  — one row per (label, scenario, model) with all metrics
-    master_summary.txt  — human-readable highlight: best model per scenario/label
+    label sub-folder and writes:
+      master_summary.csv  — flat table: one row per (label, scenario, model)
+      master_summary.txt  — full human-readable report with per-family breakdown
     """
     SCENARIO_FILES = {
         "Standard 80/20": "standard_results.csv",
         "LOO":            "loo_results.csv",
         "LOIO":           "loio_results.csv",
     }
-    # Columns we want from each scenario (rename to a common schema)
-    # Standard uses 'accuracy'/'macro_f1'; LOO/LOIO use 'mean_accuracy'/'mean_macro_f1'
-    RENAME = {
-        "accuracy":         "mean_accuracy",
-        "balanced_acc":     "mean_balanced_acc",
-        "macro_f1":         "mean_macro_f1",
-        "weighted_f1":      "mean_weighted_f1",
-        "acc_ci_lo":        "acc_ci95_lo",
-        "acc_ci_hi":        "acc_ci95_hi",
-        "f1_ci_lo":         "f1_ci95_lo",
-        "f1_ci_hi":         "f1_ci95_hi",
+    # Rename standard's single-split column names to the common mean_* schema
+    STD_RENAME = {
+        "accuracy":     "mean_accuracy",
+        "balanced_acc": "mean_balanced_acc",
+        "macro_f1":     "mean_macro_f1",
+        "weighted_f1":  "mean_weighted_f1",
+        "acc_ci_lo":    "acc_ci95_lo",
+        "acc_ci_hi":    "acc_ci95_hi",
+        "f1_ci_lo":     "f1_ci95_lo",
+        "f1_ci_hi":     "f1_ci95_hi",
     }
-    KEEP = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
+    CORE = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
             "mean_balanced_acc", "mean_macro_f1", "f1_ci95_lo", "f1_ci95_hi",
             "mean_weighted_f1"]
+    # Extra cols kept per scenario
+    STD_EXTRA  = ["train_accuracy", "overfit_gap", "conf_mean", "conf_pct_90",
+                  "n_train", "n_test"]
+    LOO_EXTRA  = ["benign_fpr", "wtd_macro_f1", "n_folds"]
+    LOIO_EXTRA = ["wtd_macro_f1", "n_instances"]
 
+    # ── Load all CSVs ────────────────────────────────────────────────────────
+    # raw_data[(label, scenario)] = DataFrame (full, unrenamed for per-family)
+    raw_data = {}
     all_rows = []
+
     for label_col in label_cols:
         label_dir = os.path.join(run_dir, label_col)
         if not os.path.isdir(label_dir):
@@ -826,105 +832,211 @@ def write_master_summary(run_dir, label_cols, df=None):
                 sdf = pd.read_csv(fpath)
             except Exception:
                 continue
-            sdf = sdf.rename(columns=RENAME)
-            # Keep only common metric columns that exist
-            cols = [c for c in KEEP if c in sdf.columns]
-            if "model" not in cols:
-                continue
-            sdf = sdf[cols].copy()
-            sdf.insert(0, "label",    label_col)
-            sdf.insert(1, "scenario", scenario)
-            all_rows.append(sdf)
+            raw_data[(label_col, scenario)] = sdf
+
+            # Build normalised flat row for master CSV
+            sdf_n = sdf.rename(columns=STD_RENAME).copy()
+            extra = (STD_EXTRA if scenario == "Standard 80/20"
+                     else LOO_EXTRA if scenario == "LOO"
+                     else LOIO_EXTRA)
+            keep = [c for c in CORE + extra if c in sdf_n.columns]
+            sdf_n = sdf_n[keep].copy()
+            sdf_n.insert(0, "label",    label_col)
+            sdf_n.insert(1, "scenario", scenario)
+            all_rows.append(sdf_n)
 
     if not all_rows:
         print("  [!] No result CSVs found — skipping master summary.")
         return
 
-    master = pd.concat(all_rows, ignore_index=True)
-
-    # Sort: best macro_f1 first
+    master = pd.concat(all_rows, ignore_index=True, sort=False)
     if "mean_macro_f1" in master.columns:
         master = master.sort_values("mean_macro_f1", ascending=False)
+    master.to_csv(os.path.join(run_dir, "master_summary.csv"), index=False)
 
-    csv_path = os.path.join(run_dir, "master_summary.csv")
-    master.to_csv(csv_path, index=False)
+    # ── Helper: best row for a (label, scenario) ────────────────────────────
+    def best_row(label_col, scenario):
+        key = (label_col, scenario)
+        if key not in raw_data:
+            return None
+        sdf = raw_data[key].rename(columns=STD_RENAME)
+        col = "mean_macro_f1" if "mean_macro_f1" in sdf.columns else "macro_f1"
+        if col not in sdf.columns:
+            return None
+        return sdf.sort_values(col, ascending=False).iloc[0]
 
-    # ── Human-readable text report ───────────────────────────────────────────
+    def fmt_ci(lo, hi):
+        try:
+            return f"[{float(lo):.4f}-{float(hi):.4f}]"
+        except (TypeError, ValueError):
+            return ""
+
+    def fmt_val(v, dec=4):
+        try:
+            return f"{float(v):.{dec}f}"
+        except (TypeError, ValueError):
+            return str(v) if v is not None else "—"
+
+    # ── Detect families from data ────────────────────────────────────────────
+    known_families = []
+    if df is not None:
+        known_families = sorted(df["family"].unique())
+    else:
+        # Infer from LOO columns (bare family names) or LOIO (_macro_f1 suffix)
+        for (lc, sc), sdf in raw_data.items():
+            if sc == "LOO":
+                skip = set(sdf.rename(columns=STD_RENAME).columns) & set(
+                    CORE + LOO_EXTRA + ["std_accuracy","std_macro_f1","wtd_accuracy",
+                                        "mean_weighted_f1","n_folds","benign_fpr"])
+                known_families = [c for c in sdf.columns if c not in skip]
+                break
+            if sc == "LOIO":
+                known_families = sorted(
+                    c.replace("_macro_f1", "") for c in sdf.columns
+                    if c.endswith("_macro_f1"))
+                break
+
+    # ── Build text report ────────────────────────────────────────────────────
+    W = 74
     lines = [
-        "=" * 70,
+        "=" * W,
         " MASTER RESULTS SUMMARY",
-        f" Run dir : {run_dir}",
-        f" Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-        "=" * 70,
+        f" Run     : {run_dir}",
+        f" Created : {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        "=" * W,
     ]
 
     if df is not None:
+        dist = df["behavior_stage"].value_counts().sort_index().to_dict() \
+               if "behavior_stage" in df.columns else {}
         lines += [
             "",
-            f"  Dataset  : {len(df)} snapshots, "
-            f"{len(df['family'].unique())} families",
-            f"  Families : {', '.join(sorted(df['family'].unique()))}",
+            f"  Snapshots : {len(df)}   Families : {len(known_families)}",
+            f"  Families  : {', '.join(known_families)}",
+            f"  Labels    : {', '.join(label_cols)}",
         ]
 
-    # Best model per (label, scenario)
-    lines += ["", " BEST MODEL PER LABEL x SCENARIO", " " + "-" * 66]
-
-    label_order    = label_cols
     scenario_order = list(SCENARIO_FILES.keys())
+    label_order    = label_cols
+
+    # ── Section 1: per-scenario best model ───────────────────────────────────
+    lines += ["", "=" * W,
+              " SECTION 1 -- BEST MODEL PER SCENARIO (all labels)",
+              "=" * W]
+
+    for scenario in scenario_order:
+        lines += ["", f"  {scenario}",  "  " + "-" * (W - 2)]
+        any_found = False
+        for label_col in label_order:
+            b = best_row(label_col, scenario)
+            if b is None:
+                continue
+            any_found = True
+            f1    = fmt_val(b.get("mean_macro_f1"))
+            ci    = fmt_ci(b.get("f1_ci95_lo"), b.get("f1_ci95_hi"))
+            acc   = fmt_val(b.get("mean_accuracy"))
+            bal   = fmt_val(b.get("mean_balanced_acc"))
+            wf1   = fmt_val(b.get("mean_weighted_f1"))
+            model = str(b.get("model", "?"))
+
+            line = (f"  {label_col:<18}  {model:<22}"
+                    f"  acc={acc}  macro_f1={f1} {ci}"
+                    f"  bal={bal}  wtd_f1={wf1}")
+
+            # Scenario-specific extras
+            if scenario == "Standard 80/20":
+                gap  = fmt_val(b.get("overfit_gap"), 4)
+                conf = fmt_val(b.get("conf_mean"), 4)
+                line += f"  overfit={gap}  conf={conf}"
+            elif scenario == "LOO":
+                fpr = fmt_val(b.get("benign_fpr"), 4)
+                line += f"  benign_fpr={fpr}"
+            lines.append(line)
+        if not any_found:
+            lines.append("  (no results)")
+
+    # ── Section 2: per-label full breakdown ──────────────────────────────────
+    lines += ["", "=" * W,
+              " SECTION 2 -- FULL BREAKDOWN PER LABEL",
+              "=" * W]
 
     for label_col in label_order:
-        lines.append(f"\n  [{label_col}]")
-        sub = master[master["label"] == label_col]
-        if sub.empty:
-            lines.append("    (no results)")
-            continue
+        lines += ["", f"  [{label_col}]", "  " + "=" * (W - 2)]
+
         for scenario in scenario_order:
-            row = sub[sub["scenario"] == scenario]
-            if row.empty:
+            key = (label_col, scenario)
+            if key not in raw_data:
                 continue
-            best = row.sort_values("mean_macro_f1", ascending=False).iloc[0]
-            f1_lo = best.get("f1_ci95_lo", "—")
-            f1_hi = best.get("f1_ci95_hi", "—")
-            ci_str = (f"  [{f1_lo:.4f}-{f1_hi:.4f} 95% CI]"
-                      if isinstance(f1_lo, float) else "")
-            lines.append(
-                f"    {scenario:<18}  {best['model']:<22}"
-                f"  acc={best.get('mean_accuracy', 0):.4f}"
-                f"  macro_f1={best.get('mean_macro_f1', 0):.4f}{ci_str}"
-                f"  bal_acc={best.get('mean_balanced_acc', 0):.4f}"
-            )
+            sdf = raw_data[key].rename(columns=STD_RENAME)
+            col = "mean_macro_f1" if "mean_macro_f1" in sdf.columns else "macro_f1"
+            if col not in sdf.columns:
+                continue
+            sdf_s = sdf.sort_values(col, ascending=False)
 
-    # Overall single best across everything
-    lines += ["", " OVERALL BEST (highest mean macro F1 across all labels/scenarios)", " " + "-" * 66]
-    overall_best = master.sort_values("mean_macro_f1", ascending=False).iloc[0]
-    lines.append(
-        f"  Label    : {overall_best['label']}\n"
-        f"  Scenario : {overall_best['scenario']}\n"
-        f"  Model    : {overall_best['model']}\n"
-        f"  Accuracy : {overall_best.get('mean_accuracy', '—')}\n"
-        f"  Macro F1 : {overall_best.get('mean_macro_f1', '—')}"
-        + (f"  [{overall_best.get('f1_ci95_lo','?'):.4f}-"
-           f"{overall_best.get('f1_ci95_hi','?'):.4f} 95% CI]"
-           if isinstance(overall_best.get('f1_ci95_lo'), float) else "")
-        + f"\n  Bal Acc  : {overall_best.get('mean_balanced_acc', '—')}"
-    )
+            lines += ["", f"  -- {scenario} --"]
 
-    # Full table sorted by macro_f1
-    lines += ["", " FULL TABLE (sorted by mean macro F1)", " " + "-" * 66]
-    display_cols = [c for c in ["label", "scenario", "model",
-                                 "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
-                                 "mean_balanced_acc", "mean_macro_f1",
-                                 "f1_ci95_lo", "f1_ci95_hi", "mean_weighted_f1"]
-                    if c in master.columns]
-    lines.append(master[display_cols].to_string(index=False))
-    lines.append("\n" + "=" * 70)
+            # All-model metric table
+            hdr_cols = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
+                        "mean_balanced_acc", "mean_macro_f1", "f1_ci95_lo",
+                        "f1_ci95_hi", "mean_weighted_f1"]
+            if scenario == "Standard 80/20":
+                hdr_cols += ["train_accuracy", "overfit_gap", "conf_mean", "conf_pct_90"]
+            elif scenario == "LOO":
+                hdr_cols += ["benign_fpr", "n_folds"]
+            elif scenario == "LOIO":
+                hdr_cols += ["n_instances"]
+            hdr_cols = [c for c in hdr_cols if c in sdf_s.columns]
+            lines.append(sdf_s[hdr_cols].to_string(index=False))
+
+            # Per-family breakdown (LOO and LOIO only)
+            if scenario == "LOO" and known_families:
+                fam_cols = [f for f in known_families
+                            if f in sdf_s.columns and f not in ("Benign",)]
+                if fam_cols:
+                    lines += ["", f"  Per-family macro F1 (best model = {sdf_s.iloc[0]['model']}):"]
+                    best = sdf_s.iloc[0]
+                    for fam in fam_cols:
+                        val = fmt_val(best.get(fam))
+                        lines.append(f"    {fam:<14}  {val}")
+                    fpr = fmt_val(best.get("benign_fpr"))
+                    lines.append(f"    {'Benign FPR':<14}  {fpr}")
+
+            elif scenario == "LOIO" and known_families:
+                fam_f1_cols = {f: f"{f}_macro_f1" for f in known_families
+                               if f"{f}_macro_f1" in sdf_s.columns}
+                if fam_f1_cols:
+                    lines += ["", f"  Per-family macro F1 (best model = {sdf_s.iloc[0]['model']}):"]
+                    best = sdf_s.iloc[0]
+                    for fam, col in fam_f1_cols.items():
+                        val = fmt_val(best.get(col))
+                        lines.append(f"    {fam:<14}  {val}")
+
+    # ── Section 3: overall single best ───────────────────────────────────────
+    lines += ["", "=" * W,
+              " SECTION 3 -- OVERALL BEST (highest mean macro F1)",
+              "=" * W, ""]
+
+    ob = master.sort_values("mean_macro_f1", ascending=False).iloc[0]
+    lines += [
+        f"  Label    : {ob['label']}",
+        f"  Scenario : {ob['scenario']}",
+        f"  Model    : {ob['model']}",
+        f"  Accuracy : {fmt_val(ob.get('mean_accuracy'))}  "
+        f"{fmt_ci(ob.get('acc_ci95_lo'), ob.get('acc_ci95_hi'))}",
+        f"  Macro F1 : {fmt_val(ob.get('mean_macro_f1'))}  "
+        f"{fmt_ci(ob.get('f1_ci95_lo'), ob.get('f1_ci95_hi'))}",
+        f"  Bal Acc  : {fmt_val(ob.get('mean_balanced_acc'))}",
+        f"  Wtd F1   : {fmt_val(ob.get('mean_weighted_f1'))}",
+        "",
+        "=" * W,
+    ]
 
     txt_path = os.path.join(run_dir, "master_summary.txt")
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
-    print(f"  [+] Master summary: {txt_path}")
-    print(f"  [+] Master CSV    : {csv_path}")
+    print(f"  [+] Master summary : {txt_path}")
+    print(f"  [+] Master CSV     : {os.path.join(run_dir, 'master_summary.csv')}")
 
 
 def _metrics(y_true, y_pred):
