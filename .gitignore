@@ -22,4 +22,5 @@ unused data
 __pycache__/
 *.pyc
 .venv/
+.vscode
 Datasets/Windows 10 x64-Snapshot4.vmem

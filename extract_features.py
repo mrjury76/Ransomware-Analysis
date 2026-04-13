@@ -471,21 +471,43 @@ def feat_handles(rows):
     if not rows:
         return {}
     type_counts = defaultdict(int)
+    pids = set()
     encrypted_handles = 0
     for r in rows:
         htype = r.get("Type", "").strip()
         name  = r.get("Name", "").strip().lower()
+        pid   = r.get("PID", "").strip()
         type_counts[htype] += 1
+        if pid:
+            pids.add(pid)
         ext = os.path.splitext(name)[1]
         if ext in ENCRYPTED_EXTENSIONS:
             encrypted_handles += 1
+
+    total = len(rows)
+    n_procs = len(pids) if pids else 1
     return {
-        "handle_total":           len(rows),
+        "handle_total":           total,
+        "handle_avg_per_process": round(total / n_procs, 2),
+        # existing types
         "handle_file_count":      type_counts.get("File", 0),
         "handle_registry_count":  type_counts.get("Key", 0),
         "handle_mutex_count":     type_counts.get("Mutant", 0),
         "handle_process_count":   type_counts.get("Process", 0),
         "handle_thread_count":    type_counts.get("Thread", 0),
+        # new types (matching their dataset)
+        "handle_port_count":      type_counts.get("ALPC Port", 0),
+        "handle_event_count":     type_counts.get("Event", 0),
+        "handle_section_count":   type_counts.get("Section", 0),
+        "handle_semaphore_count": type_counts.get("Semaphore", 0),
+        "handle_timer_count":     type_counts.get("Timer", 0) + type_counts.get("IRTimer", 0),
+        "handle_desktop_count":   type_counts.get("Desktop", 0),
+        "handle_directory_count": type_counts.get("Directory", 0),
+        "handle_token_count":     type_counts.get("Token", 0),
+        # ratios
+        "handle_file_ratio":      round(type_counts.get("File", 0) / total, 4) if total else 0,
+        "handle_registry_ratio":  round(type_counts.get("Key", 0)  / total, 4) if total else 0,
+        "handle_mutex_ratio":     round(type_counts.get("Mutant", 0) / total, 4) if total else 0,
         "handle_encrypted_files": encrypted_handles,
     }
 
@@ -718,15 +740,7 @@ def process_snapshot(snap_dir, use_cache=True):
         features["vad_rwx_ratio"] = 0
         features["vad_private_ratio"] = 0
 
-    handle_total = features.get("handle_total", 0)
-    if handle_total > 0:
-        features["handle_file_ratio"]     = round(features.get("handle_file_count", 0) / handle_total, 4)
-        features["handle_registry_ratio"] = round(features.get("handle_registry_count", 0) / handle_total, 4)
-        features["handle_mutex_ratio"]    = round(features.get("handle_mutex_count", 0) / handle_total, 4)
-    else:
-        features["handle_file_ratio"]     = 0
-        features["handle_registry_ratio"] = 0
-        features["handle_mutex_ratio"]    = 0
+    # handle ratios are now computed inside feat_handles — no recalculation needed here
 
     ldr_total = features.get("ldrmodules_total", 0)
     if ldr_total > 0:
