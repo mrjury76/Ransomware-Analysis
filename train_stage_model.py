@@ -66,9 +66,8 @@ STAGE_NAMES_TIME = {
 
 STAGE_NAMES_BEHAVIOR = {
     0: "Benign/Dormant",
-    1: "Pre-enc Active",
-    2: "Active Encryption",
-    3: "Post-Encryption",
+    1: "Pre-Encryption",
+    2: "Encryption Active/Post",
 }
 
 STAGE_NAMES_EARLY_LATE = {
@@ -98,6 +97,7 @@ BEHAVIOR_LEAKAGE_COLS = {
     "pslist_ransom_procs",
     "handle_encrypted_files",
     "filescan_encrypted_ratio",
+    "signal_encryption_score",  # composite of encrypted file counts — defines class boundary
 }
 
 # Features that act as shortcuts to the ransomware stage (late-stage indicators).
