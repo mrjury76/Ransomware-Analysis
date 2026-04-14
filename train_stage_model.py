@@ -3,20 +3,20 @@ train_stage_model.py
 --------------------
 Trains a family-agnostic ransomware stage classifier from features.csv.
 
-Label:   stage_hint  (0=benign, 1=pre-launch, 2=pre-encryption, 3=encrypting, 4=post-encryption)
-Goal:    detect the stage of ransomware execution from memory forensics alone,
-         regardless of which ransomware family produced the snapshot.
+Primary label:  behavior_stage  (0=benign/dormant, 1=pre-enc active, 2=active encryption, 3=post-encryption)
+                Grounded in memory evidence -- not collection-time clock labels.
+Secondary label: stage_binary   (0=early/benign, 1=active/post-enc) -- collapsed behavior label.
+Reference only:  stage_hint     (time-based clock label -- kept in CSV but NOT trained on)
 
-Tests two scenarios:
-  1. Standard split      — random 80/20, all families in both train and test
-  2. Leave-one-out (LOO) — train on N-1 families, test on the held-out family
-                           repeated for every family. Tests true generalization
-                           to unseen ransomware.
+Tests three scenarios:
+  1. Standard split      -- random 80/20, all families in both train and test
+  2. Leave-one-out (LOO) -- train on N-1 families, test on the held-out family
+  3. LOIO                -- leave-one-instance-out per family
 
 Usage:
     python3 train_stage_model.py --features features.csv
     python3 train_stage_model.py --features features.csv --out model_output/
-    python3 train_stage_model.py --features features.csv --no-loo
+    python3 train_stage_model.py --features features.csv --cv-mode both
 """
 
 import argparse
@@ -30,17 +30,19 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier,
                               ExtraTreesClassifier)
-from sklearn.svm import SVC
+# from sklearn.svm import SVC               # unused -- removed
 from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
+# from sklearn.neighbors import KNeighborsClassifier  # unused -- removed
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import (classification_report, confusion_matrix,
                              accuracy_score, balanced_accuracy_score,
                              f1_score, ConfusionMatrixDisplay)
 from sklearn.calibration import CalibratedClassifierCV
-from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import StratifiedKFold  # unused -- removed
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import StandardScaler
+# from sklearn.preprocessing import LabelEncoder       # unused -- removed
 import matplotlib
 matplotlib.use("Agg")   # no display needed
 import matplotlib.pyplot as plt
@@ -76,13 +78,13 @@ STAGE_NAMES_EARLY_LATE = {
     1: "Late (encrypting/post-encryption)",
 }
 
-# Columns to drop — not forensic features
+# Columns to drop -- not forensic features
 DROP_COLS = {
     "family",           # don't let the model use family identity
     "stage_hint",       # time-based label
     "stage_binary",     # collapsed time-based label (0+1 -> 0, 2+3 -> 1)
     "behavior_stage",   # behavior-based label
-    "actual_offset_s",  # time since launch — not available in real detection
+    "actual_offset_s",  # time since launch -- not available in real detection
     "target_offset_s",
     "rep",
     "run",
@@ -113,25 +115,32 @@ STAGE_SHORTCUT_COLS = {
 # Either always-zero (network plugin not captured), always-constant, or
 # fully redundant with other columns. Dropping them reduces noise.
 DEAD_FEATURES = {
+    # pslist -- Handles/CreateTime/ExitTime cols missing from vol3 CSV
     "pslist_avg_handles",
     "pslist_max_runtimes",
     "pslist_avg_runtimes",
+    # cmdline -- patterns never fire on current data
     "cmdline_sus_args_count",
     "cmdline_script_exec_count",
     "cmdline_ransom_indicators",
     "cmdline_encoded_count",
-    "ldrmodules_hidden_count",
-    "dlllist_crypto_dlls",
-    "vad_avg_total_mem_per_process",
-    "vad_max_total_mem_per_process",
-    "malfind_shellcode_regions",       # new feature — no data yet
-    "vad_avg_max_region_size_per_process",
-    "netstat_established_ratio",       # network plugin not producing data
-    "netstat_suspicious_port_ratio",
-    "netstat_outbound_ratio",
-    "ldrmodules_hidden_ratio",
     "cmdline_script_exec_ratio",
     "cmdline_encoded_ratio",
+    # ldrmodules -- hidden detection not working in vol3
+    "ldrmodules_hidden_count",
+    "ldrmodules_hidden_ratio",
+    # VAD -- Size col missing from vol3 vadinfo CSV
+    "vad_avg_total_mem_per_process",
+    "vad_max_total_mem_per_process",
+    "vad_avg_max_region_size_per_process",
+    # malfind -- disasm/hexdump parsing not yielding signal
+    "malfind_shellcode_regions",
+    "malfind_mz_regions",
+    # network -- suspicious port list too narrow, never fires
+    "netstat_suspicious_port_ratio",
+    "netstat_suspicious_port_hit_count",
+    # dlllist
+    "dlllist_crypto_dlls",
 }
 
 
@@ -143,18 +152,22 @@ DEAD_FEATURES = {
 def load_data(features_csv):
     df = pd.read_csv(features_csv, low_memory=False)
 
-    required = {"stage_hint", "family"}
+    required = {"behavior_stage", "family"}
     missing = required - set(df.columns)
     if missing:
         raise ValueError(f"features.csv is missing columns: {missing}")
 
     print(f"[+] Loaded {len(df)} rows, {len(df.columns)} columns")
     print(f"    Families : {sorted(df['family'].unique())}")
-    print(f"    Stages   : {sorted(df['stage_hint'].unique())}")
-    print(f"    Distribution:\n{df.groupby(['family','stage_hint']).size().to_string()}\n")
+    print(f"    Behavior stages : {sorted(df['behavior_stage'].unique())}")
+    print(f"    Distribution:\n{df.groupby(['family','behavior_stage']).size().to_string()}\n")
 
-    # Collapsed binary label: 0+1+2 -> 0 (early/benign), 3+4 -> 1 (late/active)
-    df["stage_binary"] = (df["stage_hint"].astype(int) >= 3).astype(int)
+    # stage_hint kept as reference column only -- not used for training
+    if "stage_hint" in df.columns:
+        print(f"    Stage hint (reference): {sorted(df['stage_hint'].unique())}")
+
+    # stage_binary: collapsed behavior label -- 0 (benign/pre-enc) vs 1 (active/post-enc)
+    df["stage_binary"] = (df["behavior_stage"].astype(int) >= 2).astype(int)
 
     return df
 
@@ -206,11 +219,11 @@ def get_models(only=None):
 
     If `only` is provided (list/set of names), restrict to those models.
     """
-    # Tree depth reduced 12→8, min_samples_leaf raised 2→5 to reduce the
+    # Tree depth reduced 12->8, min_samples_leaf raised 2->5 to reduce the
     # 100% train-accuracy overfitting seen in run10.
     # RF and ExtraTrees are wrapped in isotonic calibration so their
     # predict_proba outputs are reliable (run10 showed RF mean confidence
-    # of only 72% despite 94% accuracy — a sign of poor calibration).
+    # of only 72% despite 94% accuracy -- a sign of poor calibration).
     models = {
         "RandomForest": CalibratedClassifierCV(
             RandomForestClassifier(
@@ -268,7 +281,7 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
     print("=" * 60)
 
     if len(pd.Series(y).unique()) < 2:
-        print(f"[!] y has only 1 class — skipping standard split.")
+        print(f"[!] y has only 1 class -- skipping standard split.")
         return 0
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -276,7 +289,7 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
     )
 
     if len(pd.Series(y_train).unique()) < 2:
-        print(f"[!] y_train has only 1 class after split — skipping standard split.")
+        print(f"[!] y_train has only 1 class after split -- skipping standard split.")
         return 0
 
     print(f"    Train: {len(y_train)} rows  |  Test: {len(y_test)} rows")
@@ -295,7 +308,7 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
             preds_train = pipe.predict(X_train)
             preds       = pipe.predict(X_test)
         except Exception as e:
-            print(f"\n  [!] {name} failed: {type(e).__name__}: {e} — skipping")
+            print(f"\n  [!] {name} failed: {type(e).__name__}: {e} -- skipping")
             continue
 
         m         = _metrics(y_test, preds)
@@ -313,14 +326,14 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
         comparison.append(row)
 
         print(f"\n  {name}:")
-        print(f"    test  — acc: {m['accuracy']:.4f}  [{ci['acc_ci_lo']:.4f}–{ci['acc_ci_hi']:.4f} 95% CI]"
+        print(f"    test  -- acc: {m['accuracy']:.4f}  [{ci['acc_ci_lo']:.4f}–{ci['acc_ci_hi']:.4f} 95% CI]"
               f"  bal_acc: {m['balanced_acc']:.4f}")
         print(f"    macro_f1: {m['macro_f1']:.4f}  [{ci['f1_ci_lo']:.4f}–{ci['f1_ci_hi']:.4f} 95% CI]"
               f"  weighted_f1: {m['weighted_f1']:.4f}")
-        print(f"    train — acc: {m_train['accuracy']:.4f}  overfit gap: {overfit_gap:+.4f}")
+        print(f"    train -- acc: {m_train['accuracy']:.4f}  overfit gap: {overfit_gap:+.4f}")
         if conf:
-            print(f"    confidence — mean: {conf['conf_mean']:.4f}  min: {conf['conf_min']:.4f}"
-                  f"  ≥90%: {conf['conf_pct_90']:.1%}  ≥70%: {conf['conf_pct_70']:.1%}")
+            print(f"    confidence -- mean: {conf['conf_mean']:.4f}  min: {conf['conf_min']:.4f}"
+                  f"  >=90%: {conf['conf_pct_90']:.1%}  >=70%: {conf['conf_pct_70']:.1%}")
         print(classification_report(y_test, preds, labels=present_stages,
                                     target_names=target_names, zero_division=0))
 
@@ -333,7 +346,7 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
 
         _save_confusion_matrix(y_test, preds, present_stages, target_names,
                                os.path.join(out_dir, f"cm_standard_{name}.png"),
-                               title=f"Standard split — {name}", normalize=True)
+                               title=f"Standard split -- {name}", normalize=True)
 
         _save_calibration_plot(pipe, X_test, y_test, len(present_stages),
                                os.path.join(out_dir, f"calibration_{name}.png"))
@@ -348,7 +361,7 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
     comp_df = pd.DataFrame(comparison).sort_values("macro_f1", ascending=False)
     comp_df.to_csv(os.path.join(out_dir, "standard_results.csv"), index=False)
     print(f"\n{'=' * 40}")
-    print(f" SCENARIO 1 — Standard 80/20 split — Model comparison:")
+    print(f" SCENARIO 1 -- Standard 80/20 split -- Model comparison:")
     print(f"{'=' * 40}")
     cols_display = ["model", "accuracy", "acc_ci_lo", "acc_ci_hi",
                     "macro_f1", "f1_ci_lo", "f1_ci_hi",
@@ -369,7 +382,7 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
     model_path = os.path.join(out_dir, "stage_model.joblib")
     joblib.dump({"pipeline": best_pipe, "feature_cols": feat_cols,
                  "stage_names": stage_names, "model_name": best_name}, model_path)
-    print(f"  [✓] Model saved: {model_path}")
+    print(f"  [done] Model saved: {model_path}")
 
     return comp_df.iloc[0]["accuracy"]
 
@@ -382,7 +395,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
             selected_features=None, benign_family="Benign", benign_always_train=True):
     """
     benign_always_train=True (default): Benign samples are ALWAYS included in the
-    training fold — LOO folds only cycle over ransomware families. After all
+    training fold -- LOO folds only cycle over ransomware families. After all
     ransomware folds, a dedicated 80/20 Benign holdout measures real FPR without
     the structural impossibility of predicting stage-0 when the model was never
     trained on it.
@@ -392,7 +405,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
     print("\n" + "=" * 60)
     print(" SCENARIO 2: Leave-one-family-out (generalization test)")
     print(" Train on N-1 families, test on the held-out family.")
-    print(f" Benign '{benign_family}' always in train set — dedicated holdout measures FPR.")
+    print(f" Benign '{benign_family}' always in train set -- dedicated holdout measures FPR.")
     print("=" * 60)
 
     all_families    = sorted(df["family"].unique())
@@ -416,7 +429,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
         if len(X_test) == 0 or len(y_test.unique()) < 1:
             continue
         if len(y_train.unique()) < 2:
-            print(f"\n  --- Held-out: {held_out} — skipping (training set has only 1 class) ---")
+            print(f"\n  --- Held-out: {held_out} -- skipping (training set has only 1 class) ---")
             continue
 
         # Remap train labels to 0..N-1 for XGBoost
@@ -457,7 +470,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
                 best_macro_f1, best_name, best_preds = m["macro_f1"], model_name, preds
 
         if not fold_preds:
-            print(f"    [!] All models failed for {held_out} — skipping outputs.")
+            print(f"    [!] All models failed for {held_out} -- skipping outputs.")
             continue
 
         # Per-model confusion matrix + report CSV for every model
@@ -466,7 +479,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
             _save_confusion_matrix(
                 y_test, preds, present, names,
                 os.path.join(out_dir, f"loo_cm_{held_out}_{model_name}.png"),
-                title=f"LOO — {held_out} — {model_name}{' [best]' if tag else ''}",
+                title=f"LOO -- {held_out} -- {model_name}{' [best]' if tag else ''}",
                 normalize=True,
             )
             report_df = pd.DataFrame(
@@ -482,11 +495,11 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
         print(f"\n  --- Benign FPR holdout ({len(benign_df)} rows, trained on ransomware only) ---")
         X_b, y_b, _, _ = prepare_xy(benign_df, label_col=label_col,
                                      selected_features=selected_features)
-        # Train on ALL ransomware (no benign in this training set — realistic FPR scenario)
+        # Train on ALL ransomware (no benign in this training set -- realistic FPR scenario)
         ransom_mask = df["family"] != benign_family
         X_r, y_r, _, _ = prepare_xy(df[ransom_mask], label_col=label_col,
                                      selected_features=selected_features)
-        X_bv = X_b   # all benign samples are unseen — no need to split
+        X_bv = X_b   # all benign samples are unseen -- no need to split
         # Remap ransomware labels for XGBoost
         unique_r = sorted(int(x) for x in y_r.unique())
         to_r = {v: i for i, v in enumerate(unique_r)}
@@ -549,7 +562,7 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
     if loo_summary:
         loo_df = pd.DataFrame(loo_summary).sort_values("mean_macro_f1", ascending=False)
         print(f"\n{'=' * 60}")
-        print(f" SCENARIO 2 — LOO — Model Comparison (sorted by mean macro F1):")
+        print(f" SCENARIO 2 -- LOO -- Model Comparison (sorted by mean macro F1):")
         print(f" benign_fpr = fraction of benign samples flagged as ransomware.")
         print(f"{'=' * 60}")
         summary_cols = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
@@ -581,7 +594,7 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
     print("=" * 60)
 
     if "rep" not in df.columns:
-        print("[!] 'rep' column not in features.csv — cannot run LOIO")
+        print("[!] 'rep' column not in features.csv -- cannot run LOIO")
         return
 
     # Group key = (family, rep). Each group = one full timed collection run.
@@ -610,7 +623,7 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
         if len(X_test) == 0:
             continue
         if len(y_train.unique()) < 2:
-            print(f"  --- Held-out: {held_out} — skipping (training set has only 1 class) ---")
+            print(f"  --- Held-out: {held_out} -- skipping (training set has only 1 class) ---")
             continue
 
         unique_train = sorted(int(x) for x in y_train.unique())
@@ -679,7 +692,7 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
     if loio_summary:
         loio_df = pd.DataFrame(loio_summary).sort_values("mean_macro_f1", ascending=False)
         print(f"\n{'=' * 60}")
-        print(f" SCENARIO 3 — LOIO — Model Comparison (sorted by mean macro F1):")
+        print(f" SCENARIO 3 -- LOIO -- Model Comparison (sorted by mean macro F1):")
         print(f"{'=' * 60}")
         summary_cols = ["model", "mean_accuracy", "acc_ci95_lo", "acc_ci95_hi",
                         "wtd_accuracy", "std_accuracy",
@@ -709,7 +722,7 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
             _save_confusion_matrix(
                 yt, yp, present, names,
                 os.path.join(out_dir, f"loio_cm_{fam}.png"),
-                title=f"LOIO — {fam} (all reps, {best_model_overall})",
+                title=f"LOIO -- {fam} (all reps, {best_model_overall})",
                 normalize=True,
             )
             report_df = pd.DataFrame(
@@ -718,7 +731,7 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
             ).T
             report_df.to_csv(os.path.join(out_dir, f"loio_report_{fam}.csv"))
 
-        print(f"  [✓] Per-family confusion matrices + reports saved (model: {best_model_overall}).")
+        print(f"  [done] Per-family confusion matrices + reports saved (model: {best_model_overall}).")
 
 
 # -----------------------------------------------------------------------------
@@ -780,15 +793,15 @@ def write_run_log(out_dir, df, label_cols, models_used, scenarios_run, extra=Non
 
     with open(path, "w") as f:
         f.write("\n".join(lines) + "\n")
-    print(f"  [✓] Run log: {path}")
+    print(f"  [done] Run log: {path}")
 
 
 def write_master_summary(run_dir, label_cols, df=None):
     """
     Reads standard_results.csv, loo_results.csv, loio_results.csv from each
     label sub-folder and writes:
-      master_summary.csv  — flat table: one row per (label, scenario, model)
-      master_summary.txt  — full human-readable report with per-family breakdown
+      master_summary.csv  -- flat table: one row per (label, scenario, model)
+      master_summary.txt  -- full human-readable report with per-family breakdown
     """
     SCENARIO_FILES = {
         "Standard 80/20": "standard_results.csv",
@@ -846,7 +859,7 @@ def write_master_summary(run_dir, label_cols, df=None):
             all_rows.append(sdf_n)
 
     if not all_rows:
-        print("  [!] No result CSVs found — skipping master summary.")
+        print("  [!] No result CSVs found -- skipping master summary.")
         return
 
     master = pd.concat(all_rows, ignore_index=True, sort=False)
@@ -875,7 +888,7 @@ def write_master_summary(run_dir, label_cols, df=None):
         try:
             return f"{float(v):.{dec}f}"
         except (TypeError, ValueError):
-            return str(v) if v is not None else "—"
+            return str(v) if v is not None else "--"
 
     # ── Detect families from data ────────────────────────────────────────────
     known_families = []
@@ -1137,7 +1150,7 @@ def _save_calibration_plot(pipe, X_test, y_test, n_classes, out_path):
     plt.tight_layout()
     plt.savefig(out_path, dpi=120)
     plt.close()
-    print(f"  [✓] Saved: {out_path}")
+    print(f"  [done] Saved: {out_path}")
 
 
 def _save_confusion_matrix(y_true, y_pred, labels, names, path, title="", normalize=False):
@@ -1148,7 +1161,7 @@ def _save_confusion_matrix(y_true, y_pred, labels, names, path, title="", normal
     ConfusionMatrixDisplay(cm_raw, display_labels=names).plot(
         ax=axes[0], colorbar=False, cmap="Blues"
     )
-    axes[0].set_title(f"{title} — counts")
+    axes[0].set_title(f"{title} -- counts")
     axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=20, ha="right")
 
     if normalize:
@@ -1156,18 +1169,18 @@ def _save_confusion_matrix(y_true, y_pred, labels, names, path, title="", normal
         ConfusionMatrixDisplay(
             np.round(cm_norm, 2), display_labels=names
         ).plot(ax=axes[1], colorbar=False, cmap="Blues")
-        axes[1].set_title(f"{title} — recall (row-normalized)")
+        axes[1].set_title(f"{title} -- recall (row-normalized)")
         axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=20, ha="right")
 
     plt.tight_layout()
     plt.savefig(path, dpi=120)
     plt.close()
-    print(f"  [✓] Saved: {path}")
+    print(f"  [done] Saved: {path}")
 
 
 def _save_feature_importance(pipe, feat_cols, csv_path, plot_path, top_n=20):
     model = pipe.named_steps["model"]
-    # Unwrap CalibratedClassifierCV — average importances across its cv folds
+    # Unwrap CalibratedClassifierCV -- average importances across its cv folds
     if isinstance(model, CalibratedClassifierCV) and hasattr(model, "calibrated_classifiers_"):
         base_models = [c.estimator for c in model.calibrated_classifiers_
                        if hasattr(c, "estimator") and hasattr(c.estimator, "feature_importances_")]
@@ -1196,7 +1209,7 @@ def _save_feature_importance(pipe, feat_cols, csv_path, plot_path, top_n=20):
 
     print(f"\n  Top 10 features:")
     print(fi.head(10).to_string(index=False))
-    print(f"  [✓] Saved: {csv_path}")
+    print(f"  [done] Saved: {csv_path}")
 
 
 # -----------------------------------------------------------------------------
@@ -1215,7 +1228,7 @@ def main():
                         choices=["stage_hint", "stage_binary", "behavior_stage", "all"],
                         help="Label column to use (default: all)")
     parser.add_argument("--top-features", default=None,
-                        help="Path to a feature_importance.csv — restrict training to its top N features")
+                        help="Path to a feature_importance.csv -- restrict training to its top N features")
     parser.add_argument("--top-n", type=int, default=20,
                         help="Number of top features to use when --top-features is set (default: 20)")
     args = parser.parse_args()
@@ -1231,15 +1244,15 @@ def main():
         print(f"    {selected_features}\n")
 
     labels_to_run = []
-    if args.label in ("stage_hint", "all"):
-        labels_to_run.append(("stage_hint", STAGE_NAMES_TIME))
+    if args.label == "stage_hint":
+        print("[~] stage_hint is a reference label only -- skipping training")
     if args.label in ("stage_binary", "all"):
         labels_to_run.append(("stage_binary", STAGE_NAMES_EARLY_LATE))
     if args.label in ("behavior_stage", "all"):
         if "behavior_stage" in df.columns:
             labels_to_run.append(("behavior_stage", STAGE_NAMES_BEHAVIOR))
         else:
-            print("[!] behavior_stage not found in features.csv — skipping")
+            print("[!] behavior_stage not found in features.csv -- skipping")
 
     models_used   = list(get_models().keys())
     label_cols    = [lc for lc, _ in labels_to_run]
@@ -1254,7 +1267,7 @@ def main():
     write_run_log(args.out, df, label_cols, models_used, scenarios_run,
                   extra={"cv_mode": cv_mode,
                          "top_features": args.top_features or "all",
-                         "top_n": args.top_n if args.top_features else "—"})
+                         "top_n": args.top_n if args.top_features else "--"})
 
     for label_col, stage_names in labels_to_run:
         label_dir = os.path.join(args.out, label_col) if len(labels_to_run) > 1 else args.out

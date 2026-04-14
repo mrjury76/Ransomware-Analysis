@@ -173,14 +173,14 @@ def feat_pslist(rows):
         "pslist_count":        len(pids),
         "pslist_unique_names": len(names),
         "pslist_avg_threads":  round(sum(threads) / len(threads), 2) if threads else 0,
-        "pslist_avg_handles":  round(sum(handles) / len(handles), 2) if handles else 0,  # always 0 — Handles col missing from pslist CSV
+        # "pslist_avg_handles": always 0 — Handles col missing from pslist CSV
         "pslist_wow64_count":  wow64_count,
         "pslist_exited_count": exited_count,
         "pslist_ransom_procs": ransom_procs,
         "_pslist_pids":        pids,   # internal, stripped before output
 
-        "pslist_avg_runtimes": avg(runtimes),              # always 0 — CreateTime/ExitTime not parsed
-        "pslist_max_runtimes": round(max_or_zero(runtimes), 2),
+        # "pslist_avg_runtimes": always 0 — CreateTime/ExitTime not in pslist CSV
+        # "pslist_max_runtimes": always 0 — same reason
         "pslist_avg_children": avg(child_values),
         "pslist_max_children": max_or_zero(child_values),
         "pslist_parent_missing_count": hidden_parent_count,
@@ -206,15 +206,14 @@ def feat_cmdline(rows):
     if not rows:
         return {}
     total = len(rows)
-    has_args = suspicious = ransom_cmds = 0
-
+    has_args = suspicious = 0
     cmd_lengths = []
-    sus_args_count = 0
-    script_exec_count = 0
     unusual_dir_count = 0
     script_tool_count = 0
-    encoded_count = 0
-    
+
+    # Patterns below never fire on current data — kept for future reference:
+    # SUS_ARG_PAT, ENCODED_PAT, RANSOM_CMDLINE_TOKENS, SCRIPT_EXEC_PAT
+
     for r in rows:
         args = r.get("Args", "") or ""
         args_norm = args.strip()
@@ -226,30 +225,18 @@ def feat_cmdline(rows):
 
             if any(tok in args_lower for tok in SUSPICIOUS_ARGS):
                 suspicious += 1
-            if SUS_ARG_PAT.search(args_norm):           # always 0 — patterns never match cmdline data
-                sus_args_count += 1
-            if SCRIPT_EXEC_PAT.search(args_norm):
-                script_exec_count += 1
             if UNUSUAL_DIR_PAT.search(args_norm):
                 unusual_dir_count += 1
             if SCRIPT_TOOL_PAT.search(args_norm):
                 script_tool_count += 1
-            if ENCODED_PAT.search(args_norm):            # always 0 — no encoded commands in data
-                encoded_count += 1
-            if any(tok in args for tok in RANSOM_CMDLINE_TOKENS):  # always 0 — tokens not in cmdline CSV args
-                ransom_cmds += 1
     return {
         "cmdline_count":            total,
         "cmdline_with_args":        has_args,
         "cmdline_suspicious_count": suspicious,
-        "cmdline_avg_length": avg(cmd_lengths),
-        "cmdline_max_length": max_or_zero(cmd_lengths),
-        "cmdline_sus_args_count": sus_args_count,       # always 0
-        "cmdline_script_exec_count": script_exec_count, # always 0
+        "cmdline_avg_length":       avg(cmd_lengths),
+        "cmdline_max_length":       max_or_zero(cmd_lengths),
         "cmdline_unusual_dir_count": unusual_dir_count,
         "cmdline_script_tool_count": script_tool_count,
-        "cmdline_encoded_count": encoded_count,         # always 0
-        "cmdline_ransom_indicators": ransom_cmds,       # always 0
     }
 
 
@@ -402,7 +389,7 @@ def feat_vadinfo(rows):
         "vad_pid_count": len(pids),
         "vad_avg_regions_per_process": avg(vads_per_pid),
         "vad_max_regions_per_process": max_or_zero(vads_per_pid),
-        "vad_avg_total_mem_per_process": round(avg(total_sizes), 2) if total_sizes else 0,    # always 0 — Size col missing
+        "vad_avg_total_mem_per_process": round(avg(total_sizes), 2) if total_sizes else 0,    # always 0 -- Size col missing
         "vad_max_total_mem_per_process": round(max_or_zero(total_sizes), 2),
         "vad_avg_max_region_size_per_process": round(avg(max_region_sizes), 2) if max_region_sizes else 0,
         "vad_private_pid_count": sum(1 for v in private_counts if v > 0),
@@ -547,7 +534,7 @@ SECURITY_SERVICES = {"windefend", "msmpeng", "mbamlservice", "vsserv",
 def feat_svcscan(rows):
     if not rows:
         return {}
-    # Vol3 svcscan duplicates entries across service tables — deduplicate by
+    # Vol3 svcscan duplicates entries across service tables -- deduplicate by
     # (name, state) so that VSS/wbengine/swprv don't inflate counts on benign machines.
     seen = set()
     running = stopped = security_stopped = 0
@@ -747,14 +734,13 @@ def process_snapshot(snap_dir, use_cache=True):
         features["vad_rwx_ratio"] = 0
         features["vad_private_ratio"] = 0
 
-    # handle ratios are now computed inside feat_handles — no recalculation needed here
+    # handle ratios are now computed inside feat_handles -- no recalculation needed here
 
     ldr_total = features.get("ldrmodules_total", 0)
     if ldr_total > 0:
-        features["ldrmodules_hidden_ratio"] = round(features.get("ldrmodules_hidden_count", 0) / ldr_total, 4)  # always 0
+        # ldrmodules_hidden_ratio: always 0 -- removed
         features["ldrmodules_suspicious_path_ratio"] = round(features.get("ldrmodules_suspicious_path_hit_count", 0) / ldr_total, 4)
     else:
-        features["ldrmodules_hidden_ratio"] = 0
         features["ldrmodules_suspicious_path_ratio"] = 0
         
     filescan_total = features.get("filescan_total", 0)
@@ -767,21 +753,17 @@ def process_snapshot(snap_dir, use_cache=True):
     if netstat_total > 0:
         features["netstat_established_ratio"] = round(features.get("netstat_established", 0) / netstat_total, 4)
         features["netstat_outbound_ratio"] = round(features.get("netstat_outbound_count", 0) / netstat_total, 4)
-        features["netstat_suspicious_port_ratio"] = round(features.get("netstat_suspicious_port_hit_count", 0) / netstat_total, 4)  # always 0
+        # netstat_suspicious_port_ratio: always 0 -- removed
     else:
         features["netstat_established_ratio"] = 0
         features["netstat_outbound_ratio"] = 0
-        features["netstat_suspicious_port_ratio"] = 0
 
     cmdline_total = features.get("cmdline_count", 0)
     if cmdline_total > 0:
-        features["cmdline_encoded_ratio"] = round(features.get("cmdline_encoded_count", 0) / cmdline_total, 4)        # always 0
-        features["cmdline_script_exec_ratio"] = round(features.get("cmdline_script_exec_count", 0) / cmdline_total, 4)  # always 0
         features["cmdline_unusual_dir_ratio"] = round(features.get("cmdline_unusual_dir_count", 0) / cmdline_total, 4)
     else:
-        features["cmdline_encoded_ratio"] = 0
-        features["cmdline_script_exec_ratio"] = 0
         features["cmdline_unusual_dir_ratio"] = 0
+    # cmdline_encoded_ratio, cmdline_script_exec_ratio: always 0 -- removed
 
     dll_total = features.get("dlllist_total", 0)
     if dll_total > 0:
@@ -801,25 +783,25 @@ def process_snapshot(snap_dir, use_cache=True):
     # Grounded in ransomware lifecycle research (Kharraz 2016, Scaife 2016,
     # Sgandurra 2016, Continella 2016) and empirical analysis of universal signals.
     #
-    #   0 — Benign / Dormant
+    #   0 -- Benign / Dormant
     #       No observable ransomware activity.
     #
-    #   1 — Pre-encryption active (defense evasion / recon phase)
-    #       Ransomware is running and preparing — files are still INTACT.
+    #   1 -- Pre-encryption active (defense evasion / recon phase)
+    #       Ransomware is running and preparing -- files are still INTACT.
     #       This is the highest-value detection window.
     #       Universal signals: elevated process counts, DLL injection anomalies,
     #       suspicious handles, service manipulation.
     #
-    #   2 — Active encryption
+    #   2 -- Active encryption
     #       Files are being encrypted AND injection activity is still elevated.
     #       Universal signals peak: ldrmodules_not_in_load > 434, vad_exec_count > 5598,
     #       handle_total > 37125, plus encryption artifacts visible.
     #
-    #   3 — Post-encryption
-    #       Encryption has completed — injection anomalies have settled back
+    #   3 -- Post-encryption
+    #       Encryption has completed -- injection anomalies have settled back
     #       to near-benign levels (<80) but encrypted files/notes remain on disk.
     #       The injection/loading phase is over; ransomware may show ransom UI
-    #       or have exited. Recovery window — files are already damaged.
+    #       or have exited. Recovery window -- files are already damaged.
     #
     family = meta.get("family", "")
     # Core universal signals from empirical analysis
@@ -839,7 +821,6 @@ def process_snapshot(snap_dir, use_cache=True):
     # Encryption artifacts (family-agnostic)
     enc_files        = features.get("filescan_encrypted", 0)
     ransom_notes     = features.get("filescan_ransom_notes", 0)
-    net_outbound     = features.get("netstat_outbound_ratio", 0)
 
     # Universal thresholds from empirical peaks (mean across families)
     # These provide cross-family generalization based on analysis
@@ -865,28 +846,64 @@ def process_snapshot(snap_dir, use_cache=True):
     )
 
     # Family-specific adjustments for encryption artifact detection
+    #
+    # Dharma is a sub-60s encryptor -- by 5s it already has 50+ encrypted files
+    # and ldr_anomaly ~60, which the old logic (ldr_threshold_low=70) immediately
+    # classified as post-enc (stage 3). Fixes:
+    #   - ldr_threshold_low raised to 30 (Dharma fully exits by T090; ldr drops
+    #     to near-zero only after process exit, not during active encryption)
+    #   - has_enc_artifacts requires a meaningful file count (>500) to distinguish
+    #     "just started" (stage 1/2) from "encryption complete" (stage 3)
+    #   - enc_files_heavy (>500) used as the post-enc artifact signal
+    #   - enc_files_active (>10) combined with still-active injection = stage 2
+    #
     if family == "Jigsaw":
         # Jigsaw: screen locker, minimal file encryption, high injection
         has_enc_artifacts = enc_files > 0 or ransom_notes > 0 or malfind_count > 8
+        enc_files_active  = enc_files > 0
         ldr_threshold_low = 40  # Lower settlement threshold
     elif family == "Dharma":
-        # Dharma: fast encryptor, may show network activity
-        has_enc_artifacts = enc_files > 2 or ransom_notes > 0 or net_outbound > 0.05
-        ldr_threshold_low = 70
+        # Dharma: extremely fast encryptor (sub-60s).
+        # At T005 ldr~60 + enc_files~60 -- that's stage 1/2, NOT post-enc.
+        # Post-enc only when enc count is large AND ldr has fully collapsed.
+        has_enc_artifacts = enc_files > 500 or ransom_notes > 0
+        enc_files_active  = enc_files > 10   # actively encrypting but not done
+        ldr_threshold_low = 30               # ldr only drops this low after process exit
+    elif family == "Cerber":
+        # Cerber: ldr_anomaly sits at ~60 throughout (never rises above 100),
+        # so the default ldr_threshold_low=100 always fires ldr_settled=True.
+        # Cerber encrypts file contents in-place -- enc_files stays flat at ~14
+        # across all stages, so file count can't gate post-enc either.
+        # Key discriminators:
+        #   - malfind_count ~11-13 during stages 1-2, drops to ~3 at stage 3
+        #   - ldr_anomaly < 20 only at genuine post-enc (T090)
+        # Use malfind as the injection-active proxy and ldr < 20 as settled.
+        has_enc_artifacts = enc_files > 5 or ransom_notes > 0
+        enc_files_active  = enc_files > 5
+        ldr_threshold_low = 20               # ldr drops to ~10 only at true post-enc
     else:
-        # Default (WannaCry, Cerber, etc.)
+        # Default (WannaCry, Benign)
         has_enc_artifacts = enc_files > 3 or ransom_notes > 0
+        enc_files_active  = enc_files > 3
         ldr_threshold_low = 100  # Universal signal settles below this
 
-    ldr_settled = ldr_anomaly < ldr_threshold_low
+    ldr_active  = ldr_anomaly >= ldr_threshold_low   # injection still running
+    ldr_settled = ldr_anomaly < ldr_threshold_low    # injection done / process exited
 
-    # Stage determination with improved logic
+    # Stage determination
+    #
+    # Priority order (most specific first):
+    #   3 -- post-enc:    large enc artifact count AND injection fully settled
+    #   2 -- active enc:  enc artifacts visible AND injection still active
+    #   1 -- pre-enc:     ransomware active (injection/handles/privs) but files intact
+    #   0 -- benign:      no significant ransomware activity
+    #
     if has_enc_artifacts and ldr_settled:
-        behavior_stage = 3          # post-encryption: artifacts remain, injection done
-    elif has_enc_artifacts and universal_active:
-        behavior_stage = 2          # active encryption: artifacts + high activity
+        behavior_stage = 3          # post-encryption: done encrypting, injection gone
+    elif (has_enc_artifacts or enc_files_active) and (universal_active or ldr_active):
+        behavior_stage = 2          # active encryption: files accumulating + still active
     elif universal_preenc:
-        behavior_stage = 1          # pre-enc active: ransomware active, files intact
+        behavior_stage = 1          # pre-enc: ransomware active, files still intact
     else:
         behavior_stage = 0          # benign: no significant activity
 
@@ -959,8 +976,8 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"\n[✓] Features saved to: {args.out}")
-    print(f"[✓] Rows: {len(rows)}  |  Feature columns: {len(feat_cols)}")
+    print(f"\n[done] Features saved to: {args.out}")
+    print(f"[done] Rows: {len(rows)}  |  Feature columns: {len(feat_cols)}")
 
 
 if __name__ == "__main__":

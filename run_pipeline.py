@@ -2,9 +2,9 @@
 run_pipeline.py
 ---------------
 Master pipeline:
-  Step 1 — autovol4    : run Volatility on all vmem files
-  Step 2 — features    : extract ML feature matrix -> features.csv
-  Step 3 — train model : train family-agnostic stage classifier
+  Step 1 -- autovol4    : run Volatility on all vmem files
+  Step 2 -- features    : extract ML feature matrix -> features.csv
+  Step 3 -- train model : train family-agnostic stage classifier
 
 Usage:
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots
@@ -37,9 +37,9 @@ def main():
     parser.add_argument("--model-out",      default=None,
                         help="Output directory for trained model (default: <scan-dir>/model_output)")
     parser.add_argument("--skip-analysis",  action="store_true",
-                        help="Skip autovol4 — use existing plugin CSVs")
+                        help="Skip autovol4 -- use existing plugin CSVs")
     parser.add_argument("--skip-training",  action="store_true",
-                        help="Skip model training — stop after features.csv")
+                        help="Skip model training -- stop after features.csv")
     parser.add_argument("--no-loo",         action="store_true",
                         help="Skip leave-one-family-out evaluation during training")
     parser.add_argument("--cv-mode",        default="family",
@@ -50,7 +50,7 @@ def main():
     parser.add_argument("--cache",         action="store_true",
                         help="Use cached feature extraction results (features_cache.json) when available")
     parser.add_argument("--top-features",  default=None,
-                        help="Path to a feature_importance.csv — restrict stage training to its top N features")
+                        help="Path to a feature_importance.csv -- restrict stage training to its top N features")
     parser.add_argument("--top-n",         type=int, default=20,
                         help="Number of top features to use when --top-features is set (default: 20)")
     args = parser.parse_args()
@@ -84,7 +84,7 @@ def main():
     # ── Step 1: autovol4 batch analysis ───────────────────────────────────────
     if not args.skip_analysis:
         print("\n" + "=" * 60)
-        print(" STEP 1: autovol4 — Volatility analysis on all vmem files")
+        print(" STEP 1: autovol4 -- Volatility analysis on all vmem files")
         print("=" * 60)
 
         # Import batch_mode from wherever autovol4.py lives
@@ -96,26 +96,26 @@ def main():
         autovol4.batch_mode(scan_dir, only_families=only_families)
 
         # Auto-commit and push new CSVs to dataset repo
-        print("\n[+] Pushing new plugin CSVs to dataset repo...")
-        try:
-            git = ["git", "-C", scan_dir]
-            subprocess.run(git + ["add", "-A"], check=True)
-            result = subprocess.run(git + ["diff", "--cached", "--quiet"])
-            if result.returncode != 0:
-                subprocess.run(git + ["commit", "-m",
-                               "Add volatility plugin CSVs from pipeline run"], check=True)
-                subprocess.run(git + ["push"], check=True)
-                print("[+] Dataset repo pushed.")
-            else:
-                print("[~] No new CSVs to commit.")
-        except subprocess.CalledProcessError as e:
-            print(f"[!] Git push failed: {e} — continuing pipeline")
-    else:
-        print("\n[~] Skipping autovol4 analysis (--skip-analysis)")
+    #     print("\n[+] Pushing new plugin CSVs to dataset repo...")
+    #     try:
+    #         git = ["git", "-C", scan_dir]
+    #         subprocess.run(git + ["add", "-A"], check=True)
+    #         result = subprocess.run(git + ["diff", "--cached", "--quiet"])
+    #         if result.returncode != 0:
+    #             subprocess.run(git + ["commit", "-m",
+    #                            "Add volatility plugin CSVs from pipeline run"], check=True)
+    #             subprocess.run(git + ["push"], check=True)
+    #             print("[+] Dataset repo pushed.")
+    #         else:
+    #             print("[~] No new CSVs to commit.")
+    #     except subprocess.CalledProcessError as e:
+    #         print(f"[!] Git push failed: {e} -- continuing pipeline")
+    # else:
+    #     print("\n[~] Skipping autovol4 analysis (--skip-analysis)")
 
     # ── Step 2: feature extraction ────────────────────────────────────────────
     print("\n" + "=" * 60)
-    print(" STEP 2: extract_features — building ML feature matrix")
+    print(" STEP 2: extract_features -- building ML feature matrix")
     print("=" * 60)
 
     import extract_features
@@ -161,7 +161,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"\n[✓] Features saved: {out_csv} ({len(rows)} rows, {len(feat_cols)} features)")
+    print(f"\n[[done]] Features saved: {out_csv} ({len(rows)} rows, {len(feat_cols)} features)")
 
     if args.skip_training:
         print("\n[~] Skipping model training (--skip-training)")
@@ -170,7 +170,7 @@ def main():
 
     # ── Step 3: train stage model ─────────────────────────────────────────────
     print("\n" + "=" * 60)
-    print(" STEP 3: train_stage_model — family-agnostic stage classifier")
+    print(" STEP 3: train_stage_model -- family-agnostic stage classifier")
     print("=" * 60)
 
     import train_stage_model
@@ -186,9 +186,9 @@ def main():
 
     cv_mode      = "none" if args.no_loo else args.cv_mode
     models_used  = list(train_stage_model.get_models().keys())
-    label_pairs  = [("stage_hint",    train_stage_model.STAGE_NAMES_TIME),
-                    ("stage_binary",  train_stage_model.STAGE_NAMES_EARLY_LATE),
-                    ("behavior_stage",train_stage_model.STAGE_NAMES_BEHAVIOR)]
+    label_pairs  = [("stage_hint",     train_stage_model.STAGE_NAMES_TIME),       # reference only -- skipped
+                    ("stage_binary",   train_stage_model.STAGE_NAMES_EARLY_LATE),  # collapsed behavior (0/1)
+                    ("behavior_stage", train_stage_model.STAGE_NAMES_BEHAVIOR)]    # primary 4-class label
     label_cols   = [lc for lc, _ in label_pairs if lc in df.columns]
     scenarios    = ["Standard 80/20 split"]
     if cv_mode in ("family", "both"):
@@ -204,12 +204,19 @@ def main():
                "family_filter": sorted(only_families) if only_families else "all",
                "cv_mode":       cv_mode,
                "top_features":  args.top_features or "all",
-               "top_n":         args.top_n if args.top_features else "—"},
+               "top_n":         args.top_n if args.top_features else "--"},
     )
 
-    # Train with all label types: time-based (4-class), binary time-based, and behavior-based
+    # Train with behavior-based labels only.
+    # stage_hint is kept in features.csv as a reference/baseline column but is
+    # NOT used for training -- it reflects collection-time clock labels which are
+    # inaccurate for fast families (Dharma, Cerber) where behavior_stage is
+    # grounded in actual memory evidence.
     for label_col, stage_names in label_pairs:
         if label_col not in df.columns:
+            continue
+        if label_col == "stage_hint":
+            print(f"\n[~] Skipping stage_hint training (reference label only)")
             continue
 
         label_dir = os.path.join(model_out, label_col)
