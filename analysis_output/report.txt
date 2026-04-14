@@ -1,81 +1,100 @@
 ======================================================================
- CROSS-FAMILY BEHAVIORAL ANALYSIS REPORT
+ CROSS-FAMILY BEHAVIORAL ANALYSIS REPORT  (v2)
  Stage column : stage_hint
  Families     : Benign, Cerber, Dharma, Jigsaw, WannaCry
- Peak stage   : Active Enc
+ Per-family peak stages:
+   Cerber      : Active Enc
+   Dharma      : Post-Enc
+   Jigsaw      : Active Enc
+   WannaCry    : Recon/Evasion
 ======================================================================
 
-[UNIVERSAL SIGNALS] Rise in ALL 4 ransomware families at 'Active Enc':
-  Feature                                         MeanPeak   MeanDelta     CV
-  --------------------------------------------------------------------------
-  pslist_count                                       94.94        3.83   0.04
-  pslist_unique_names                                51.69        2.36   0.05
-  cmdline_with_args                                  94.94        3.83   0.04
-  cmdline_count                                      94.94        3.69   0.04
-  ldrmodules_suspicious_path_pid_count                2.37        0.82   0.38
-  ldrmodules_max_per_process                        136.24       60.51   0.37
-  ldrmodules_not_in_load                            434.21      365.99   1.09
-  ldrmodules_not_in_init                            483.06      387.46   1.00
-  vad_exec_count                                   5598.11      193.60   0.01
-  ldrmodules_suspicious_path_hit_count               22.62       19.44   0.56
-  ldrmodules_total                                 2288.50     1639.44   0.46
-  vad_total                                       16703.46      523.93   0.02
-  ldrmodules_avg_per_process                         31.88       16.03   0.31
-  ldrmodules_not_in_mem                             434.21      365.99   1.09
-  vad_private_pid_count                              90.56        3.37   0.02
-  vad_pid_count                                      91.56        3.39   0.02
-  malfind_avg_regions_per_process                     3.93        1.80   0.68
-  handle_total                                    37125.76     1093.27   0.07
-  handle_process_count                              855.80       32.27   0.01
-  handle_registry_count                            2992.76      138.96   0.06
+[UNIVERSAL STABLE SIGNALS]  consistency=1.0, CV<0.5  (0 features)
+  Feature                                        WtdScore   MeanPeak   MeanDelta  CohenD     CV
+  ------------------------------------------------------------------------------------------
 
-[MAJORITY SIGNALS] Rise in >= 75% of ransomware families:
-  Feature                                        Consistency   MeanDelta
-  ----------------------------------------------------------------------
-  cmdline_suspicious_count                              0.75        0.26
-  cmdline_avg_length                                    0.75        9.15
-  dlllist_unusual_path_pid_count                        0.75        0.25
-  psscan_count                                          0.75        2.20
-  handle_port_count                                     0.75       49.60
-  handle_semaphore_count                                0.75       46.00
-  malfind_private_exec                                  0.75        1.32
-  malfind_count                                         0.75        1.16
-  handle_avg_per_process                                0.75       23.56
-  malfind_max_regions_per_process                       0.75        1.47
-  dlllist_non_system                                    0.75       62.94
-  dlllist_max_load_total_per_process                    0.75       43.65
-  cmdline_unusual_dir_count                             0.75        1.33
-  dlllist_total                                         0.75       47.23
-  svcscan_security_stopped                              0.75        0.37
+[UNIVERSAL NOISY SIGNALS]  consistency=1.0, CV>=0.5  (0 features)
+  (Rise in all families but magnitude varies — less reliable as general detectors)
+  Feature                                        WtdScore   MeanPeak   MeanDelta  CohenD     CV
+  ------------------------------------------------------------------------------------------
 
-[FAMILY FINGERPRINTS] Low consistency (<= 25%), high mean peak:
+[MAJORITY SIGNALS] consistency >= 75%, not universal  (15 shown)
+  Feature                                        Consistency  WtdScore   MeanDelta
+  -------------------------------------------------------------------------------
+  filescan_encrypted                                    0.75     1.320      271.40
+  filescan_encrypted_ratio                              0.75     1.205        0.04
+  cmdline_suspicious_count                              0.75     0.786        0.73
+  cmdline_unusual_dir_ratio                             0.75     0.393        0.02
+  malfind_rwx_ratio                                     0.75     0.274        0.17
+  cmdline_avg_length                                    0.75     0.144       10.98
+  signal_encryption_score                               0.75     0.098        0.01
+  vad_max_regions_per_process                           0.75     0.041       92.25
+  filescan_total                                        0.75     0.028      162.40
+  dlllist_unusual_path_pid_count                        0.75     0.025        0.13
+  handle_section_count                                  0.75     0.019       20.61
+  vad_avg_regions_per_process                           0.75     0.019        3.26
+  handle_avg_per_process                                0.75     0.018        8.56
+  vad_private_ratio                                     0.75     0.017        0.01
+  svcscan_stopped                                       0.75     0.016        6.47
+
+[FAMILY FINGERPRINTS] consistency<=25%, high mean peak  (15 shown)
   Feature                                        Consistency   MeanPeak
   --------------------------------------------------------------------
-  cmdline_max_length                                    0.00     893.86
-  dlllist_unique_dlls                                   0.25     753.58
-  filescan_encrypted                                    0.25     274.84
-  dlllist_avg_per_process                               0.25      54.01
-  dlllist_unusual_path_hit_count                        0.25      41.89
-  pslist_max_children                                   0.25      36.71
-  vad_private_exec                                      0.25      17.43
-  vad_rwx_region_count                                  0.25      17.43
-  dlllist_crypto_dlls                                   0.25       7.00
-  hidden_process_count                                  0.00       5.26
-  vad_rwx_pid_count                                     0.25       3.88
-  malfind_rwx_pid_count                                 0.25       2.06
-  malfind_pid_count                                     0.00       2.06
-  malfind_rwx_ratio                                     0.25       0.85
-  vad_private_ratio                                     0.25       0.45
+  handle_total                                          0.25   38151.14
+  handle_event_count                                    0.25    9869.72
+  vad_exec_count                                        0.25    5748.12
+  dlllist_non_system                                    0.25    4463.76
+  dlllist_total                                         0.25    4015.35
+  handle_registry_count                                 0.00    3142.86
+  handle_port_count                                     0.25    2025.73
+  handle_file_count                                     0.25    1747.71
+  handle_semaphore_count                                0.25    1673.26
+  cmdline_max_length                                    0.25    1140.18
+  priv_total_enabled                                    0.25    1138.33
+  handle_process_count                                  0.25     875.99
+  handle_mutex_count                                    0.25     807.33
+  dlllist_unique_dlls                                   0.00     793.47
+  handle_token_count                                    0.25     595.64
 
-[SIMILARITY MATRIX] Cosine similarity at 'Active Enc':
-            Benign  Cerber  Dharma  Jigsaw  WannaCry
-  Benign       0.0   0.000   0.000   0.000     0.000
-  Cerber       0.0   1.000   0.993   1.000     0.997
-  Dharma       0.0   0.993   1.000   0.992     0.993
-  Jigsaw       0.0   1.000   0.992   1.000     0.997
-  WannaCry     0.0   0.997   0.993   0.997     1.000
+[BENIGN SEPARABILITY] Top features by Cohen's d (ransomware vs Benign):
+  (High d = good at separating ransomware from benign → reduces Benign FPR)
+  Feature                                        CohenD_sep  RansomMean  BenignMean            Direction
+  ----------------------------------------------------------------------------------------------------
+  netstat_established                              45535.36        0.00        1.44        benign_higher
+  netstat_unique_ips                               11383.84        1.00        1.36        benign_higher
+  netstat_established_ratio                         1034.79        0.00        0.03        benign_higher
+  dlllist_max_load_total_per_process                  84.94     1612.02     2334.67        benign_higher
+  dlllist_avg_max_loadcount_per_process               50.68        5.42       19.43        benign_higher
+  netstat_outbound_count                              15.58        9.82       11.44        benign_higher
+  netstat_total                                       15.58       39.82       41.44        benign_higher
+  netstat_outbound_ratio                              14.03        0.25        0.28        benign_higher
+  vad_private_region_count                            13.13     7544.63     8462.27        benign_higher
+  vad_rwx_region_count                                10.86       16.14       14.91    ransomware_higher
+  vad_total                                            7.71    17031.45    18496.07        benign_higher
+  handle_file_ratio                                    7.63        0.05        0.05        benign_higher
+  handle_registry_ratio                                7.05        0.08        0.08    ransomware_higher
+  ldrmodules_suspicious_path_ratio                     6.35        0.00        0.01        benign_higher
+  psscan_count                                         6.13      103.68      109.55        benign_higher
+  malfind_pid_count                                    6.07        2.72        5.43        benign_higher
+  dlllist_crypto_ratio                                 5.12        0.03        0.04        benign_higher
+  vad_exec_ratio                                       4.58        0.34        0.33    ransomware_higher
+  vad_rwx_ratio                                        4.22        0.00        0.00    ransomware_higher
+  vad_max_regions_per_process                          4.17     2341.85     2743.16        benign_higher
+
+[UNIVERSAL FEATURE SET SUMMARY]
+  Tier 1 (gold)   — 0 features: consistent, stable, benign-separable
+  Tier 2 (silver) — 38 features: majority or high benign sep
+
+  Tier 1 features (recommended for any new-family detector):
+
+[SIMILARITY MATRIX] Cosine similarity (per-family peaks, Benign excluded):
+            Cerber  Dharma  Jigsaw  WannaCry
+  Cerber     1.000   0.997   1.000     0.999
+  Dharma     0.997   1.000   0.996     0.999
+  Jigsaw     1.000   0.996   1.000     0.998
+  WannaCry   0.999   0.999   0.998     1.000
 
   Most similar  : Cerber <-> Jigsaw  (1.000)
-  Least similar : Benign <-> WannaCry  (0.000)
+  Least similar : Dharma <-> Jigsaw  (0.996)
 
 ======================================================================

@@ -182,6 +182,11 @@ def main():
     os.makedirs(model_out, exist_ok=True)
     df = train_stage_model.load_data(out_csv)
 
+    # Jigsaw excluded — samples were not executing due to missing .NET 3.5
+    # TODO: re-enable once Jigsaw is re-collected with working execution
+    df = df[df["family"] != "Jigsaw"].reset_index(drop=True)
+    print(f"[~] Jigsaw excluded. Remaining: {len(df)} rows, families: {sorted(df['family'].unique())}")
+
     selected_features = None
     if args.top_features:
         selected_features = train_stage_model.load_top_features(args.top_features, top_n=args.top_n)

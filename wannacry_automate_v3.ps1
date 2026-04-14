@@ -106,7 +106,7 @@ if ($FamilyArg -eq "" -or $NumRunsArg -eq 0) {
 
 $familyInput = if ($FamilyArg -ne "") { $FamilyArg } else { (Read-Host "Which family to run? (name or ALL)").Trim() }
 $NUM_RUNS    = if ($NumRunsArg -gt 0)  { $NumRunsArg } else { [int](Read-Host "How many full infection cycles per family?") }
-$runAnalysis = $false   # set to $true to run autovol4 on each snapshot after collection
+$runAnalysis = $true
 
 if ($familyInput -eq "ALL") {
     $familiesToRun = @($FAMILIES.Keys | Sort-Object)
@@ -158,7 +158,7 @@ function Invoke-AutoVol4 {
 
     $startArgs = @{
         FilePath     = "wsl.exe"
-        ArgumentList = @("-e", "bash", "-c", $wslCmd)
+        ArgumentList = @("bash", "-c", $wslCmd)
         NoNewWindow  = $true
         PassThru     = $true
         Wait         = $true
@@ -407,7 +407,7 @@ if ($PIPELINE_WSL -ne "") {
     $wslCmd     = "python3 $PIPELINE_WSL --scan-dir $wslScanDir"
 
     $proc = Start-Process -FilePath "wsl.exe" `
-                          -ArgumentList @("-e", "bash", "-c", $wslCmd) `
+                          -ArgumentList @("bash", "-c", $wslCmd) `
                           -NoNewWindow -PassThru -Wait
 
     if ($proc.ExitCode -eq 0) {

@@ -43,7 +43,6 @@ SYSTEM_DLL_PATHS = {"\\windows\\system32", "\\windows\\syswow64",
 
 CRYPTO_LIBS = {"bcrypt.dll", "crypt32.dll", "ncrypt.dll", "advapi32.dll"}
 SUSPICIOUS_PORTS = {4444, 1337, 8080, 9001}
-SMB_PORT = 445  # WannaCry uses SMB (EternalBlue) for lateral movement
 
 # Crypto-related DLLs (loading these indicates cryptographic setup)
 CRYPTO_DLLS = {"advapi32.dll", "crypt32.dll", "bcrypt.dll", "ncrypt.dll",
@@ -629,22 +628,17 @@ def feat_privileges(rows):
 def feat_netstat(rows):
     if not rows:
         return {}
-    established = listening = 0
+    established = listening = outbound_count = 0
     remote_ips  = set()
     pids = defaultdict(int)
     outbound_pids = set()
-    outbound_count = 0
-    smb_connections = 0  # WannaCry: connections on port 445 (SMB/EternalBlue)
     established_pids = set()
-
     remote_ips_by_pid = defaultdict(set)
 
     for r in rows:
-        pid = safe_int(r.get("PID", 0))
-        state = r.get("State", "").strip().upper()
+        pid    = safe_int(r.get("PID", 0))
+        state  = r.get("State", "").strip().upper()
         remote = r.get("ForeignAddr", "").strip()
-        foreign_port = safe_int(r.get("ForeignPort", 0), 0)
-        local_port = safe_int(r.get("LocalPort", 0), 0)
 
         if "ESTABLISHED" in state:
             established += 1
@@ -654,33 +648,23 @@ def feat_netstat(rows):
             listening += 1
         if remote and remote not in {"", "0.0.0.0", "*", "N/A"}:
             remote_ips.add(remote)
+            outbound_count += 1
             if pid:
+                outbound_pids.add(pid)
                 remote_ips_by_pid[pid].add(remote)
         if pid:
             pids[pid] += 1
 
-        outbound = remote not in {"", "0.0.0.0", "*", "N/A"}
-        if outbound:
-            outbound_count += 1
-            if pid:
-                outbound_pids.add(pid)
-
-        # WannaCry SMB worm: count outbound/established connections on port 445,
-        # not LISTENING (port 445 always listens on Windows -- not a signal)
-        if (foreign_port == SMB_PORT or local_port == SMB_PORT) and "LISTEN" not in state:
-            smb_connections += 1
-
     total = len(rows)
 
     return {
-        "netstat_total":                      total,
-        "netstat_established":                established,
-        "netstat_listening":                  listening,
-        "netstat_unique_ips":                 len(remote_ips),
-        "netstat_outbound_count":             outbound_count,
-        "netstat_smb_connections":            smb_connections,  # WannaCry SMB worm signal
-        "netstat_established_ratio":          round(established / total, 4) if total else 0,
-        "netstat_outbound_ratio":             round(outbound_count / total, 4) if total else 0,
+        "netstat_total":             total,
+        "netstat_established":       established,
+        "netstat_listening":         listening,
+        "netstat_unique_ips":        len(remote_ips),
+        "netstat_outbound_count":    outbound_count,
+        "netstat_established_ratio": round(established   / total, 4) if total else 0,
+        "netstat_outbound_ratio":    round(outbound_count / total, 4) if total else 0,
     }
 
 
@@ -1030,11 +1014,16 @@ def main():
     print(f"[+] Found {len(snap_dirs)} snapshot(s) to process")
 
     rows = []
-    for i, snap_dir in enumerate(sorted(snap_dirs), 1):
-        print(f"  [{i}/{len(snap_dirs)}] {snap_dir}")
+    sorted_snaps = sorted(snap_dirs)
+    total = len(sorted_snaps)
+    for i, snap_dir in enumerate(sorted_snaps, 1):
+        pct = int(i / total * 40)
+        bar = "#" * pct + "-" * (40 - pct)
+        print(f"\r  [{bar}] {i}/{total}", end="", flush=True)
         row = process_snapshot(snap_dir)
         if row:
             rows.append(row)
+    print()
 
     if not rows:
         print("[-] No feature rows extracted.")

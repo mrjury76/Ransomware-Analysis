@@ -323,8 +323,8 @@ def compute_signal_consistency(profiles, families, feat_cols, out_dir, peak_stag
         mean_peak    = np.mean(peak_vals)  if peak_vals  else 0.0
         mean_delta   = np.mean(np.array(peak_vals) - np.array(early_vals)) if peak_vals else 0.0
         cv_peak      = (np.std(peak_vals) / mean_peak) if mean_peak > 0 and len(peak_vals) > 1 else 0.0
-        mean_rel_delta = np.mean(rel_deltas) if rel_deltas else 0.0
-        weighted_score = consistency * min(mean_rel_delta, 10.0)  # cap at 10x to avoid outlier dominance
+        mean_rel_delta = min(np.mean(rel_deltas), 10.0) if rel_deltas else 0.0
+        weighted_score = consistency * mean_rel_delta
 
         # Cohen's d for the rise (mean_delta / pooled std of peak & early)
         if len(peak_vals) > 1 and len(early_vals) > 1:
