@@ -12,6 +12,7 @@ Usage:
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis --skip-training
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --model-out /mnt/d/Patrick/model
     python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --family WannaCry --skip-analysis
+    python3 run_pipeline.py --scan-dir /mnt/d/Patrick/VMSnapshots --skip-analysis --label behavior_stage
 """
 
 import argparse
@@ -53,6 +54,9 @@ def main():
                         help="Path to a feature_importance.csv -- restrict stage training to its top N features")
     parser.add_argument("--top-n",         type=int, default=20,
                         help="Number of top features to use when --top-features is set (default: 20)")
+    parser.add_argument("--label",         default="all",
+                        choices=["stage_hint", "stage_binary", "behavior_stage", "all"],
+                        help="Which label(s) to train on (default: all)")
     args = parser.parse_args()
 
     scan_dir   = os.path.abspath(args.scan_dir)
@@ -186,10 +190,12 @@ def main():
 
     cv_mode      = "none" if args.no_loo else args.cv_mode
     models_used  = list(train_stage_model.get_models().keys())
-    label_pairs  = [("stage_hint",     train_stage_model.STAGE_NAMES_TIME),       # reference only -- skipped
-                    ("stage_binary",   train_stage_model.STAGE_NAMES_EARLY_LATE),  # collapsed behavior (0/1)
-                    ("behavior_stage", train_stage_model.STAGE_NAMES_BEHAVIOR)]    # primary 4-class label
-    label_cols   = [lc for lc, _ in label_pairs if lc in df.columns]
+    all_label_pairs = [("stage_hint",    train_stage_model.STAGE_NAMES_TIME),
+                       ("stage_binary",  train_stage_model.STAGE_NAMES_EARLY_LATE),
+                       ("behavior_stage",train_stage_model.STAGE_NAMES_BEHAVIOR)]
+    label_pairs  = [(lc, sn) for lc, sn in all_label_pairs
+                    if (args.label == "all" or args.label == lc) and lc in df.columns]
+    label_cols   = [lc for lc, _ in label_pairs]
     scenarios    = ["Standard 80/20 split"]
     if cv_mode in ("family", "both"):
         scenarios.append("LOO (leave-one-family-out)")

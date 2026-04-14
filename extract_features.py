@@ -801,29 +801,28 @@ def process_snapshot(snap_dir, use_cache=True):
     else:
         features["malfind_rwx_ratio"] = 0
         
-    # ── Behavior-based stage label (4-class) ─────────────────────────────────
+    # ── Behavior-based stage label (3-class) ─────────────────────────────────
     # Grounded in ransomware lifecycle research (Kharraz 2016, Scaife 2016,
     # Sgandurra 2016, Continella 2016) and empirical analysis of universal signals.
+    #
+    # Designed around the operational goal: detect ransomware BEFORE files
+    # are damaged. The key split is whether encryption evidence exists yet.
+    #
+    # Designed around the operational goal: detect ransomware BEFORE files
+    # are damaged. The key split is whether encryption evidence exists yet.
     #
     #   0 -- Benign / Dormant
     #       No observable ransomware activity.
     #
-    #   1 -- Pre-encryption active (defense evasion / recon phase)
-    #       Ransomware is running and preparing -- files are still INTACT.
-    #       This is the highest-value detection window.
-    #       Universal signals: elevated process counts, DLL injection anomalies,
-    #       suspicious handles, service manipulation.
+    #   1 — Pre-Encryption
+    #       Ransomware is running but no encryption artifacts visible yet.
+    #       Files are still INTACT. This is the highest-value intervention
+    #       window — stopping here prevents all data loss.
     #
-    #   2 -- Active encryption
-    #       Files are being encrypted AND injection activity is still elevated.
-    #       Universal signals peak: ldrmodules_not_in_load > 434, vad_exec_count > 5598,
-    #       handle_total > 37125, plus encryption artifacts visible.
-    #
-    #   3 -- Post-encryption
-    #       Encryption has completed -- injection anomalies have settled back
-    #       to near-benign levels (<80) but encrypted files/notes remain on disk.
-    #       The injection/loading phase is over; ransomware may show ransom UI
-    #       or have exited. Recovery window -- files are already damaged.
+    #   2 — Encryption Active / Post-Encryption
+    #       Encryption has started or completed — files are being damaged
+    #       or already damaged. Active enc and post-enc are merged because
+    #       the operational response is the same: files are at risk.
     #
     family = meta.get("family", "")
     # Core universal signals from empirical analysis
@@ -861,10 +860,12 @@ def process_snapshot(snap_dir, use_cache=True):
     universal_preenc = (
         ldr_anomaly > 100 or      # Early elevation in injection
         svc_sec_stopped > 2 or    # Security service manipulation
-        wow64_count > 2 or        # 32-bit injection on 64-bit
-        priv_enabled > 1000 or    # Privilege escalation
-        ransom_procs > 0 or       # Known ransomware processes
-        malfind_count > 2         # Injection activity
+        wow64_count > 2 or        # 32-bit injection on 64-bit (benign max=2, so >2 is safe)
+        ransom_procs > 0 or       # Known ransomware processes (vssadmin, wbadmin, etc.)
+        features.get("malfind_avg_regions_per_process", 0) > 2.0
+        # NOTE: priv_enabled > 1000 removed — benign mean=1142, same as ransomware (useless)
+        # NOTE: malfind_count > 2 removed — benign mean=9.5 > ransomware peak=6.5 (backwards)
+        # malfind_avg_regions_per_process used instead (benign mean=1.48 vs ransomware peak=2.8)
     )
 
     # Family-specific adjustments for encryption artifact detection
@@ -933,7 +934,53 @@ def process_snapshot(snap_dir, use_cache=True):
     elif universal_preenc:
         behavior_stage = 1          # pre-enc: ransomware active, files still intact
     else:
-        behavior_stage = 0          # benign: no significant activity
+        behavior_stage = 0          # benign/dormant
+
+    # ── Stage-specific composite features ────────────────────────────────────
+    # Normalisation denominators are the cross-family mean peak values from
+    # analyze_family_behavior.py (universal_feature_set.csv / report.txt).
+    # Values are capped at 2× the mean peak so a single outlier family doesn't
+    # dominate; the result is always in [0, 1] before the cap (>1 means elevated).
+
+    def _norm(val, peak):
+        """Return val / peak, clamped to [0, 2]."""
+        return min(val / peak, 2.0) if peak > 0 else 0.0
+
+    # Injection / memory-anomaly signal — peaks at stages 1–2.
+    # Uses Tier-1 malfind feature plus the strongest majority ldrmodules signals.
+    inj_malfind = _norm(features.get("malfind_avg_regions_per_process", 0), 2.8)
+    inj_ldr     = _norm(features.get("ldrmodules_not_in_load", 0), 434.0)
+    inj_rwx     = _norm(features.get("malfind_rwx_region_count", 0), 6.5)
+    inj_vad_rwx = _norm(features.get("vad_rwx_region_count", 0), 18.1)
+    features["signal_injection_score"] = round(
+        (inj_malfind + inj_ldr + inj_rwx + inj_vad_rwx) / 4.0, 4
+    )
+
+    # Encryption-artifact signal — peaks at stages 2–3.
+    # filescan_encrypted mean peak varies by family (max ~208 for WannaCry);
+    # use 50 as a conservative cross-family threshold so any family registers.
+    enc_files  = _norm(features.get("filescan_encrypted", 0), 50.0)
+    enc_notes  = min(features.get("filescan_ransom_notes", 0), 2.0) / 2.0
+    enc_handle = _norm(features.get("handle_encrypted_files", 0), 10.0)
+    features["signal_encryption_score"] = round(
+        (enc_files + enc_notes + enc_handle) / 3.0, 4
+    )
+
+    # Tier-1 composite — weighted sum of the 7 gold universal features.
+    # Weights are the weighted_score values from universal_feature_set.csv.
+    # For benign_higher features the signal is the *deficit* from the benign mean
+    # (ransomware has fewer VAD/handle entries than benign at peak).
+    _t1_malfind  = _norm(features.get("malfind_avg_regions_per_process", 0), 2.8)  * 0.409
+    _t1_vad_tot  = _norm(max(18614 - features.get("vad_total", 18614), 0), 1793)   * 0.041
+    _t1_vad_exec = _norm(max(6053 - features.get("vad_exec_count", 6053), 0), 399) * 0.049
+    _t1_hproc    = _norm(max(904 - features.get("handle_process_count", 904), 0), 37) * 0.056
+    _t1_hdesk    = _norm(features.get("handle_desktop_count", 0), 78.0)             * 0.085
+    _t1_vpid     = _norm(max(98 - features.get("vad_pid_count", 98), 0), 5)         * 0.055
+    _t1_vppid    = _norm(max(97 - features.get("vad_private_pid_count", 97), 0), 5) * 0.055
+    features["tier1_composite"] = round(
+        _t1_malfind + _t1_vad_tot + _t1_vad_exec + _t1_hproc +
+        _t1_hdesk + _t1_vpid + _t1_vppid, 4
+    )
 
     row = {
         "family":           meta.get("family", ""),
