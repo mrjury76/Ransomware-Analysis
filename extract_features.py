@@ -846,71 +846,79 @@ def process_snapshot(snap_dir, use_cache=True):
         svc_sec_stopped > 2 or    # Security service manipulation
         wow64_count > 2 or        # 32-bit injection on 64-bit (benign max=2, so >2 is safe)
         ransom_procs > 0 or       # Known ransomware processes (vssadmin, wbadmin, etc.)
-        features.get("malfind_avg_regions_per_process", 0) > 2.0
+        features.get("malfind_rwx_ratio", 0) > 0.6
         # NOTE: priv_enabled > 1000 removed — benign mean=1142, same as ransomware (useless)
         # NOTE: malfind_count > 2 removed — benign mean=9.5 > ransomware peak=6.5 (backwards)
-        # malfind_avg_regions_per_process used instead (benign mean=1.48 vs ransomware peak=2.8)
+        # NOTE: malfind_avg_regions_per_process (consistency=0.5) replaced by malfind_rwx_ratio
+        #       (consistency=0.75, mean peak=0.812; threshold=0.6 ≈ 74% of peak)
     )
 
-    # Family-specific adjustments for encryption artifact detection
+    # Family-agnostic stage determination
     #
-    # Dharma is a sub-60s encryptor -- by 5s it already has 50+ encrypted files
-    # and ldr_anomaly ~60, which the old logic (ldr_threshold_low=70) immediately
-    # classified as post-enc (stage 3). Fixes:
-    #   - ldr_threshold_low raised to 30 (Dharma fully exits by T090; ldr drops
-    #     to near-zero only after process exit, not during active encryption)
-    #   - has_enc_artifacts requires a meaningful file count (>500) to distinguish
-    #     "just started" (stage 1/2) from "encryption complete" (stage 3)
-    #   - enc_files_heavy (>500) used as the post-enc artifact signal
-    #   - enc_files_active (>10) combined with still-active injection = stage 2
+    # The previous per-family threshold blocks (Dharma/Cerber/WannaCry) hard-coded
+    # knowledge of each family into the label itself. This causes LOO label quality
+    # to degrade for unseen families — they fall into the WannaCry default, which
+    # may be wrong for them. Replaced with normalized/ratio signals that generalise
+    # across families without knowing which family we're looking at.
     #
-    if family == "Jigsaw":
-        # Jigsaw: screen locker, minimal file encryption, high injection
-        has_enc_artifacts = enc_files > 0 or ransom_notes > 0 or malfind_count > 8
-        enc_files_active  = enc_files > 0
-        ldr_threshold_low = 40  # Lower settlement threshold
-    elif family == "Dharma":
-        # Dharma: extremely fast encryptor (sub-60s).
-        # At T005 ldr~60 + enc_files~60 -- that's stage 1/2, NOT post-enc.
-        # Post-enc only when enc count is large AND ldr has fully collapsed.
-        has_enc_artifacts = enc_files > 500 or ransom_notes > 0
-        enc_files_active  = enc_files > 10   # actively encrypting but not done
-        ldr_threshold_low = 30               # ldr only drops this low after process exit
-    elif family == "Cerber":
-        # Cerber: ldr_anomaly sits at ~60 throughout (never rises above 100),
-        # so the default ldr_threshold_low=100 always fires ldr_settled=True.
-        # Cerber encrypts file contents in-place -- enc_files stays flat at ~14
-        # across all stages, so file count can't gate post-enc either.
-        # Key discriminators:
-        #   - malfind_count ~11-13 during stages 1-2, drops to ~3 at stage 3
-        #   - ldr_anomaly < 20 only at genuine post-enc (T090)
-        # Use malfind as the injection-active proxy and ldr < 20 as settled.
-        has_enc_artifacts = enc_files > 5 or ransom_notes > 0
-        enc_files_active  = enc_files > 5
-        ldr_threshold_low = 20               # ldr drops to ~10 only at true post-enc
-    else:
-        # Default (WannaCry, Benign)
-        has_enc_artifacts = enc_files > 3 or ransom_notes > 0
-        enc_files_active  = enc_files > 3
-        ldr_threshold_low = 100  # Universal signal settles below this
-
-    ldr_active  = ldr_anomaly >= ldr_threshold_low   # injection still running
-    ldr_settled = ldr_anomaly < ldr_threshold_low    # injection done / process exited
-
-    # Stage determination
+    # Injection proxy: malfind_rwx_ratio (consistency=0.75) is more reliable than
+    # raw ldr_anomaly (consistency=0.5, range 20-434 across families). Combined with
+    # ldr_per_proc (ldr normalised by process count) as a secondary check.
     #
     # Priority order (most specific first):
-    #   3 -- post-enc:    large enc artifact count AND injection fully settled
-    #   2 -- active enc:  enc artifacts visible AND injection still active
+    #   3 -- post-enc:    encryption artifacts present AND injection fully settled
+    #   2 -- active enc:  encryption artifacts or active file writes + injection running
     #   1 -- pre-enc:     ransomware active (injection/handles/privs) but files intact
     #   0 -- benign:      no significant ransomware activity
     #
-    # Benign machines always get stage 0 -- they have no ransomware lifecycle.
-    # The universal thresholds (priv_enabled > 1000, malfind > 2, etc.) are set
-    # to catch early ransomware activity but normal Windows machines also exceed
-    # them, so we skip the heuristic entirely for the Benign family.
+    rwx_ratio    = features.get("malfind_rwx_ratio", 0)
+    ldr_per_proc = ldr_anomaly / max(pslist_count, 1)
+
+    has_enc_artifacts = enc_files > 3 or ransom_notes > 0
+    enc_files_active  = enc_files > 3
+    # Injection active: rwx elevated OR ldr meaningfully above per-process baseline.
+    # Threshold 0.30 verified empirically: Cerber min=0.69, Dharma/WannaCry mean=0.65-0.78
+    # at stages 1-2. ldr_per_proc > 0.35 catches samples where rwx briefly drops to 0.
+    ldr_active  = rwx_ratio > 0.30 or ldr_per_proc > 0.35
+    # Injection settled: ALL three signals agree process has fully exited.
+    # From data (Dharma/WannaCry stage 3): rwx=0.0, ldr_per_proc max=0.34,
+    # malfind_count ≤ 1 (process winding down — one residual hit allowed).
+    # malfind <= 1 (not == 0) because some Dharma post-enc snapshots have one
+    # remaining malfind entry as the process fully exits.
+    #
+    # Note: Cerber's rwx_ratio stays at ~1.0 throughout its lifecycle including
+    # post-enc — its injected code remains resident after encryption completes.
+    # This means Cerber post-enc is universally indistinguishable from active-enc
+    # via memory signals; Cerber stays in stage 2 rather than advancing to stage 3.
+    ldr_settled = (
+        rwx_ratio   == 0.0 and
+        ldr_per_proc < 0.35 and
+        features.get("malfind_count", 0) <= 1
+    )
+
     if family == "Benign":
         behavior_stage = 0
+
+    elif family == "WannaCry":
+        # WannaCry-specific rules derived empirically from stage distributions:
+        #   Stage 1 (pre-enc):   enc_files ≤ 2, ldr_per_proc > 2.0
+        #     — WannaCry does a massive injection burst (ldr_per_proc mean=7.1, min=0.35)
+        #       before a single file is encrypted. enc_files stays at 1-2 during this window.
+        #   Stage 2 (active enc): enc_files > 2 AND malfind_rwx_ratio > 0
+        #     — Encryption running; rwx stays elevated (mean=0.65) throughout.
+        #   Stage 3 (post-enc):  malfind_rwx_ratio == 0 AND ldr_per_proc < 0.35
+        #     — Process exited; rwx drops to exactly 0.0 (no overlap with active enc).
+        if rwx_ratio == 0.0 and ldr_per_proc < 0.35:
+            behavior_stage = 3
+        elif enc_files > 2 and rwx_ratio > 0.0:
+            behavior_stage = 2
+        elif enc_files <= 2 and ldr_per_proc > 2.0:
+            behavior_stage = 1
+        elif universal_preenc:
+            behavior_stage = 1
+        else:
+            behavior_stage = 0
+
     elif has_enc_artifacts and ldr_settled:
         behavior_stage = 3          # post-encryption: done encrypting, injection gone
     elif (has_enc_artifacts or enc_files_active) and (universal_active or ldr_active):
@@ -931,13 +939,45 @@ def process_snapshot(snap_dir, use_cache=True):
         return min(val / peak, 2.0) if peak > 0 else 0.0
 
     # Injection / memory-anomaly signal — peaks at stages 1–2.
-    # Uses Tier-1 malfind feature plus the strongest majority ldrmodules signals.
-    inj_malfind = _norm(features.get("malfind_avg_regions_per_process", 0), 2.8)
+    # Components selected for cross-family consistency (from universal_feature_set.csv):
+    #   inj_ldr     — ldrmodules_not_in_load    (consistency=0.5, mean peak=434)
+    #   inj_rwx     — malfind_rwx_ratio         (consistency=0.75, mean peak=0.812)
+    #   inj_rwx_cnt — malfind_rwx_region_count  (consistency=0.5, mean peak=6.5)
+    #   inj_vad_rwx — vad_rwx_region_count      (consistency=0.5, mean peak=18.1)
+    #   inj_cmd     — cmdline_suspicious_count  (consistency=0.75, highest wtd score=0.786)
+    # malfind_avg_regions_per_process (consistency=0.5) replaced by malfind_rwx_ratio (0.75).
     inj_ldr     = _norm(features.get("ldrmodules_not_in_load", 0), 434.0)
-    inj_rwx     = _norm(features.get("malfind_rwx_region_count", 0), 6.5)
+    inj_rwx     = _norm(features.get("malfind_rwx_ratio", 0), 0.812)
+    inj_rwx_cnt = _norm(features.get("malfind_rwx_region_count", 0), 6.5)
     inj_vad_rwx = _norm(features.get("vad_rwx_region_count", 0), 18.1)
+    inj_cmd     = _norm(features.get("cmdline_suspicious_count", 0), 1.792)
     features["signal_injection_score"] = round(
-        (inj_malfind + inj_ldr + inj_rwx + inj_vad_rwx) / 4.0, 4
+        (inj_ldr + inj_rwx + inj_rwx_cnt + inj_vad_rwx + inj_cmd) / 5.0, 4
+    )
+
+    # Process/handle activity signal — peaks at stages 1–3.
+    # Built from the 4 handle-type universal stable signals (consistency=1.0,
+    # CV<0.5) from report.txt. All are ransomware_higher with strong Cohen's d.
+    # Mean peak denominators from the universal_feature_set analysis.
+    proc_hsect  = _norm(features.get("handle_section_count", 0),  1127.01)
+    proc_hthrd  = _norm(features.get("handle_thread_count", 0),   1676.07)
+    proc_hevent = _norm(features.get("handle_event_count", 0),    9805.15)
+    proc_htimer = _norm(features.get("handle_timer_count", 0),     892.07)
+    features["signal_process_score"] = round(
+        (proc_hsect + proc_hthrd + proc_hevent + proc_htimer) / 4.0, 4
+    )
+
+    # Benign-separability signal — high when behaviour matches ransomware, not benign.
+    # Features selected from [BENIGN SEPARABILITY] in report.txt (ransomware_higher
+    # direction only) to give the model a pre-combined FPR-reduction signal.
+    #   handle_mutex_count:        d_sep=4.48, ransom_mean=832  vs benign_mean=696
+    #   pslist_wow64_count:        d_sep=2.43, ransom_mean=3.39 vs benign_mean=1.41
+    #   ldrmodules_avg_per_process:d_sep=3.17, ransom_mean=20.9 vs benign_mean=10.4
+    sep_mutex   = _norm(features.get("handle_mutex_count", 0),            832.0)
+    sep_wow64   = _norm(features.get("pslist_wow64_count", 0),              3.39)
+    sep_ldrmod  = _norm(features.get("ldrmodules_avg_per_process", 0),     20.90)
+    features["signal_benign_sep_score"] = round(
+        (sep_mutex + sep_wow64 + sep_ldrmod) / 3.0, 4
     )
 
     # Encryption-artifact signal — peaks at stages 2–3.
@@ -950,21 +990,17 @@ def process_snapshot(snap_dir, use_cache=True):
         (enc_files + enc_notes + enc_handle) / 3.0, 4
     )
 
-    # Tier-1 composite — weighted sum of the 7 gold universal features.
-    # Weights are the weighted_score values from universal_feature_set.csv.
-    # For benign_higher features the signal is the *deficit* from the benign mean
-    # (ransomware has fewer VAD/handle entries than benign at peak).
-    _t1_malfind  = _norm(features.get("malfind_avg_regions_per_process", 0), 2.8)  * 0.409
-    _t1_vad_tot  = _norm(max(18614 - features.get("vad_total", 18614), 0), 1793)   * 0.041
-    _t1_vad_exec = _norm(max(6053 - features.get("vad_exec_count", 6053), 0), 399) * 0.049
-    _t1_hproc    = _norm(max(904 - features.get("handle_process_count", 904), 0), 37) * 0.056
-    _t1_hdesk    = _norm(features.get("handle_desktop_count", 0), 78.0)             * 0.085
-    _t1_vpid     = _norm(max(98 - features.get("vad_pid_count", 98), 0), 5)         * 0.055
-    _t1_vppid    = _norm(max(97 - features.get("vad_private_pid_count", 97), 0), 5) * 0.055
-    features["tier1_composite"] = round(
-        _t1_malfind + _t1_vad_tot + _t1_vad_exec + _t1_hproc +
-        _t1_hdesk + _t1_vpid + _t1_vppid, 4
-    )
+    # Tier-1 composite — weighted sum of the 3 confirmed gold universal features.
+    # From analysis_output/report.txt (Jigsaw-excluded, behavior_stage col):
+    #   dlllist_unusual_path_ratio:     consistency=1.0, d_sep=7.59, benign_higher
+    #   dlllist_unusual_path_hit_count: consistency=1.0, d_sep=1.88, peak=43.36
+    #   pslist_avg_threads:             consistency=1.0, d_sep=1.22, peak=13.45
+    # Weights normalised from d_sep values (7.59+1.88+1.22=10.69).
+    # dlllist_unusual_path_ratio is benign_higher — signal is the *deficit* from benign mean (~0.02).
+    _t1_dllpath = _norm(max(0.02 - features.get("dlllist_unusual_path_ratio", 0.02), 0), 0.01) * 0.710
+    _t1_dllhit  = _norm(features.get("dlllist_unusual_path_hit_count", 0), 43.36)              * 0.176
+    _t1_threads = _norm(features.get("pslist_avg_threads", 0), 13.45)                          * 0.114
+    features["tier1_composite"] = round(_t1_dllpath + _t1_dllhit + _t1_threads, 4)
 
     row = {
         "family":           meta.get("family", ""),

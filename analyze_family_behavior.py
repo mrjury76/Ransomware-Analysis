@@ -50,24 +50,51 @@ STAGE_NAMES = {
     3: "Post-Enc",
 }
 
-# Features known to always be zero / broken in the dataset — skip them
-# (annotated in extract_features.py with "always 0")
+# Features confirmed zero importance across all feature_importance.csv runs — skip them.
+# Kept in sync with DEAD_FEATURES in train_stage_model.py.
 DEAD_FEATURES = {
+    # ── Structural: col missing from vol3 CSV output ──────────────────────
     "pslist_avg_handles",
-    "pslist_avg_runtimes",
-    "pslist_max_runtimes",
+
+    # ── cmdline -- regex patterns never fire on current captures ──────────
     "cmdline_sus_args_count",
     "cmdline_script_exec_count",
-    "cmdline_encoded_count",
-    "cmdline_ransom_indicators",
-    "cmdline_encoded_ratio",
     "cmdline_script_exec_ratio",
+    "cmdline_ransom_indicators",
+    "cmdline_encoded_count",
+    "cmdline_encoded_ratio",
+
+    # ── ldrmodules -- hidden-module detection not working in vol3 ─────────
     "ldrmodules_hidden_count",
     "ldrmodules_hidden_ratio",
+
+    # ── VAD -- Size col missing from vol3 vadinfo CSV ─────────────────────
+    "vad_avg_total_mem_per_process",
+    "vad_max_total_mem_per_process",
+    "vad_avg_max_region_size_per_process",
+
+    # ── malfind -- disasm/hexdump parsing yields no signal ────────────────
+    "malfind_shellcode_regions",
+    "malfind_mz_regions",
+
+    # ── netstat -- columns removed, never populated, or zero separation ───
     "netstat_suspicious_port_ratio",
     "netstat_suspicious_port_hit_count",
-    "malfind_mz_regions",       # always 0 in practice
-    "malfind_shellcode_regions", # always 0 in practice
+    "netstat_suspicious_port_pid_count",
+    "netstat_pid_count",
+    "netstat_tcp_pid_count",
+    "netstat_udp_pid_count",
+    "netstat_established_pid_count",
+    "netstat_listening_pid_count",
+    "netstat_avg_connections_per_process",
+    "netstat_max_connections_per_process",
+    "netstat_avg_unique_ips_per_process",
+    "netstat_outbound_pid_count",
+    "netstat_listening",              # Cohen's d=0 all families — zero FPR separation
+
+    # ── dlllist -- zero importance across all runs ────────────────────────
+    "dlllist_crypto_dlls",
+    "dlllist_crypto_pid_count",
 }
 
 # Features to focus on in heatmaps (high-importance, interpretable signals)
@@ -108,14 +135,17 @@ FOCUS_FEATURES = [
 
 def load_data(csv_path):
     df = pd.read_csv(csv_path, low_memory=False)
-    print(f"[+] Loaded {len(df)} rows, {df.shape[1]} columns from {csv_path}")
+    before = len(df)
+    df = df[df["family"] != "Jigsaw"]
+    print(f"[+] Loaded {len(df)} rows, {df.shape[1]} columns from {csv_path}"
+          f"  (Jigsaw excluded: {before - len(df)} rows dropped)")
     return df
 
 
 def get_feat_cols(df):
     meta = {"family", "stage_hint", "behavior_stage", "actual_offset_s",
             "target_offset_s", "rep", "run", "snap_name", "snap_dir",
-            "stage_binary"}
+            "behaviour_binary"}
     cols = [c for c in df.columns
             if c not in meta
             and c not in DEAD_FEATURES
@@ -627,10 +657,133 @@ def check_behavior_stage_alignment(df, out_dir):
         print("  " + top.to_string(index=False).replace("\n", "\n  "))
 
 
+# ── LOO benign FPR analysis ───────────────────────────────────────────────────
+
+def analyze_benign_loo_fpr(df, feat_cols, stage_col, out_dir, per_fam_peak):
+    """
+    Investigates why LOO produces ~99% benign FPR.
+
+    For each ransomware family (as the LOO held-out family) we ask: how well
+    does each feature separate *benign* from that specific family at peak stage?
+    Features with low Cohen's d for a specific family are the ones causing the
+    model to confuse benign with that family's training signal.
+
+    Also computes a per-feature FPR risk score: features where benign falls
+    inside the distribution of MULTIPLE families are the root cause of the
+    cross-family FPR collapse.
+
+    Outputs:
+      loo_benign_overlap.csv              per-(family, feature) Cohen's d + overlap %
+      fpr_risk_features.csv               features ranked by multi-family overlap risk
+      benign_separability_per_family.png  heatmap: features x families, colour=Cohen's d
+    """
+    stage_name_inv = {v: k for k, v in STAGE_NAMES.items()}
+    ransom_fams    = [f for f in df["family"].unique() if f != "Benign"]
+    benign_df      = df[df["family"] == "Benign"]
+
+    if benign_df.empty:
+        print("  [skip] No Benign rows found")
+        return None, None
+
+    records = []
+    for fam in ransom_fams:
+        fam_df = df[df["family"] == fam]
+
+        # Use the family's peak stage for raw data
+        peak_label    = per_fam_peak.get(fam)
+        peak_stage_idx = stage_name_inv.get(peak_label)
+        if peak_stage_idx is not None and stage_col in fam_df.columns:
+            fam_peak = fam_df[fam_df[stage_col] == peak_stage_idx]
+        else:
+            fam_peak = fam_df
+        if len(fam_peak) < 3:
+            continue
+
+        for feat in feat_cols:
+            if feat not in fam_peak.columns or feat not in benign_df.columns:
+                continue
+            fam_vals = fam_peak[feat].dropna().values.astype(float)
+            ben_vals = benign_df[feat].dropna().values.astype(float)
+            if len(fam_vals) < 2 or len(ben_vals) < 2:
+                continue
+
+            # Cohen's d using pooled std
+            pooled_std = np.sqrt((np.std(fam_vals) ** 2 + np.std(ben_vals) ** 2) / 2)
+            d = abs(np.mean(fam_vals) - np.mean(ben_vals)) / (pooled_std + 1e-9)
+
+            # Fraction of benign samples that fall within 1 std of this family's mean
+            fam_mean = np.mean(fam_vals)
+            fam_std  = np.std(fam_vals)
+            overlap_pct = float(np.mean(
+                (ben_vals >= fam_mean - fam_std) & (ben_vals <= fam_mean + fam_std)
+            ))
+
+            records.append({
+                "family":            fam,
+                "feature":           feat,
+                "fam_mean":          round(float(np.mean(fam_vals)), 4),
+                "benign_mean":       round(float(np.mean(ben_vals)), 4),
+                "cohens_d":          round(float(d), 4),
+                "benign_overlap_pct": round(overlap_pct, 4),
+            })
+
+    if not records:
+        print("  [skip] Insufficient data for LOO benign FPR analysis")
+        return None, None
+
+    loo_df = pd.DataFrame(records)
+    loo_df.to_csv(os.path.join(out_dir, "loo_benign_overlap.csv"), index=False)
+    print(f"  [saved] loo_benign_overlap.csv  ({len(loo_df)} family-feature pairs)")
+
+    # Per-feature risk: features where benign is inside multiple family distributions
+    n_fams = len(ransom_fams)
+    risk_df = (
+        loo_df.groupby("feature")
+        .agg(
+            mean_cohens_d        =("cohens_d",          "mean"),
+            min_cohens_d         =("cohens_d",          "min"),
+            worst_family         =("cohens_d",          lambda x: loo_df.loc[x.index, "family"].iloc[x.values.argmin()]),
+            n_families_overlapping=("benign_overlap_pct", lambda x: int((x > 0.3).sum())),
+            mean_overlap_pct     =("benign_overlap_pct", "mean"),
+        )
+        .reset_index()
+    )
+    risk_df["fpr_risk_score"] = (
+        risk_df["n_families_overlapping"] / n_fams +
+        (1.0 / (risk_df["min_cohens_d"] + 0.1))
+    )
+    risk_df = risk_df.sort_values("fpr_risk_score", ascending=False)
+    risk_df.to_csv(os.path.join(out_dir, "fpr_risk_features.csv"), index=False)
+    print(f"  [saved] fpr_risk_features.csv  ({len(risk_df)} features ranked by FPR risk)")
+
+    # Heatmap: feature rows x family cols, colour = Cohen's d
+    pivot = loo_df.pivot(index="feature", columns="family", values="cohens_d").fillna(0)
+    pivot = pivot.loc[pivot.mean(axis=1).sort_values().index]  # worst at top
+    pivot_plot = pivot.head(35)
+
+    fig, ax = plt.subplots(figsize=(max(6, len(ransom_fams) * 1.8),
+                                    min(22, len(pivot_plot) * 0.45 + 2)))
+    im = ax.imshow(pivot_plot.values, aspect="auto", cmap="RdYlGn",
+                   vmin=0, vmax=3, interpolation="nearest")
+    ax.set_xticks(range(len(pivot_plot.columns)))
+    ax.set_xticklabels(pivot_plot.columns, rotation=30, ha="right", fontsize=9)
+    ax.set_yticks(range(len(pivot_plot.index)))
+    ax.set_yticklabels(pivot_plot.index, fontsize=7)
+    ax.set_title(
+        "Benign vs family Cohen's d at peak stage (top 35 worst-separated features)\n"
+        "Red = low separation = LOO benign FPR risk", fontsize=10
+    )
+    plt.colorbar(im, ax=ax, fraction=0.03, pad=0.04, label="Cohen's d")
+    plt.tight_layout()
+    save_fig(fig, os.path.join(out_dir, "benign_separability_per_family.png"))
+
+    return loo_df, risk_df
+
+
 # ── text report ───────────────────────────────────────────────────────────────
 
 def write_report(sig_df, sim_df, sep_df, univ_df, families, out_dir,
-                 stage_col, per_fam_peak):
+                 stage_col, per_fam_peak, risk_df=None):
     ransom_fams = [f for f in families if f != "Benign"]
     n_ransom = len(ransom_fams)
 
@@ -719,6 +872,26 @@ def write_report(sig_df, sim_df, sep_df, univ_df, families, out_dir,
             lines.append(f"\n  Most similar  : {pairs[0][0]} <-> {pairs[0][1]}  ({pairs[0][2]:.3f})")
             lines.append(f"  Least similar : {pairs[-1][0]} <-> {pairs[-1][1]}  ({pairs[-1][2]:.3f})")
 
+    # ── LOO benign FPR analysis ────────────────────────────────────────────
+    if risk_df is not None and not risk_df.empty:
+        lines.append(f"\n[BENIGN LOO FPR ANALYSIS]")
+        lines.append(f"  Why does LOO produce ~99% benign FPR?")
+        lines.append(f"  Features below are ranked by FPR risk: low Cohen's d means benign")
+        lines.append(f"  overlaps with one or more ransomware family distributions,")
+        lines.append(f"  causing the LOO model to label benign as ransomware.")
+        lines.append(f"\n  {'Feature':<45} {'MinCohenD':>10} {'WorstFamily':>14} {'FamiliesOverlap':>16} {'MeanOverlap%':>13}")
+        lines.append("  " + "-" * 102)
+        for _, r in risk_df.head(20).iterrows():
+            lines.append(
+                f"  {r['feature']:<45} {r['min_cohens_d']:>10.3f}"
+                f" {r['worst_family']:>14} {r['n_families_overlapping']:>16}"
+                f" {r['mean_overlap_pct']:>13.1%}"
+            )
+        lines.append(f"\n  Features with Cohen's d < 0.5 for ANY family are actionable gaps —")
+        lines.append(f"  the model cannot distinguish benign from that family on those features.")
+        n_gaps = int((risk_df["min_cohens_d"] < 0.5).sum())
+        lines.append(f"  Total actionable gaps: {n_gaps} features")
+
     lines.append("\n" + "=" * 70)
 
     report_path = os.path.join(out_dir, "report.txt")
@@ -734,7 +907,7 @@ def main():
     parser = argparse.ArgumentParser(description="Per-family behavioral profiling and cross-family similarity")
     parser.add_argument("--csv",       default=DEFAULT_CSV, help="Path to features.csv")
     parser.add_argument("--out",       default=DEFAULT_OUT, help="Output directory")
-    parser.add_argument("--stage-col", default="stage_hint",
+    parser.add_argument("--stage-col", default="behavior_stage",
                         choices=["stage_hint", "behavior_stage"],
                         help="Which stage column to use for grouping")
     parser.add_argument("--peak",      default=2, type=int,
@@ -801,10 +974,14 @@ def main():
             top_signals.append(must_have)
     plot_stage_trajectories(profiles, families, args.out, top_signals)
 
+    # ── LOO benign FPR analysis ────────────────────────────────────────────
+    print("\n[9] Analysing benign LOO FPR root cause...")
+    _, risk_df = analyze_benign_loo_fpr(df, feat_cols, args.stage_col, args.out, per_fam_peak)
+
     # ── write report ───────────────────────────────────────────────────────
-    print("\n[9] Writing text report...")
+    print("\n[10] Writing text report...")
     write_report(sig_df, sim_df, sep_df, univ_df, families, args.out,
-                 args.stage_col, per_fam_peak)
+                 args.stage_col, per_fam_peak, risk_df=risk_df)
 
     print(f"\n{'=' * 60}")
     print(f" Analysis complete")

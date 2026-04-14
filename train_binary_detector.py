@@ -44,7 +44,7 @@ except ImportError:
 # Columns to drop — metadata, not forensic features
 DROP_COLS = {
     "family", "label",
-    "stage_hint", "stage_binary", "behavior_stage",
+    "stage_hint", "behaviour_binary", "behavior_stage",
     "actual_offset_s", "target_offset_s",
     "rep", "run", "snap_name", "snap_dir",
 }

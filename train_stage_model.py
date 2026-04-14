@@ -5,7 +5,7 @@ Trains a family-agnostic ransomware stage classifier from features.csv.
 
 Primary label:  behavior_stage  (0=benign/dormant, 1=pre-enc active, 2=active encryption, 3=post-encryption)
                 Grounded in memory evidence -- not collection-time clock labels.
-Secondary label: stage_binary   (0=early/benign, 1=active/post-enc) -- collapsed behavior label.
+Secondary label: behaviour_binary (0=early/benign, 1=active/post-enc) -- collapsed behavior label.
 Reference only:  stage_hint     (time-based clock label -- kept in CSV but NOT trained on)
 
 Tests three scenarios:
@@ -69,7 +69,8 @@ STAGE_NAMES_TIME = {
 STAGE_NAMES_BEHAVIOR = {
     0: "Benign/Dormant",
     1: "Pre-Encryption",
-    2: "Encryption Active/Post",
+    2: "Active Encryption",
+    3: "Post-Encryption",
 }
 
 STAGE_NAMES_EARLY_LATE = {
@@ -81,7 +82,7 @@ STAGE_NAMES_EARLY_LATE = {
 DROP_COLS = {
     "family",           # don't let the model use family identity
     "stage_hint",       # time-based label
-    "stage_binary",     # collapsed time-based label (0+1 -> 0, 2+3 -> 1)
+    "behaviour_binary",     # collapsed time-based label (0+1 -> 0, 2+3 -> 1)
     "behavior_stage",   # behavior-based label
     "actual_offset_s",  # time since launch -- not available in real detection
     "target_offset_s",
@@ -109,7 +110,7 @@ BEHAVIOR_LEAKAGE_COLS = {
 }
 
 # Features that act as shortcuts to the ransomware stage (late-stage indicators).
-# Dropped during stage_hint / stage_binary training to avoid trivial leakage.
+# Dropped during stage_hint / behaviour_binary training to avoid trivial leakage.
 STAGE_SHORTCUT_COLS = {
     "filescan_encrypted",
     "filescan_ransom_notes",
@@ -121,36 +122,43 @@ STAGE_SHORTCUT_COLS = {
     "handle_eky_count",
     "handle_fun_count",
     "filescan_encrypted_ratio",
+    "signal_encryption_score",  # composite of encrypted file counts — defines class boundary
 }
 
-# Features that contributed zero importance across all models, or that have
-# high between-family variance relative to between-stage variance (family-specific
-# noise that hurts cross-family generalization).
+# Features confirmed zero importance across all 47 feature_importance.csv files
+# (runs 10-26, all labels). Empirically dead — not guesses.
+#
+# Inconsistent features (non-zero in some runs) are commented out below —
+# leave them in the model until there's a clear reason to drop them.
 DEAD_FEATURES = {
-    # pslist -- Handles/CreateTime/ExitTime cols missing from vol3 CSV
-    "pslist_avg_handles",
-    "pslist_max_runtimes",
-    "pslist_avg_runtimes",
-    # cmdline -- patterns never fire on current data
+    # ── Structural: col missing from vol3 CSV output ──────────────────────
+    "pslist_avg_handles",           # Handles col absent from pslist plugin
+
+    # ── cmdline -- regex patterns never fire on current captures ──────────
     "cmdline_sus_args_count",
     "cmdline_script_exec_count",
+    "cmdline_script_exec_ratio",
     "cmdline_ransom_indicators",
     "cmdline_encoded_count",
-    "cmdline_script_exec_ratio",
     "cmdline_encoded_ratio",
-    # ldrmodules -- hidden detection not working in vol3
+
+    # ── ldrmodules -- hidden-module detection not working in vol3 ─────────
     "ldrmodules_hidden_count",
     "ldrmodules_hidden_ratio",
-    # VAD -- Size col missing from vol3 vadinfo CSV
+
+    # ── VAD -- Size col missing from vol3 vadinfo CSV ─────────────────────
     "vad_avg_total_mem_per_process",
     "vad_max_total_mem_per_process",
     "vad_avg_max_region_size_per_process",
-    # malfind -- disasm/hexdump parsing not yielding signal
+
+    # ── malfind -- disasm/hexdump parsing yields no signal ────────────────
     "malfind_shellcode_regions",
     "malfind_mz_regions",
-    # network -- old columns removed from feat_netstat
+
+    # ── netstat -- columns removed or never populated ─────────────────────
     "netstat_suspicious_port_ratio",
     "netstat_suspicious_port_hit_count",
+    "netstat_suspicious_port_pid_count",
     "netstat_pid_count",
     "netstat_tcp_pid_count",
     "netstat_udp_pid_count",
@@ -160,15 +168,20 @@ DEAD_FEATURES = {
     "netstat_max_connections_per_process",
     "netstat_avg_unique_ips_per_process",
     "netstat_outbound_pid_count",
-    # dlllist -- high family-CV, low stage-CV (family-specific noise)
+    "netstat_listening",              # Cohen's d=0 all families — zero FPR separation
+
+    # ── dlllist -- zero importance across all runs ────────────────────────
     "dlllist_crypto_dlls",
     "dlllist_crypto_pid_count",
-    "dlllist_total",
-    "dlllist_non_system",
-    "dlllist_unique_dlls",
-    # cmdline -- family-specific text patterns, not stage-discriminative
-    "cmdline_avg_length",
-    "cmdline_max_length",
+
+    # ── Inconsistent (non-zero in some runs — keep in model for now) ──────
+    # "pslist_max_runtimes",        # non-zero in a few runs
+    # "pslist_avg_runtimes",        # non-zero in a few runs
+    # "dlllist_total",              # confirmed universal stable signal (report.txt) — keep
+    # "dlllist_non_system",         # family-CV noise but occasional importance
+    # "dlllist_unique_dlls",        # confirmed universal stable signal (report.txt) — keep
+    # "cmdline_avg_length",         # some signal in certain label configs
+    # "cmdline_max_length",         # confirmed universal stable signal (report.txt) — keep
 }
 
 
@@ -185,6 +198,12 @@ def load_data(features_csv):
     if missing:
         raise ValueError(f"features.csv is missing columns: {missing}")
 
+    # Jigsaw excluded: executes but produces near-zero encrypted file artifacts
+    # (mean 0.61 files, zero ransom notes), so behavior_stage labels 2/3 are
+    # assigned via injection signals alone — inconsistent with all other families.
+    # Valid for binary malware detection but not stage classification.
+    df = df[df["family"] != "Jigsaw"]
+
     print(f"[+] Loaded {len(df)} rows, {len(df.columns)} columns")
     print(f"    Families : {sorted(df['family'].unique())}")
     print(f"    Behavior stages : {sorted(df['behavior_stage'].unique())}")
@@ -194,8 +213,8 @@ def load_data(features_csv):
     if "stage_hint" in df.columns:
         print(f"    Stage hint (reference): {sorted(df['stage_hint'].unique())}")
 
-    # stage_binary: collapsed behavior label -- 0 (benign/pre-enc) vs 1 (active/post-enc)
-    df["stage_binary"] = (df["behavior_stage"].astype(int) >= 2).astype(int)
+    # behaviour_binary: collapsed behavior label -- 0 (benign/pre-enc) vs 1 (active/post-enc)
+    df["behaviour_binary"] = (df["behavior_stage"].astype(int) >= 2).astype(int)
 
     return df
 
@@ -217,7 +236,7 @@ def prepare_xy(df, label_col="stage_hint", selected_features=None):
     drop = set(DROP_COLS) | DEAD_FEATURES
     if label_col == "behavior_stage":
         drop |= BEHAVIOR_LEAKAGE_COLS
-    if label_col in {"stage_hint", "stage_binary"}:
+    if label_col in {"stage_hint", "behaviour_binary"}:
         drop |= STAGE_SHORTCUT_COLS
     if selected_features:
         feat_cols = [c for c in selected_features if c in df.columns and c not in drop]
@@ -1129,7 +1148,7 @@ def _save_confusion_matrix(y_true, y_pred, labels, names, path, title="", normal
 
     cm_raw = confusion_matrix(y_true, y_pred, labels=labels)
     ConfusionMatrixDisplay(cm_raw, display_labels=names).plot(
-        ax=axes[0], colorbar=False, cmap="Blues"
+        ax=axes[0], colorbar=False, cmap="GnBu"
     )
     axes[0].set_title(f"{title} -- counts")
     axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=20, ha="right")
@@ -1138,7 +1157,7 @@ def _save_confusion_matrix(y_true, y_pred, labels, names, path, title="", normal
         cm_norm = confusion_matrix(y_true, y_pred, labels=labels, normalize="true")
         ConfusionMatrixDisplay(
             np.round(cm_norm, 2), display_labels=names
-        ).plot(ax=axes[1], colorbar=False, cmap="Blues")
+        ).plot(ax=axes[1], colorbar=False, cmap="GnBu")
         axes[1].set_title(f"{title} -- recall (row-normalized)")
         axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=20, ha="right")
 
@@ -1195,7 +1214,7 @@ def main():
                         choices=["family", "instance", "both", "none"],
                         help="Cross-validation mode: 'family' (LOO), 'instance' (LOIO), 'both', or 'none'")
     parser.add_argument("--label",    default="all",
-                        choices=["stage_hint", "stage_binary", "behavior_stage", "all"],
+                        choices=["stage_hint", "behaviour_binary", "behavior_stage", "all"],
                         help="Label column to use (default: all)")
     parser.add_argument("--top-features", default=None,
                         help="Path to a feature_importance.csv -- restrict training to its top N features")
@@ -1216,8 +1235,8 @@ def main():
     labels_to_run = []
     if args.label == "stage_hint":
         print("[~] stage_hint is a reference label only -- skipping training")
-    if args.label in ("stage_binary", "all"):
-        labels_to_run.append(("stage_binary", STAGE_NAMES_EARLY_LATE))
+    if args.label in ("behaviour_binary", "all"):
+        labels_to_run.append(("behaviour_binary", STAGE_NAMES_EARLY_LATE))
     if args.label in ("behavior_stage", "all"):
         if "behavior_stage" in df.columns:
             labels_to_run.append(("behavior_stage", STAGE_NAMES_BEHAVIOR))

@@ -128,7 +128,7 @@ model_results/
       cm_loo_WannaCry.png      # LOO confusion matrix per family
       report_loo_WannaCry.csv
       ...
-    stage_binary/
+    behaviour_binary/
       ...
     behavior_stage/
       ...
@@ -161,7 +161,7 @@ python3 train_stage_model.py --features features.csv --no-loo
 | `--features` | Yes | Path to `features.csv` |
 | `--out` | No | Output directory. Default: `model_output/` |
 | `--no-loo` | No | Skip leave-one-family-out evaluation |
-| `--label` | No | Which label to train on: `stage_hint`, `stage_binary`, `behavior_stage`, or `all` (default: `all`) |
+| `--label` | No | Which label to train on: `stage_hint`, `behaviour_binary`, `behavior_stage`, or `all` (default: `all`) |
 
 ---
 

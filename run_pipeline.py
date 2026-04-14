@@ -55,7 +55,7 @@ def main():
     parser.add_argument("--top-n",         type=int, default=20,
                         help="Number of top features to use when --top-features is set (default: 20)")
     parser.add_argument("--label",         default="all",
-                        choices=["stage_hint", "stage_binary", "behavior_stage", "all"],
+                        choices=["stage_hint", "behaviour_binary", "behavior_stage", "all"],
                         help="Which label(s) to train on (default: all)")
     args = parser.parse_args()
 
@@ -144,11 +144,15 @@ def main():
     print(f"[+] Found {len(snap_dirs)} snapshot(s)")
 
     rows = []
+    total_snaps = len(snap_dirs)
     for i, snap_dir_path in enumerate(sorted(snap_dirs), 1):
-        print(f"  [{i}/{len(snap_dirs)}] {snap_dir_path}")
+        pct = int(i / total_snaps * 40)
+        bar = "#" * pct + "-" * (40 - pct)
+        print(f"\r  [{bar}] {i}/{total_snaps}", end="", flush=True)
         row = extract_features.process_snapshot(snap_dir_path, use_cache=args.cache)
         if row:
             rows.append(row)
+    print()
 
     if not rows:
         print("[-] No feature rows extracted.")
@@ -196,7 +200,7 @@ def main():
     cv_mode      = "none" if args.no_loo else args.cv_mode
     models_used  = list(train_stage_model.get_models().keys())
     all_label_pairs = [("stage_hint",    train_stage_model.STAGE_NAMES_TIME),
-                       ("stage_binary",  train_stage_model.STAGE_NAMES_EARLY_LATE),
+                       ("behaviour_binary",  train_stage_model.STAGE_NAMES_EARLY_LATE),
                        ("behavior_stage",train_stage_model.STAGE_NAMES_BEHAVIOR)]
     label_pairs  = [(lc, sn) for lc, sn in all_label_pairs
                     if (args.label == "all" or args.label == lc) and lc in df.columns]
