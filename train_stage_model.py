@@ -97,8 +97,14 @@ DROP_COLS = {
 BEHAVIOR_LEAKAGE_COLS = {
     "filescan_encrypted",
     "filescan_ransom_notes",
+    "filescan_wncryt",
+    "filescan_fun",
+    "filescan_jigsaw_notes",
     "pslist_ransom_procs",
     "handle_encrypted_files",
+    "handle_wncryt_count",
+    "handle_eky_count",
+    "handle_fun_count",
     "filescan_encrypted_ratio",
 }
 
@@ -107,13 +113,19 @@ BEHAVIOR_LEAKAGE_COLS = {
 STAGE_SHORTCUT_COLS = {
     "filescan_encrypted",
     "filescan_ransom_notes",
+    "filescan_wncryt",
+    "filescan_fun",
+    "filescan_jigsaw_notes",
     "handle_encrypted_files",
+    "handle_wncryt_count",
+    "handle_eky_count",
+    "handle_fun_count",
     "filescan_encrypted_ratio",
 }
 
-# Features that contributed zero importance across all models in run10.
-# Either always-zero (network plugin not captured), always-constant, or
-# fully redundant with other columns. Dropping them reduces noise.
+# Features that contributed zero importance across all models, or that have
+# high between-family variance relative to between-stage variance (family-specific
+# noise that hurts cross-family generalization).
 DEAD_FEATURES = {
     # pslist -- Handles/CreateTime/ExitTime cols missing from vol3 CSV
     "pslist_avg_handles",
@@ -136,11 +148,27 @@ DEAD_FEATURES = {
     # malfind -- disasm/hexdump parsing not yielding signal
     "malfind_shellcode_regions",
     "malfind_mz_regions",
-    # network -- suspicious port list too narrow, never fires
+    # network -- old columns removed from feat_netstat
     "netstat_suspicious_port_ratio",
     "netstat_suspicious_port_hit_count",
-    # dlllist
+    "netstat_pid_count",
+    "netstat_tcp_pid_count",
+    "netstat_udp_pid_count",
+    "netstat_established_pid_count",
+    "netstat_listening_pid_count",
+    "netstat_avg_connections_per_process",
+    "netstat_max_connections_per_process",
+    "netstat_avg_unique_ips_per_process",
+    "netstat_outbound_pid_count",
+    # dlllist -- high family-CV, low stage-CV (family-specific noise)
     "dlllist_crypto_dlls",
+    "dlllist_crypto_pid_count",
+    "dlllist_total",
+    "dlllist_non_system",
+    "dlllist_unique_dlls",
+    # cmdline -- family-specific text patterns, not stage-discriminative
+    "cmdline_avg_length",
+    "cmdline_max_length",
 }
 
 
@@ -337,19 +365,9 @@ def run_standard_split(X, y, feat_cols, out_dir, stage_names=None, label_map=Non
         print(classification_report(y_test, preds, labels=present_stages,
                                     target_names=target_names, zero_division=0))
 
-        report_df = pd.DataFrame(
-            classification_report(y_test, preds, labels=present_stages,
-                                  target_names=target_names,
-                                  output_dict=True, zero_division=0)
-        ).T
-        report_df.to_csv(os.path.join(out_dir, f"report_standard_{name}.csv"))
-
         _save_confusion_matrix(y_test, preds, present_stages, target_names,
                                os.path.join(out_dir, f"cm_standard_{name}.png"),
                                title=f"Standard split -- {name}", normalize=True)
-
-        _save_calibration_plot(pipe, X_test, y_test, len(present_stages),
-                               os.path.join(out_dir, f"calibration_{name}.png"))
 
         if m["macro_f1"] > best_score:
             best_score, best_name, best_pipe = m["macro_f1"], name, pipe
@@ -473,20 +491,14 @@ def run_loo(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, la
             print(f"    [!] All models failed for {held_out} -- skipping outputs.")
             continue
 
-        # Per-model confusion matrix + report CSV for every model
-        for model_name, preds in fold_preds.items():
-            tag = "best" if model_name == best_name else ""
+        # Best-model confusion matrix only (one PNG per family)
+        if best_name and best_preds is not None:
             _save_confusion_matrix(
-                y_test, preds, present, names,
-                os.path.join(out_dir, f"loo_cm_{held_out}_{model_name}.png"),
-                title=f"LOO -- {held_out} -- {model_name}{' [best]' if tag else ''}",
+                y_test, best_preds, present, names,
+                os.path.join(out_dir, f"loo_cm_{held_out}.png"),
+                title=f"LOO -- {held_out} -- {best_name} [best]",
                 normalize=True,
             )
-            report_df = pd.DataFrame(
-                classification_report(y_test, preds, labels=present,
-                                      target_names=names, output_dict=True, zero_division=0)
-            ).T
-            report_df.to_csv(os.path.join(out_dir, f"loo_report_{held_out}_{model_name}.csv"))
 
     # ── Benign holdout: dedicated 80/20 split to measure real FPR ────────────────
     benign_fpr_by_model = {}
@@ -725,11 +737,6 @@ def run_loio(df, feat_cols, out_dir, label_col="stage_hint", stage_names=None, l
                 title=f"LOIO -- {fam} (all reps, {best_model_overall})",
                 normalize=True,
             )
-            report_df = pd.DataFrame(
-                classification_report(yt, yp, labels=present,
-                                      target_names=names, output_dict=True, zero_division=0)
-            ).T
-            report_df.to_csv(os.path.join(out_dir, f"loio_report_{fam}.csv"))
 
         print(f"  [done] Per-family confusion matrices + reports saved (model: {best_model_overall}).")
 
@@ -1114,43 +1121,6 @@ def _prediction_confidence(pipe, X_test):
         "conf_pct_50": round(float((conf >= 0.50).mean()), 4),
     }
 
-
-def _save_calibration_plot(pipe, X_test, y_test, n_classes, out_path):
-    """One-vs-rest calibration curves: predicted probability vs actual frequency.
-
-    Only drawn for models that support predict_proba.
-    """
-    model = pipe.named_steps["model"]
-    if not hasattr(model, "predict_proba"):
-        return
-    try:
-        proba = pipe.predict_proba(X_test)
-    except Exception:
-        return
-
-    from sklearn.calibration import calibration_curve
-
-    fig, ax = plt.subplots(figsize=(7, 6))
-    ax.plot([0, 1], [0, 1], "k--", label="Perfect calibration")
-
-    for cls_idx in range(min(n_classes, proba.shape[1])):
-        binary_y = (np.asarray(y_test) == cls_idx).astype(int)
-        if binary_y.sum() == 0:
-            continue
-        try:
-            frac_pos, mean_pred = calibration_curve(binary_y, proba[:, cls_idx], n_bins=10)
-            ax.plot(mean_pred, frac_pos, marker="o", label=f"Class {cls_idx}")
-        except Exception:
-            continue
-
-    ax.set_xlabel("Mean predicted probability")
-    ax.set_ylabel("Fraction of positives")
-    ax.set_title("Calibration curves (one-vs-rest)")
-    ax.legend(fontsize=8)
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=120)
-    plt.close()
-    print(f"  [done] Saved: {out_path}")
 
 
 def _save_confusion_matrix(y_true, y_pred, labels, names, path, title="", normalize=False):

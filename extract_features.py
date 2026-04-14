@@ -43,6 +43,7 @@ SYSTEM_DLL_PATHS = {"\\windows\\system32", "\\windows\\syswow64",
 
 CRYPTO_LIBS = {"bcrypt.dll", "crypt32.dll", "ncrypt.dll", "advapi32.dll"}
 SUSPICIOUS_PORTS = {4444, 1337, 8080, 9001}
+SMB_PORT = 445  # WannaCry uses SMB (EternalBlue) for lateral movement
 
 # Crypto-related DLLs (loading these indicates cryptographic setup)
 CRYPTO_DLLS = {"advapi32.dll", "crypt32.dll", "bcrypt.dll", "ncrypt.dll",
@@ -66,9 +67,20 @@ RANSOM_NOTE_NAMES = {"@please_read_me@", "readme_for_decrypt", "_readme_",
                      "decrypt_instruction", "your_files_are_encrypted",
                      "recover_your_files"}
 
-# Process names that indicate ransomware pre-encryption behavior
+# Process names that indicate ransomware pre-encryption behavior (family-agnostic)
 RANSOM_PROCESS_NAMES = {"vssadmin.exe", "wbadmin.exe", "bcdedit.exe",
                         "wmic.exe"}
+
+# WannaCry-specific process names (truncated to 15 chars as stored in pslist)
+WANNACRY_PROCESS_NAMES = {"wannacry.exe", "@wanadecryptor", "taskhsvc.exe",
+                          "tasksche.exe", "mssecsvc.exe"}
+
+# WannaCry-specific file substrings in handles/filescan
+WANNACRY_FILE_MARKERS = {"wncryt", ".eky", ".dky", "@wanadecryptor"}
+
+# Jigsaw-specific ransom note substrings (matched against basename only)
+JIGSAW_NOTE_NAMES = {"your_files_have_been_encrypted", "we_have_your_files",
+                     "read_it.txt"}
 
 
 def read_csv(path):
@@ -168,7 +180,8 @@ def feat_pslist(rows):
     child_values = list(child_counts.values())
     hidden_parent_count = sum(1 for ppid in child_counts if ppid and ppid not in pids)
 
-    ransom_procs = sum(1 for n in names if n in RANSOM_PROCESS_NAMES)
+    ransom_procs   = sum(1 for n in names if n in RANSOM_PROCESS_NAMES)
+    wannacry_procs = sum(1 for n in names if n in WANNACRY_PROCESS_NAMES)
     return {
         "pslist_count":        len(pids),
         "pslist_unique_names": len(names),
@@ -177,6 +190,7 @@ def feat_pslist(rows):
         "pslist_wow64_count":  wow64_count,
         "pslist_exited_count": exited_count,
         "pslist_ransom_procs": ransom_procs,
+        "pslist_wannacry_procs": wannacry_procs,  # WannaCry-specific: @wanadecryptor, taskhsvc, etc.
         "_pslist_pids":        pids,   # internal, stripped before output
 
         # "pslist_avg_runtimes": always 0 — CreateTime/ExitTime not in pslist CSV
@@ -460,6 +474,9 @@ def feat_handles(rows):
     type_counts = defaultdict(int)
     pids = set()
     encrypted_handles = 0
+    wncryt_handles = 0   # WannaCry: .WNCRYT temp files open during encryption
+    eky_handles    = 0   # WannaCry: .eky/.dky encryption key files (present stage 1+)
+    fun_handles    = 0   # Jigsaw: .fun encrypted file handles
     for r in rows:
         htype = r.get("Type", "").strip()
         name  = r.get("Name", "").strip().lower()
@@ -467,9 +484,16 @@ def feat_handles(rows):
         type_counts[htype] += 1
         if pid:
             pids.add(pid)
-        ext = os.path.splitext(name)[1]
-        if ext in ENCRYPTED_EXTENSIONS:
-            encrypted_handles += 1
+        if htype == "File":
+            ext = os.path.splitext(name)[1]
+            if ext in ENCRYPTED_EXTENSIONS:
+                encrypted_handles += 1
+            if "wncryt" in name:
+                wncryt_handles += 1
+            if ext in {".eky", ".dky"}:
+                eky_handles += 1
+            if ext == ".fun":
+                fun_handles += 1
 
     total = len(rows)
     n_procs = len(pids) if pids else 1
@@ -496,6 +520,10 @@ def feat_handles(rows):
         "handle_registry_ratio":  round(type_counts.get("Key", 0)  / total, 4) if total else 0,
         "handle_mutex_ratio":     round(type_counts.get("Mutant", 0) / total, 4) if total else 0,
         "handle_encrypted_files": encrypted_handles,
+        # Family-specific encryption artifacts (strong stage indicators)
+        "handle_wncryt_count":    wncryt_handles,  # WannaCry .WNCRYT temp handles
+        "handle_eky_count":       eky_handles,      # WannaCry key file handles
+        "handle_fun_count":       fun_handles,       # Jigsaw .fun file handles
     }
 
 
@@ -505,25 +533,47 @@ def feat_filescan(rows):
     total = len(rows)
     encrypted = 0
     ransom_notes = 0
+    wncryt_files = 0   # WannaCry: .WNCRYT files visible in filesystem
+    fun_files    = 0   # Jigsaw: .fun encrypted files
+    jigsaw_notes = 0   # Jigsaw-specific ransom notes
     for r in rows:
         name = r.get("Name", "").strip().lower()
-        # Extension-based match
         ext = os.path.splitext(name)[1]
+        basename = name.rsplit("\\", 1)[-1] if "\\" in name else name
+
+        # WannaCry: .WNCRYT extension or substring (temp file during encryption)
+        if "wncryt" in name:
+            wncryt_files += 1
+            encrypted += 1
+            continue
+        # Jigsaw: .fun extension
+        if ext == ".fun":
+            fun_files += 1
+            encrypted += 1
+            continue
+        # Extension-based match (remaining families)
         if ext in ENCRYPTED_EXTENSIONS:
             encrypted += 1
             continue
-        # Substring-based match (catches WannaCry .WNCRYT embedded in path)
+        # Substring-based match for other families
         if any(sub in name for sub in ENCRYPTED_SUBSTRINGS):
             encrypted += 1
             continue
-        # Ransom note detection
-        basename = name.rsplit("\\", 1)[-1] if "\\" in name else name
+        # Ransom note detection (family-agnostic)
         if any(note in basename for note in RANSOM_NOTE_NAMES):
+            ransom_notes += 1
+            continue
+        # Jigsaw-specific ransom notes
+        if any(note in basename for note in JIGSAW_NOTE_NAMES):
+            jigsaw_notes += 1
             ransom_notes += 1
     return {
         "filescan_total":        total,
         "filescan_encrypted":    encrypted,
         "filescan_ransom_notes": ransom_notes,
+        "filescan_wncryt":       wncryt_files,  # WannaCry-specific encryption marker
+        "filescan_fun":          fun_files,       # Jigsaw-specific encryption marker
+        "filescan_jigsaw_notes": jigsaw_notes,    # Jigsaw ransom note count
     }
 
 
@@ -584,12 +634,8 @@ def feat_netstat(rows):
     pids = defaultdict(int)
     outbound_pids = set()
     outbound_count = 0
-    suspicious_port_pids = set()
-    suspicious_port_hits = 0
-    tcp_pids = set()
-    udp_pids = set()
+    smb_connections = 0  # WannaCry: connections on port 445 (SMB/EternalBlue)
     established_pids = set()
-    listening_pids = set()
 
     remote_ips_by_pid = defaultdict(set)
 
@@ -597,7 +643,6 @@ def feat_netstat(rows):
         pid = safe_int(r.get("PID", 0))
         state = r.get("State", "").strip().upper()
         remote = r.get("ForeignAddr", "").strip()
-        proto = r.get("Proto", "").strip().upper()
         foreign_port = safe_int(r.get("ForeignPort", 0), 0)
         local_port = safe_int(r.get("LocalPort", 0), 0)
 
@@ -607,8 +652,6 @@ def feat_netstat(rows):
                 established_pids.add(pid)
         if "LISTEN" in state:
             listening += 1
-            if pid:
-                listening_pids.add(pid)
         if remote and remote not in {"", "0.0.0.0", "*", "N/A"}:
             remote_ips.add(remote)
             if pid:
@@ -622,36 +665,22 @@ def feat_netstat(rows):
             if pid:
                 outbound_pids.add(pid)
 
-        if foreign_port in SUSPICIOUS_PORTS or local_port in SUSPICIOUS_PORTS:
-            suspicious_port_hits += 1
-            if pid:
-                suspicious_port_pids.add(pid)
+        # WannaCry SMB worm: count outbound/established connections on port 445,
+        # not LISTENING (port 445 always listens on Windows -- not a signal)
+        if (foreign_port == SMB_PORT or local_port == SMB_PORT) and "LISTEN" not in state:
+            smb_connections += 1
 
-        if "TCP" in proto and pid:
-            tcp_pids.add(pid)
-        if "UDP" in proto and pid:
-            udp_pids.add(pid)
-
-    conns_per_pid = list(pids.values())
-    unique_remote_ips_per_pid = [len(v) for v in remote_ips_by_pid.values()]
+    total = len(rows)
 
     return {
-        "netstat_total":       len(rows),
-        "netstat_established": established,
-        "netstat_listening":   listening,
-        "netstat_unique_ips":  len(remote_ips),
-        "netstat_pid_count": len(pids),
-        "netstat_avg_connections_per_process": avg(conns_per_pid),
-        "netstat_max_connections_per_process": max_or_zero(conns_per_pid),
-        "netstat_avg_unique_ips_per_process": avg(unique_remote_ips_per_pid),
-        "netstat_outbound_count": outbound_count,
-        "netstat_outbound_pid_count": len(outbound_pids),
-        "netstat_suspicious_port_hit_count": suspicious_port_hits,   # always 0
-        "netstat_suspicious_port_pid_count": len(suspicious_port_pids),
-        "netstat_tcp_pid_count": len(tcp_pids),
-        "netstat_udp_pid_count": len(udp_pids),
-        "netstat_established_pid_count": len(established_pids),
-        "netstat_listening_pid_count": len(listening_pids),
+        "netstat_total":                      total,
+        "netstat_established":                established,
+        "netstat_listening":                  listening,
+        "netstat_unique_ips":                 len(remote_ips),
+        "netstat_outbound_count":             outbound_count,
+        "netstat_smb_connections":            smb_connections,  # WannaCry SMB worm signal
+        "netstat_established_ratio":          round(established / total, 4) if total else 0,
+        "netstat_outbound_ratio":             round(outbound_count / total, 4) if total else 0,
     }
 
 
@@ -719,7 +748,7 @@ def process_snapshot(snap_dir, use_cache=True):
     features.update(feat_filescan(plugin_rows["windows.filescan"]))
     features.update(feat_svcscan(plugin_rows["windows.svcscan"]))
     features.update(feat_privileges(plugin_rows["windows.privileges"]))
-    # features.update(feat_netstat(plugin_rows["windows.netstat"]))
+    features.update(feat_netstat(plugin_rows["windows.netstat"]))
 
     # ── Ratio features (normalize across system load) ──────────────────────
     vad_total = features.get("vad_total", 0)
@@ -749,14 +778,7 @@ def process_snapshot(snap_dir, use_cache=True):
     else:
         features["filescan_encrypted_ratio"] = 0
 
-    netstat_total = features.get("netstat_total", 0)
-    if netstat_total > 0:
-        features["netstat_established_ratio"] = round(features.get("netstat_established", 0) / netstat_total, 4)
-        features["netstat_outbound_ratio"] = round(features.get("netstat_outbound_count", 0) / netstat_total, 4)
-        # netstat_suspicious_port_ratio: always 0 -- removed
-    else:
-        features["netstat_established_ratio"] = 0
-        features["netstat_outbound_ratio"] = 0
+    # netstat ratios computed inside feat_netstat
 
     cmdline_total = features.get("cmdline_count", 0)
     if cmdline_total > 0:
@@ -898,7 +920,13 @@ def process_snapshot(snap_dir, use_cache=True):
     #   1 -- pre-enc:     ransomware active (injection/handles/privs) but files intact
     #   0 -- benign:      no significant ransomware activity
     #
-    if has_enc_artifacts and ldr_settled:
+    # Benign machines always get stage 0 -- they have no ransomware lifecycle.
+    # The universal thresholds (priv_enabled > 1000, malfind > 2, etc.) are set
+    # to catch early ransomware activity but normal Windows machines also exceed
+    # them, so we skip the heuristic entirely for the Benign family.
+    if family == "Benign":
+        behavior_stage = 0
+    elif has_enc_artifacts and ldr_settled:
         behavior_stage = 3          # post-encryption: done encrypting, injection gone
     elif (has_enc_artifacts or enc_files_active) and (universal_active or ldr_active):
         behavior_stage = 2          # active encryption: files accumulating + still active
