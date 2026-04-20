@@ -57,6 +57,8 @@ def main():
     parser.add_argument("--label",         default="all",
                         choices=["stage_hint", "behaviour_binary", "behavior_stage", "all"],
                         help="Which label(s) to train on (default: all)")
+    parser.add_argument("--no-balance",    action="store_true",
+                        help="Disable benign/ransomware undersampling (default: balance to 50/50)")
     args = parser.parse_args()
 
     scan_dir   = os.path.abspath(args.scan_dir)
@@ -184,7 +186,7 @@ def main():
     import train_stage_model
 
     os.makedirs(model_out, exist_ok=True)
-    df = train_stage_model.load_data(out_csv)
+    df = train_stage_model.load_data(out_csv, balance_benign=not args.no_balance)
 
     # Jigsaw excluded — samples were not executing due to missing .NET 3.5
     # TODO: re-enable once Jigsaw is re-collected with working execution

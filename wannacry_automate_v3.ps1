@@ -37,6 +37,10 @@ $OUTPUT_ROOT = "D:\Patrick\VMSnapshots\Datasets"
 # T=0 baseline always captured automatically before launch
 $SNAP_OFFSETS = @(5, 10, 20, 45, 90)
 
+# Benign captures only need a single snapshot -- system state doesn't evolve
+# over short windows the way ransomware does. One snapshot per rep = 1 data point.
+$BENIGN_SNAP_OFFSETS = @(30)
+
 # -- MULTI-FAMILY CONFIG TABLE ------------------------------------------------
 # Key   = display name (also used in output folder names and CSV family column)
 # Value = path to malware executable INSIDE the guest VM
@@ -225,7 +229,8 @@ $SESSION_DIR  = Join-Path $OUTPUT_ROOT "${FAMILY}_${timestamp}"
 New-Item -ItemType Directory -Force -Path $SESSION_DIR | Out-Null
 $logFile = Join-Path $SESSION_DIR "session.log"
 
-$totalRuns = $NUM_RUNS * $SNAP_OFFSETS.Count
+$activeOffsets = if ($MALWARE_PATH -eq "BENIGN") { $BENIGN_SNAP_OFFSETS } else { $SNAP_OFFSETS }
+$totalRuns     = $NUM_RUNS * $activeOffsets.Count
 
 Log "============================================" Cyan
 Log " $FAMILY Collection Session"               Cyan
@@ -241,7 +246,7 @@ Log "============================================" Cyan
 # Outer loop = reps, inner loop = offsets so we cycle T+15,30,60... before repeating.
 $runIndex = 0
 for ($rep = 1; $rep -le $NUM_RUNS; $rep++) {
-    foreach ($targetOffset in $SNAP_OFFSETS) {
+    foreach ($targetOffset in $activeOffsets) {
         $runIndex++
 
         Log "" White

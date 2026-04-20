@@ -190,7 +190,13 @@ DEAD_FEATURES = {
 # Data loading
 # -----------------------------------------------------------------------------
 
-def load_data(features_csv):
+def load_data(features_csv, balance_benign=True, benign_family="Benign", random_state=42):
+    """Load features CSV and optionally undersample ransomware to 50/50 benign balance.
+
+    balance_benign=True (default): undersample ransomware families so that total
+    ransomware count equals total benign count.  Sampling is proportional across
+    families and stratified by behavior_stage so stage distribution is preserved.
+    """
     df = pd.read_csv(features_csv, low_memory=False)
 
     required = {"behavior_stage", "family"}
@@ -208,6 +214,32 @@ def load_data(features_csv):
     print(f"    Families : {sorted(df['family'].unique())}")
     print(f"    Behavior stages : {sorted(df['behavior_stage'].unique())}")
     print(f"    Distribution:\n{df.groupby(['family','behavior_stage']).size().to_string()}\n")
+
+    if balance_benign:
+        benign_df  = df[df["family"] == benign_family]
+        ransom_df  = df[df["family"] != benign_family]
+        n_benign   = len(benign_df)
+        n_ransom   = len(ransom_df)
+
+        if n_ransom > n_benign:
+            # Undersample ransomware proportionally per family, stratified by stage
+            rng = np.random.default_rng(random_state)
+            sampled = []
+            for fam, fdf in ransom_df.groupby("family"):
+                # Each family gets its proportional share of the benign count
+                n_take = max(1, round(n_benign * len(fdf) / n_ransom))
+                # Stratify by stage so stage distribution is preserved
+                stage_frames = []
+                for stage, sdf in fdf.groupby("behavior_stage"):
+                    n_stage = max(1, round(n_take * len(sdf) / len(fdf)))
+                    idx = rng.choice(len(sdf), size=min(n_stage, len(sdf)), replace=False)
+                    stage_frames.append(sdf.iloc[idx])
+                sampled.append(pd.concat(stage_frames))
+            ransom_balanced = pd.concat(sampled).reset_index(drop=True)
+            df = pd.concat([benign_df, ransom_balanced]).reset_index(drop=True)
+            print(f"[~] Balanced: {n_benign} benign / {len(ransom_balanced)} ransomware "
+                  f"(was {n_ransom} ransomware, undersampled {n_ransom - len(ransom_balanced)})")
+            print(f"    Balanced distribution:\n{df.groupby(['family','behavior_stage']).size().to_string()}\n")
 
     # stage_hint kept as reference column only -- not used for training
     if "stage_hint" in df.columns:
