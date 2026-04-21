@@ -1,0 +1,33 @@
+============================================================
+ TRAINING RUN LOG
+============================================================
+  Timestamp  : 2026-04-13 22:25:43
+  Output dir : /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/model_results/run22/stage_binary
+
+  Snapshots  : 391 rows
+  Families   : 5
+      Benign                     75 rows
+      Cerber                     76 rows
+      Dharma                     80 rows
+      Jigsaw                     80 rows
+      WannaCry                   80 rows
+
+  Feature cols (approx): 105
+
+  Labels trained:
+      stage_binary          {0: 134, 1: 257}
+
+  Models:
+      RandomForest
+      ExtraTrees
+      GradientBoosting
+      LogisticRegression
+      XGBoost
+
+  Scenarios run:
+      Standard 80/20 split
+
+  Notes:
+      standard_accuracy: 0.9873
+      cv_mode: none
+============================================================

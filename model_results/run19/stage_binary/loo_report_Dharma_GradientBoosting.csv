@@ -1,0 +1,6 @@
+,precision,recall,f1-score,support
+Early (benign/pre-launch/pre-encryption),0.07142857142857142,0.5,0.125,4.0
+Late (encrypting/post-encryption),0.9615384615384616,0.6578947368421053,0.78125,76.0
+accuracy,0.65,0.65,0.65,0.65
+macro avg,0.5164835164835165,0.5789473684210527,0.453125,80.0
+weighted avg,0.9170329670329671,0.65,0.7484375,80.0

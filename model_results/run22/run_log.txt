@@ -1,0 +1,39 @@
+============================================================
+ TRAINING RUN LOG
+============================================================
+  Timestamp  : 2026-04-13 22:25:23
+  Output dir : /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/model_results/run22
+
+  Snapshots  : 391 rows
+  Families   : 5
+      Benign                     75 rows
+      Cerber                     76 rows
+      Dharma                     80 rows
+      Jigsaw                     80 rows
+      WannaCry                   80 rows
+
+  Feature cols (approx): 105
+
+  Labels trained:
+      stage_hint            {0: 75, 1: 78, 2: 79, 3: 99, 4: 60}
+      stage_binary          {0: 134, 1: 257}
+      behavior_stage        {0: 82, 1: 52, 2: 133, 3: 124}
+
+  Models:
+      RandomForest
+      ExtraTrees
+      GradientBoosting
+      LogisticRegression
+      XGBoost
+
+  Scenarios run:
+      Standard 80/20 split
+
+  Notes:
+      features_csv: /mnt/c/Users/Patrick/Desktop/MusfiqFinalProject/Ransomware-Analysis/output/features.csv
+      scan_dir: /mnt/d/Patrick/VMSnapshots/Datasets
+      family_filter: all
+      cv_mode: none
+      top_features: all
+      top_n: --
+============================================================
