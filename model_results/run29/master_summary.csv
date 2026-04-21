@@ -1,0 +1,25 @@
+label,scenario,model,mean_accuracy,acc_ci95_lo,acc_ci95_hi,mean_balanced_acc,mean_macro_f1,f1_ci95_lo,f1_ci95_hi,mean_weighted_f1,train_accuracy,overfit_gap,conf_mean,conf_pct_90,n_train,n_test,benign_fpr,wtd_macro_f1,n_folds,n_instances
+behaviour_binary,Standard 80/20,RandomForest,0.9841,0.9524,1.0,0.98,0.9833,0.9481,1.0,0.9841,0.9879,0.0038,0.9311,0.7143,248.0,63.0,,,,
+behaviour_binary,Standard 80/20,GradientBoosting,0.9683,0.9206,1.0,0.9668,0.9668,0.9165,1.0,0.9683,1.0,0.0317,0.9927,0.9841,248.0,63.0,,,,
+behaviour_binary,Standard 80/20,ExtraTrees,0.9524,0.8889,1.0,0.94,0.9491,0.886,1.0,0.9518,0.9919,0.0395,0.9352,0.8095,248.0,63.0,,,,
+behavior_stage,Standard 80/20,GradientBoosting,0.9365,0.873,0.9841,0.9356,0.9259,0.8229,0.9868,0.9382,1.0,0.0635,0.9998,1.0,248.0,63.0,,,,
+behavior_stage,Standard 80/20,LogisticRegression,0.9206,0.8571,0.9841,0.9621,0.9252,0.8518,0.9835,0.926,0.9839,0.0633,0.9221,0.7778,248.0,63.0,,,,
+behavior_stage,LOIO,GradientBoosting,0.9748,0.959,0.9907,0.9459,0.9238,0.868,0.9796,0.9744,,,,,,,,0.9026,,25.0
+behavior_stage,Standard 80/20,ExtraTrees,0.9206,0.8413,0.9841,0.928,0.9137,0.8142,0.9815,0.9217,0.9798,0.0592,0.9142,0.7302,248.0,63.0,,,,
+behaviour_binary,LOIO,GradientBoosting,0.9825,0.9692,0.9958,0.9481,0.9098,0.8346,0.9849,0.9825,,,,,,,,0.8839,,25.0
+behavior_stage,LOIO,LogisticRegression,0.9598,0.9387,0.9809,0.9403,0.9058,0.8496,0.962,0.9612,,,,,,,,0.8792,,25.0
+behavior_stage,LOIO,RandomForest,0.957,0.9333,0.9807,0.9282,0.9032,0.8391,0.9672,0.9589,,,,,,,,0.8951,,25.0
+behavior_stage,LOIO,ExtraTrees,0.952,0.9248,0.9792,0.9242,0.9013,0.8357,0.9669,0.9538,,,,,,,,0.8927,,25.0
+behaviour_binary,Standard 80/20,LogisticRegression,0.8889,0.8095,0.9524,0.8874,0.8847,0.798,0.9522,0.8892,0.9879,0.099,0.9062,0.6825,248.0,63.0,,,,
+behavior_stage,Standard 80/20,RandomForest,0.873,0.7778,0.9524,0.9053,0.8639,0.7471,0.9454,0.8734,0.9798,0.1068,0.9369,0.7937,248.0,63.0,,,,
+behaviour_binary,LOIO,ExtraTrees,0.9344,0.9042,0.9645,0.8678,0.832,0.7532,0.9109,0.9367,,,,,,,,0.8094,,25.0
+behaviour_binary,LOIO,LogisticRegression,0.9307,0.904,0.9574,0.8652,0.7934,0.7072,0.8796,0.934,,,,,,,,0.758,,25.0
+behaviour_binary,LOIO,RandomForest,0.9238,0.8891,0.9585,0.8529,0.7562,0.6617,0.8507,0.9404,,,,,,,,0.7909,,25.0
+behaviour_binary,LOO,RandomForest,0.575,0.1672,0.9828,0.3611,0.3431,0.1787,0.5074,0.5645,,,,,,,1.0,0.3455,3.0,
+behaviour_binary,LOO,ExtraTrees,0.5529,0.0963,1.0094,0.3481,0.3262,0.1291,0.5233,0.5354,,,,,,,1.0,0.3293,3.0,
+behavior_stage,LOO,GradientBoosting,0.4504,0.2792,0.6217,0.415,0.3257,0.123,0.5284,0.4874,,,,,,,1.0,0.3288,3.0,
+behaviour_binary,LOO,LogisticRegression,0.3987,0.1686,0.6288,0.3584,0.2848,0.1502,0.4193,0.4354,,,,,,,1.0,0.287,3.0,
+behavior_stage,LOO,RandomForest,0.5221,0.2324,0.8118,0.3064,0.2842,0.15,0.4184,0.5097,,,,,,,,0.2862,3.0,
+behaviour_binary,LOO,GradientBoosting,0.4077,0.1937,0.6216,0.264,0.2807,0.1684,0.3931,0.4556,,,,,,,1.0,0.2825,3.0,
+behavior_stage,LOO,LogisticRegression,0.3923,0.2855,0.4991,0.3284,0.2369,0.0972,0.3766,0.4159,,,,,,,1.0,0.2384,3.0,
+behavior_stage,LOO,ExtraTrees,0.4077,0.136,0.6793,0.2865,0.1607,0.0839,0.2375,0.3883,,,,,,,,0.1615,3.0,

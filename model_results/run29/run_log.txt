@@ -1,0 +1,39 @@
+============================================================
+ TRAINING RUN LOG
+============================================================
+  Timestamp  : 2026-04-14 04:17:36
+  Output dir : /home/pthrower/Ransomware-Analysis/model_results/run29
+
+  Snapshots  : 311 rows
+  Families   : 4
+      Benign                     75 rows
+      Cerber                     76 rows
+      Dharma                     80 rows
+      WannaCry                   80 rows
+
+  Feature cols (approx): 106
+
+  Labels trained:
+      stage_hint            {0: 75, 1: 58, 2: 59, 3: 74, 4: 45}
+      behaviour_binary      {0: 121, 1: 190}
+      behavior_stage        {0: 76, 1: 45, 2: 162, 3: 28}
+
+  Models:
+      RandomForest
+      ExtraTrees
+      GradientBoosting
+      LogisticRegression
+
+  Scenarios run:
+      Standard 80/20 split
+      LOO (leave-one-family-out)
+      LOIO (leave-one-instance-out)
+
+  Notes:
+      features_csv: /home/pthrower/Ransomware-Analysis/output/features.csv
+      scan_dir: /home/pthrower/Datasets
+      family_filter: all
+      cv_mode: both
+      top_features: all
+      top_n: --
+============================================================

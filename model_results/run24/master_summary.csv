@@ -1,0 +1,17 @@
+label,scenario,model,mean_accuracy,acc_ci95_lo,acc_ci95_hi,mean_balanced_acc,mean_macro_f1,f1_ci95_lo,f1_ci95_hi,mean_weighted_f1,train_accuracy,overfit_gap,conf_mean,conf_pct_90,n_train,n_test,benign_fpr,wtd_macro_f1,n_folds
+behaviour_binary,Standard 80/20,GradientBoosting,0.9841,0.9524,1.0,0.9783,0.9827,0.9426,1.0,0.984,1.0,0.0159,0.9995,1.0,248.0,63.0,,,
+behavior_stage,Standard 80/20,GradientBoosting,0.9683,0.9206,1.0,0.951,0.9552,0.8678,1.0,0.968,1.0,0.0317,0.9999,1.0,248.0,63.0,,,
+behaviour_binary,Standard 80/20,RandomForest,0.9524,0.8889,1.0,0.9533,0.9491,0.8764,1.0,0.9526,0.9839,0.0315,0.9561,0.8254,248.0,63.0,,,
+behaviour_binary,Standard 80/20,ExtraTrees,0.9524,0.9048,1.0,0.9348,0.947,0.879,1.0,0.9516,0.9879,0.0355,0.9478,0.8413,248.0,63.0,,,
+behavior_stage,Standard 80/20,LogisticRegression,0.9524,0.9048,1.0,0.9436,0.9383,0.8392,1.0,0.9531,0.9879,0.0355,0.9236,0.746,248.0,63.0,,,
+behavior_stage,Standard 80/20,RandomForest,0.9365,0.873,0.9845,0.9363,0.9318,0.8399,0.9906,0.9363,0.9718,0.0353,0.9533,0.8571,248.0,63.0,,,
+behaviour_binary,Standard 80/20,LogisticRegression,0.9206,0.8413,0.9841,0.9098,0.9136,0.8278,0.9819,0.9202,0.9839,0.0633,0.9237,0.7143,248.0,63.0,,,
+behavior_stage,Standard 80/20,ExtraTrees,0.9365,0.873,0.9841,0.9124,0.9078,0.7845,0.9887,0.9364,0.9677,0.0312,0.9324,0.8254,248.0,63.0,,,
+behaviour_binary,LOO,RandomForest,0.6447,0.3588,0.9307,0.3918,0.3828,0.2808,0.4848,0.6428,,,,,,,1.0,0.3842,3.0
+behaviour_binary,LOO,ExtraTrees,0.6,0.1891,1.0109,0.365,0.3529,0.1863,0.5195,0.5919,,,,,,,1.0,0.3555,3.0
+behaviour_binary,LOO,LogisticRegression,0.4667,0.2469,0.6864,0.3733,0.3195,0.1959,0.443,0.5114,,,,,,,1.0,0.3215,3.0
+behavior_stage,LOO,GradientBoosting,0.4726,0.3412,0.604,0.3273,0.3106,0.0979,0.5233,0.5078,,,,,,,1.0,0.3129,3.0
+behaviour_binary,LOO,GradientBoosting,0.455,0.2977,0.6124,0.2838,0.3084,0.2309,0.3859,0.5111,,,,,,,1.0,0.3097,3.0
+behavior_stage,LOO,RandomForest,0.5785,0.3731,0.7839,0.3221,0.2863,0.1498,0.4228,0.5537,,,,,,,,0.2876,3.0
+behavior_stage,LOO,LogisticRegression,0.4693,0.4028,0.5358,0.3587,0.262,0.1254,0.3985,0.4799,,,,,,,1.0,0.2631,3.0
+behavior_stage,LOO,ExtraTrees,0.4967,0.2064,0.787,0.3182,0.2146,0.0868,0.3424,0.46,,,,,,,,0.2156,3.0

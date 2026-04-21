@@ -1,0 +1,33 @@
+============================================================
+ TRAINING RUN LOG
+============================================================
+  Timestamp  : 2026-04-14 03:12:18
+  Output dir : /home/pthrower/Ransomware-Analysis/model_results/run27/behaviour_binary
+
+  Snapshots  : 311 rows
+  Families   : 4
+      Benign                     75 rows
+      Cerber                     76 rows
+      Dharma                     80 rows
+      WannaCry                   80 rows
+
+  Feature cols (approx): 104
+
+  Labels trained:
+      behaviour_binary      {0: 116, 1: 195}
+
+  Models:
+      RandomForest
+      ExtraTrees
+      GradientBoosting
+      LogisticRegression
+
+  Scenarios run:
+      Standard 80/20 split
+      LOO (leave-one-family-out)
+      LOIO (leave-one-instance-out)
+
+  Notes:
+      standard_accuracy: 0.9841
+      cv_mode: both
+============================================================
